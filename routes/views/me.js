@@ -8,28 +8,10 @@ exports = module.exports = function(req, res) {
 	
 	locals.section = 'me';
 	
-	view.on('post', { action: 'profile.top' }, function(next) {
+	view.on('post', { action: 'user.update' }, function(next) {
 	
 		req.user.getUpdateHandler(req).process(req.body, {
-			fields: 'name,email,twitter,website,github',
-			flashErrors: true
-		}, function(err) {
-		
-			if (err) {
-				return next();
-			}
-			
-			req.flash('success', 'Your changes have been saved.');
-			return next();
-		
-		});
-	
-	});
-	
-	view.on('post', { action: 'profile.bottom' }, function(next) {
-	
-		req.user.getUpdateHandler(req).process(req.body, {
-			fields: 'isPublic,bio,photo,mentoring.available,mentoring.free,mentoring.paid,mentoring.swap,mentoring.have,mentoring.want',
+			fields: 'name,email,twitter,website,github,bio,photo',
 			flashErrors: true
 		}, function(err) {
 		
@@ -67,6 +49,6 @@ exports = module.exports = function(req, res) {
 	
 	});
 	
-	view.render('site/me');
+	view.render('me/index');
 	
 }

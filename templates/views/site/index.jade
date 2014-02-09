@@ -1,25 +1,6 @@
 extends ../../layouts/default
 
-mixin topic(topic)
-	li: .topic
-		.topic__avatar
-			img(src=topic.author.photo.exists ? topic.author.photo.thumbnail(60,60) : 'http://www.placehold.it/60x60')
-		.topic__count
-			.topic__count-number= topic.replyCount
-			.topic__count-label Answers
-		.topic__content
-			h2.topic__title: a(href=topic.url)= topic.name
-			.topic__info
-				| Posted 
-				time(datetime=topic.publishedOn)= moment(topic.publishedOn).format('DD MMM YYYY')
-				|  by 
-				strong= topic.author.name.full
-			if topic.category
-				.topic__meta
-					span.topic__category
-						span(class=topic.category.key).category-indicator
-						span= topic.category.name
-
+include ../../mixins/topic-item
 
 block content
 	.container
@@ -34,18 +15,20 @@ block content
 				if topics.total
 					ol.topics
 						for topic in topics.results
-							+topic(topic)
+							+topic-item(topic)
 				else
-					h3 Sorry, we couldn't find any topics matching your criteria.
+					.no-results
+						.no-results__message Sorry, we couldn't find any topics matching your criteria.
 
 			.col-sm-3
 				.categories-heading Categories
 				.categories-list: ul
-					li(class=!current.category ? 'is-active' : null): a(href=current.filter ? ('/' + current.filter.value) : '/')
-						span.category-indicator
-						span All topics
+					li(class=!current.category ? 'is-active' : null)
+						a(href=current.filter ? ('/' + current.filter.value) : '/').categories-list__item
+							span.category-indicator
+							span All topics
 					for category in categories
-						li(class=current.category && category.key == current.category.key ? 'is-active' : null)
-							a(href='/' + current.filter.value + '/' + category.key)
+						li(class=current.category && category.key == current.category.key ? 'is-active #{category.key}' : category.key)
+							a(href='/' + current.filter.value + '/' + category.key).categories-list__item
 								span(class=category.key).category-indicator
 								span= category.name

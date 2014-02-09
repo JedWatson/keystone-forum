@@ -1,0 +1,97 @@
+extends ../../layouts/default
+
+block content
+	.container
+		.row
+			.col-sm-3
+				.flag
+					.flag__image
+						img(src=current.user.photo.exists ? current.user._.photo.thumbnail(30,30) : 'http://placehold.it/30x30', alt=current.user.name.full, width=30, height=30)
+					.flag__body
+						strong.font-lg= current.user.name.full
+				hr
+				p You have asked #{plural(current.user.topicCount, '* question', '* questions')} 
+				p You have answered to #{plural(current.user.replyCount, '* question', '* questions')}
+				p Since #{moment(current.user.createdOn).format('DD MMMM YYYY')}
+				p: strong: a(href=current.user.url) View your profile
+			.col-sm-9
+				form(method='post', autocomplete='off').profile-form.form-horizontal
+					input(type='hidden', name='action', value='user.update')
+					.profile-form__section
+						h3.profile-form__heading Your Profile
+						.form-group
+							label.col-sm-2.control-label Name
+							.col-sm-10: .row
+								.col-sm-6: input(type='text', name='name.first' value=current.user.name.first).form-control
+								.col-sm-6: input(type='text', name='name.last' value=current.user.name.last).form-control
+						.form-group
+							label.col-sm-2.control-label Email
+							.col-sm-10
+								input(type='email', name='email' value=current.user.email).form-control.form-control-labelled
+						.form-group
+							label.col-sm-2.control-label Website
+							.col-sm-10
+								input(type='text', name='website' value=current.user.website).form-control.form-control-labelled
+						.form-group
+							label.col-sm-2.control-label Twitter
+							.col-sm-10
+								input(type='text', name='twitter' value=current.user.twitter).form-control.form-control-labelled
+						.form-group
+							label.col-sm-2.control-label Github
+							.col-sm-10
+								input(type='text', name='github' value=current.user.github).form-control.form-control-labelled
+						
+					.profile-form__section
+						h3.profile-form__heading Public info
+						.form-group
+							label.col-sm-2.control-label Bio
+								br
+								a(href='http://daringfireball.net/projects/markdown/', target='_blank', title='Markdown Guide (new window)').text-muted (markdown)
+							.col-sm-10
+								textarea(name='bio', rows=5).form-control=current.user.bio.md
+						
+						.form-group
+							label.col-sm-2.control-label Photo
+							.col-sm-10
+								if current.user.photo.exists
+									.row
+										.col-sm-3: img(src=current.user._.photo.thumbnail(120,120)).img-responsive
+										.col-sm-9: input(type='file', name='photo_upload')
+								else
+									input(type='file', name='photo_upload')
+						
+					.profile-form__section
+						h3.profile-form__heading Change password
+						.form-group
+							label.col-sm-2.control-label Photo
+							.col-sm-10
+								.form-group
+									label(for='change-password').sr-only Current Password
+									input(type='password', name='currentPassword', placeholder='Current Password', id='change-password').form-control
+								.form-group
+									label(for='change-passwordNew').sr-only New Password
+									input(type='password', name='password', placeholder='New Password', id='change-passwordNew').form-control
+								.form-group
+									label(for='change-passwordConfirm').sr-only Confirm Password
+									input(type='password', name='password_confirm', placeholder='Confirm Password', id='signin-passwordConfirm').form-control
+						
+					.profile-form__section
+						h3.profile-form__heading Email notifications
+						.form-group
+							label.col-sm-2.control-label Email me when
+							.col-sm-10
+								label.checkbox
+									input(type='checkbox' name='notifications.topics')
+									|  Someone asks a question
+								label.checkbox
+									input(type='checkbox' name='notifications.replies')
+									|  Someone answers a question I've asked
+
+
+					.form-group
+						.col-sm-10.col-sm-offset-2
+							button(type='submit', data-loading-text="Saving...").btn.btn-primary Save profile
+							
+block js
+	script(src='/js/lib/bootstrap/button.js')
+	script(src='/js/views/me.js')

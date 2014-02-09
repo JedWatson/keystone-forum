@@ -3,7 +3,6 @@ html
 	head
 		include ../includes/htmlhead
 		block css
-		block head
 	body
 		include ../includes/header
 		
@@ -12,7 +11,7 @@ html
 		.docs-body
 			block content
 		
-		//- include ../includes/footer
+		include ../includes/footer
 		
 		script(src="/js/lib/jquery/jquery-1.10.2.min.js")
 		script(src='/js/lib/bootstrap/collapse.js')

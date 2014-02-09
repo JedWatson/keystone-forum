@@ -1,114 +1,52 @@
-extends ../../layouts/details
+extends ../../layouts/default
 
-//- include ../../mixins/forums/navigation
-//- include ../../mixins/common/commenting
+include ../../mixins/commenting
 
-
-block details-header
-	//- Admin tools for the author
-	if current.user && current.user.id == topic.author.id
-		.alert.alert-info.mv-10
-			span.entypo.entypo-btn-align.entypo-circled-info.text-primary-dark
-			| As the topic author, you can 
-			a(href='?remove').alert-link.js-delete-confirm delete this topic
-			|  or 
-			a(href=current.user.url + '#topics').alert-link see all your topics
-			
-	header
-		h1.page-heading=topic.title
-		if topic.author || topic.publishedOn
-			p.lead.page-lead
-				span.category-tags
-					a(href=topic.forum.url).category-tag=topic.forum.name
-				if topic.publishedOn
-					span.text-muted  started on  
-					=moment(topic.publishedOn).format('dddd, D MMM YYYY')
-				if topic.author
-					span.text-muted  by 
-					a(href=topic.author.url)=topic.author.name.full
-
-	
-block details-content
-				
-	
-	//- topic content
-	.details-panel-body
-		.flag.visible-xs
-			a(href='/profile/' + topic.author.key).flag__image
-				img(src=topic.author.photo.exists ? topic.author._.photo.thumbnail(60,60) : '/images/placeholder/60x60.jpg', alt=topic.author.name.full, width=60, height=60).img-thumbnail.img-circle
-			.flag__body
-				.text-muted Started on #{topic._.publishedOn.format('D MMM YYYY')} by
-				strong: a(href='/profile/' + topic.author.key)=topic.author.name.full
-		.media.mt-0
-			a(href='/profile/' + topic.author.key).pull-left.hidden-xs
-				img(src=topic.author.photo.exists ? topic.author._.photo.thumbnail(60,60) : '/images/placeholder/60x60.jpg', alt=topic.author.name.full, width=60, height=60).img-thumbnail.img-circle
-			.media-body.media-body-column
-				.text-muted Started on #{topic._.publishedOn.format('D MMM YYYY')} by
-				p.hidden-xs: strong: a(href='/profile/' + topic.author.key)=topic.author.name.full
-				.details-content-wrapper!=topic.content.extended
-	
-	//-comments
-	//- #comments.details-panel-footer
-		if replies.length
-			h4.comment-count=plural(replies.length, '* reply', '* replies')
-			+comment-thread(replies)
-		h4.comment-count=replies.length ? 'Reply to this topic' : 'Be the first to repy'
-		+comment-form('topic.reply')
+block content
+	.container
+		.row
+			.col-sm-9
+				article.topic-details
+					header.topic-details__header
+						h1.heading=topic.name
+						if topic.category
+							a(href='/newest/' + topic.category.key).topic-category
+								span(class=topic.category.key).category-indicator
+								span= topic.category.name
+						if topic.author || topic.publishedOn
+							span.subheading
+								if topic.publishedOn
+									span  started on  
+									=moment(topic.publishedOn).format('dddd, D MMM YYYY')
+								if topic.author
+									span  by 
+									a(href=topic.author.url).text-muted=topic.author.name.full
+								if replies.length
+									|  &middot; 
+									a(href='#answers')= plural(replies.length, '* answer', '* answers')
+					.topic-details__body
+						.media
+							a(href='/profile/' + topic.author.key).pull-left
+								img(src=topic.author.photo.exists ? topic.author._.photo.thumbnail(60,60) : 'http://placehold.it/60x60', alt=topic.author.name.full, width=60, height=60).img-avatar
+							.media-body.media-body-column
+								p.hidden-xs.text-muted
+									strong: a(href='/profile/' + topic.author.key)=topic.author.name.full
+									|  &middot; 
+									span #{moment(topic.publishedOn).fromNow()}
+								.details-content-wrapper!=topic.content.full.html
 					
-					
-					
-					
-					
-//- sidebar
-block details-sidebar
-	//- showcase the forum 
-	.spotlight.spotlight--primary
-		.media
-			.text-muted Forum
-			h5.mt-0.mb-5: a(href=topic.forum.url)=topic.forum.name
-			p=topic.forum.description
-		if topic.forum.topicCount
-			ul.spotlight__list.is-stacked
-				li.spotlight__list-item
-					a(href=topic.forum.url).flag
-						.flag__image: span.entypo.entypo-fixed-width.entypo-newspaper
-						.flag__body.spotlight__list-text=plural(topic.forum.topicCount, '* more topic', '* more topics') + ' in this forum'
-			p.text-center.mb-0: a(href=topic.forum.url) View forum page
+					//-comments
+					#answers.topic-details__footer
+						if replies.length
+							h4.text-muted=plural(replies.length, '* answer', '* answers')
+							+comment-thread(replies)
+						+comment-form()
+			.col-sm-3
+				h4.text-muted Tips for answering
+				p Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam blandit pretium est, in lobortis enim lobortis nec. Cras consequat lacus a mauris semper eleifend.
 
-	//- showcase the topic author
-	.spotlight.spotlight--primary-light
-		.media
-			.pull-left: a(href=topic.author.url)
-				img(src=topic.author.photo.exists ? topic.author._.photo.thumbnail(60,60) : '/images/placeholder/60x60.jpg', alt=topic.author.name.full, width=60, height=60).img-thumbnail
-			.media-body
-				.text-muted Started by
-				h5.mv-0: a(href=topic.author.url)=topic.author.name.full
-				if topic.author.location.serialised
-					p=topic.author._.location.format('suburb state')
-		
-		//- display the author's stuff
-		if authorTopics.length || authorListings.length
-			ul.spotlight__list.is-stacked
-				if authorTopics.length
-					li.spotlight__list-item
-						a(href=topic.author.url).flag
-							.flag__image: span.spotlight__list-icon.entypo.entypo-fixed-width.entypo-newspaper
-							.flag__body: span.spotlight__list-text #{plural(authorTopics.length, '* more topic', '* more topics')} by #{topic.author.name.first}
-				if authorListings.length
-					for listing in authorListings
-						li.spotlight__list-item
-							a(href=listing.url, title=listing.name).flag
-								.flag__image: span.spotlight__list-icon.entypo.entypo-fixed-width.entypo-briefcase
-								.flag__body: span.spotlight__list-text #{topic.author.name.first}'s #{listing.listingTypeLabel.toLowerCase()} listing
-			p.text-center.mb-0: a(href=topic.author.url) View author page
-
-	
-	//- tags
-	if topic.tags.length
-		h5.text-muted Tagged
-		ul.list-inline
-			for tag in topic.tags
-				li: a(href=tag.url).badge=tag.name
-			
-	p.text-center.mv-10
-		a(href=topic.forum.url + '/create').link-dark Want to start your own topic?
+				hr
+				h4.text-muted Found a bug?
+				p If you're experiencing what appears to be a bug or something that doesn't seem to be working correctly, please 
+					a(href='https://github.com/JedWatson/keystone/issues') log&nbsp;an&nbsp;issue
+					|  in the Github project

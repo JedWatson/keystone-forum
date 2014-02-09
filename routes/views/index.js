@@ -8,7 +8,7 @@ exports = module.exports = function(req, res) {
 	var view = new keystone.View(req, res),
 		locals = res.locals;
 	
-	locals.section = 'home';
+	locals.section = 'forum';
 	locals.current.filter = _.where(globals.forum.topic.filters, { value: req.params.filter })[0] || _.where(globals.forum.topic.filters, { value: 'newest' })[0];
 	locals.current.category = _.where(req.categories, { key: req.params.category })[0];
 	

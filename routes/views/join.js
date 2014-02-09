@@ -1,6 +1,5 @@
-var async = require('async');
-
-var keystone = require('keystone');
+var keystone = require('keystone'),
+	async = require('async');
 
 exports = module.exports = function(req, res) {
 	
@@ -11,32 +10,8 @@ exports = module.exports = function(req, res) {
 	var view = new keystone.View(req, res),
 		locals = res.locals;
 	
-	locals.section = 'login';
+	locals.section = 'join';
 	locals.form = req.body;
-	
-	view.on('post', { action: 'signin' }, function(next) {
-		
-		if (!req.body.signin_email || !req.body.signin_password) {
-			req.flash('error', 'Please enter your username and password.');
-			return next();
-		}
-		
-		var onSuccess = function() {
-			if (req.query && req.query.from) {
-				res.redirect(req.query.from);
-			} else {
-				res.redirect('/me');
-			}
-		}
-		
-		var onFail = function() {
-			req.flash('error', 'Your username or password were incorrect, please try again.');
-			return next();
-		}
-		
-		keystone.session.signin({ email: req.body.signin_email, password: req.body.signin_password }, req, res, onSuccess, onFail);
-		
-	});
 	
 	view.on('post', { action: 'join' }, function(next) {
 		
@@ -104,7 +79,11 @@ exports = module.exports = function(req, res) {
 			if (err) return next();
 			
 			var onSuccess = function() {
-				return res.redirect('/me');
+				if (req.query.returnto) {
+					return res.redirect(req.query.returnto);
+				} else {
+					return res.redirect('/me');
+				}
 			}
 			
 			var onFail = function(e) {
@@ -118,6 +97,6 @@ exports = module.exports = function(req, res) {
 		
 	});
 	
-	view.render('site/signin');
+	view.render('site/join');
 	
 }

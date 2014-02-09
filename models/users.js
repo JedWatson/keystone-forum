@@ -1,4 +1,5 @@
 var keystone = require('keystone'),
+	async = require('async'),
 	Types = keystone.Field.Types;
 
 /**
@@ -11,8 +12,6 @@ var User = new keystone.List('User', {
 });
 
 var deps = {
-	mentoring: { 'mentoring.available': true },
-	
 	github: { 'services.github.isConfigured': true },
 	google: { 'services.google.isConfigured': true },
 	twitter: { 'services.twitter.isConfigured': true }
@@ -36,7 +35,7 @@ User.add({
 		replies: Boolean
 	}
 }, 'Permissions', {
-	isAdmin: { type: Boolean, label: 'Can Admin Keystone Forum' }
+	isAdmin: { type: Boolean, label: 'Can Admin KeystoneJS Forum' }
 }, 'Services', {
 	services: {
 		github: {
@@ -62,6 +61,13 @@ User.add({
 	}
 });
 
+/** Meta */
+
+User.add('Meta', {
+	topicCount: { type: Number, default: 0, collapse: true, noedit: true },
+	replyCount: { type: Number, default: 0, collapse: true, noedit: true }
+});
+
 
 /**
 	Relationships
@@ -81,6 +87,10 @@ User.relationship({ path: 'authoredReplies', ref: 'ForumReply', refPath: 'author
 // Provide access to Keystone
 User.schema.virtual('canAccessKeystone').get(function() {
 	return this.isAdmin;
+});
+
+User.schema.virtual('url').get(function() {
+	return '/profile/' + this.key;
 });
 
 
@@ -107,11 +117,11 @@ User.schema.methods.resetPassword = function(callback) {
 		new keystone.Email('forgotten-password').send({
 			name: user.name.first || user.name.full,
 			link: 'http://forum.keystonejs.com/reset-password/' + user.resetPasswordKey,
-			subject: 'Reset your Keystone Forum Password'
+			subject: 'Reset your KeystoneJS Forum Password'
 		},{
 			to: user,
 			from: {
-				name: 'Keystone Forum',
+				name: 'KeystoneJS Forum',
 				email: 'contact@keystonejs.com'
 			}
 		}, callback);
@@ -119,6 +129,38 @@ User.schema.methods.resetPassword = function(callback) {
 	});
 	
 }
+
+User.schema.pre('save', function(next) {
+	
+	var user = this;
+	
+	this.wasNew = this.isNew;
+	
+	if (!this.isModified('publishedOn') && this.isModified('state') && this.state == 'published') {
+		this.publishedOn = new Date();
+	}
+	
+	async.parallel([
+		
+		// cache the count of topics to this user
+		function(done) {
+			keystone.list('ForumTopic').model.count().where('author', user.id).where('state', 'published').exec(function(err, count) {
+				user.topicCount = count || 0;
+				done(err);
+			});
+		},
+		
+		// cache the count of replies to this user
+		function(done) {
+			keystone.list('ForumReply').model.count().where('author', user.id).where('state', 'published').exec(function(err, count) {
+				user.replyCount = count || 0;
+				done(err);
+			});
+		}
+		
+	], next);
+	
+});
 
 
 /**

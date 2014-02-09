@@ -10,7 +10,11 @@ header(role='banner').docs-header
 			.docs-nav__collapse.collapse
 				ul.docs-nav__nav
 					if current.user
-						li: a(href=js) Ask question
+						li(class=section == 'forum' ? 'active' : null): a(href='/') Forum
+						li(class=section == 'ask' ? 'active' : null): a(href='/me/ask') Ask Question
+						li(class=section == 'me' ? 'active' : null): a(href='/me') Settings
+						li: a(href='/signout') Log out
 					else
-						li: a(href='/signin') Log in
+						li(class=section == 'login' ? 'active' : null): a(href='/login') Log in
+						li(class=section == 'join' ? 'active' : null): a(href='/join') Join
 		//- include ../includes/primary-nav

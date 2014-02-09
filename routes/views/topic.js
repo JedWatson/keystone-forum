@@ -7,7 +7,7 @@ exports = module.exports = function(req, res) {
 	var view = new keystone.View(req, res),
 		locals = res.locals;
 	
-	locals.section = 'topic';
+	locals.section = 'forum';
 	
 	
 	// LOAD Topic
@@ -23,7 +23,7 @@ exports = module.exports = function(req, res) {
 				if (err) return res.err(err);
 				if (!topic) return res.notfound('Topic not found');
 				locals.topic = topic;
-				locals.topic.populateRelated('replies[author]', next);
+				next();
 			});
 		
 	});
@@ -35,8 +35,8 @@ exports = module.exports = function(req, res) {
 	view.on('init', function(next) {
 		
 		ForumReply.model.find()
-			.where( 'topic', locals.topic )
-			.where( 'replyState', 'published' )
+			.where( 'topic', locals.topic.id )
+			.where( 'state', 'published' )
 			.where( 'author' ).ne( null )
 			.populate( 'author', 'name photo' )
 			.sort('-publishedOn')
@@ -92,7 +92,6 @@ exports = module.exports = function(req, res) {
 		
 		var newReply = new ForumReply.model({
 			state: 'published',
-			forum: locals.topic.forum.id,
 			topic: locals.topic.id,
 			author: locals.current.user.id
 		});
@@ -189,7 +188,7 @@ exports = module.exports = function(req, res) {
 			.where('author', locals.topic.author)
 			.sort('-publishedOn')
 			.limit(4)
-			.populate('author forum')
+			.populate('author')
 			.exec(function(err, authorTopics) {
 				if (err) return res.err(err);
 				locals.authorTopics = authorTopics;
@@ -204,7 +203,7 @@ exports = module.exports = function(req, res) {
 	
 	view.on('render', function(next) {
 		locals.page.name = locals.topic.title;
-		locals.page.title = locals.page.name + ' - ' + locals.topic.forum.name + ' on KeystoneJS Forum';
+		locals.page.title = locals.page.name + ' on KeystoneJS Forum';
 		next();
 	});
 	

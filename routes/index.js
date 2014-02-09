@@ -40,11 +40,12 @@ exports = module.exports = function(app) {
 	app.get('/:filter(newest|active|unanswered|featured)', routes.views.index); // TODO use globals to pull out filters
 	app.get('/:filter(newest|active|unanswered|featured)/:category?', routes.views.index); // TODO use globals to pull out filters
 	
-	app.all('/topic/:topic', routes.views.index);
+	app.all('/topic/:topic', routes.views.topic);
 	
 	
 	// Session
-	app.all('/:mode(signin|join)', routes.views.signin);
+	app.all('/join', routes.views.join);
+	app.all('/login', routes.views.signin);
 	app.get('/signout', routes.views.signout);
 	app.all('/forgot-password', routes.views['forgot-password']);
 	app.all('/reset-password/:key', routes.views['reset-password']);
@@ -58,7 +59,7 @@ exports = module.exports = function(app) {
 	// User
 	app.all('/me*', middleware.requireUser);
 	app.all('/me', routes.views.me);
-	app.all('/me/create/topic', routes.views.createTopic);
+	app.all('/me/ask', routes.views.ask);
 	
 	
 	// API

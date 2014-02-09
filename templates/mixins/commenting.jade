@@ -1,0 +1,44 @@
+mixin comment-form(action)
+	form(method='post').comment-form.media
+		input(type='hidden', name='action', value='comment.create')
+		
+		.comment-author.pull-left
+			if current.user
+				img(src=current.user.photo.exists ? current.user._.photo.thumbnail(60,60) : 'http://placehold.it/60x60', alt=current.user.name.full, width=60, height=60).img-avatar
+			else
+				img(src='http://placehold.it/60x60', alt='Comment author placeholder', width=60, height=60).img-avatar
+		.comment-box.media-body
+			.comment-field
+				.form-group: textarea(name='content', placeholder=current.user ? 'Leave a message...' : 'Please sign in to comment', disabled=!current.user).comment-field-input.form-control
+			if current.user
+				.form-inline.mv-5
+					button(type='submit').btn.btn-sm.btn-primary Post Comment
+					//- TODO
+					//- This would be nice to have later
+					//- .checkbox: label
+						input(type='checkbox', name='subscribed', value='true', checked)
+						| &nbsp;Subscribe to thread
+			else
+				a(href='/join?returnto=' + page.path).btn.btn-sm.btn-primary Log in or Join to Comment
+
+mixin comment-post(comment)
+	if comment.author
+		div(id='comment-id-' + comment.id).comment-post
+			if current.user && current.user.id == comment.author.id
+				a(href='?remove=comment&comment=' + comment.id, title='Delete this comment', rel='tooltip', data-placement='left').comment-delete.js-delete-confirm
+					span.entypo.entypo-trash
+						
+			.media
+				a(href=comment.author.url).pull-left
+					img(src=comment.author.photo.exists ? comment.author._.photo.thumbnail(60,60) : 'http://placehold.it/60x60', alt=comment.author.name.full, width=60, height=60).img-avatar
+				.media-body
+					p
+						strong: a(href=comment.author.url)=comment.author.name.full
+						span.text-muted  &middot; #{moment(comment.publishedOn).fromNow()}
+					p!=comment.content.html
+
+mixin comment-thread(comments)
+	if comments.length
+		.comment-thread
+			for comment in comments
+				+comment-post(comment)

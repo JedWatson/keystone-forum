@@ -1,4 +1,4 @@
-// ==============================
+//
 // LAYOUT
 // ==============================
 
@@ -8,14 +8,23 @@
 body {
 	font-weight: 300;
 }
-strong {
+
+strong,
+label {
 	font-weight: 400;
 }
 
 
 
 
-// Container smaller
+// smaller container
+.container-sm {
+	.container-fixed();
+	
+	max-width: 400px;
+}
+
+// variable width container
 .flexi-container {
 	.container-fluid();
 
@@ -38,10 +47,10 @@ strong {
 	}
 	.keystone-logo {
 		float: left;
-		img {
-			height: 35px;
-			width: 103px;
-		}
+		// img {
+		// 	height: 35px;
+		// 	width: 103px;
+		// }
 	}
 	.social-buttons {
 		float: left;
@@ -77,14 +86,6 @@ strong {
 		display: block;
 		padding: 0 15px;
 		text-decoration: none;
-	}
-	
-	// active
-	.active a {
-		@shadow: 0 -2px white inset, 0 -5px @link-color inset;
-		.box-shadow( @shadow );
-		background: none transparent;
-		color: @gray-darker;
 	}
 }
 .docs-nav__collapse.in {
@@ -128,6 +129,14 @@ strong {
 				background-color: transparent;
 			}
 		}
+	
+		// active
+		li.active a {
+			@shadow: 0 -2px white inset, 0 -5px @link-color inset;
+			.box-shadow( @shadow );
+			background: none transparent;
+			color: @gray-darker;
+		}
 	}
 }
 
@@ -138,6 +147,7 @@ strong {
 	color: @gray-light;
 	font-size: @font-size-small;
 	font-weight: 300;
+	margin-top: 30px;
 	padding-bottom: 30px;
 	padding-top: 30px;
 	position: relative;
@@ -155,7 +165,8 @@ strong {
 		}
 	}
 	
-	@media (min-width: @screen-sm) {
+	@media (min-width: @screen-sm-min) {
+		margin-top: 100px;
 		padding-bottom: 60px;
 		padding-top: 60px;
 		
@@ -193,3 +204,30 @@ strong {
 }
 
 
+
+
+// User Stuff
+.profile-form__section {
+	margin-bottom: 6em;
+}
+.profile-form__heading {
+	.box-sizing( content-box );
+	border-bottom: 1px solid @gray-lighter;
+	font-size: @font-size-large;
+	height: 30px;
+	line-height: 30px;
+	margin-bottom: @line-height-computed;
+	margin-top: 0;
+	padding-bottom: @line-height-computed;
+}
+
+
+
+
+// Form Stuff
+.form-horizontal .control-label {
+	text-align: left;
+}
+label.checkbox {
+	font-weight: 300;
+}

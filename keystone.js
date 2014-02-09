@@ -15,8 +15,8 @@ var keystone = require('keystone'),
 
 keystone.init({
 
-	'name': 'Keystone Forum',
-	'brand': 'Keystone Forum',
+	'name': 'KeystoneJS Forum',
+	'brand': 'KeystoneJS Forum',
 	'back': '/me',
 
 	'favicon': 'public/favicon.ico',

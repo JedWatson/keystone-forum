@@ -1,0 +1,24 @@
+doctype html
+html
+	head
+		include ../includes/htmlhead
+		block css
+		block head
+	body
+		include ../includes/header
+		
+		block intro
+		
+		.docs-body
+			block content
+		
+		//- include ../includes/footer
+		
+		script(src="/js/lib/jquery/jquery-1.10.2.min.js")
+		script(src='/js/lib/bootstrap/collapse.js')
+		//- script(src='/js/lib/bootstrap/dropdown.js')
+		//- script(src='/js/lib/prism/prism.min.js')
+		
+		//- Page Scripts
+		block js
+

@@ -1,0 +1,51 @@
+extends ../../layouts/default
+
+mixin topic(topic)
+	li: .topic
+		.topic__avatar
+			img(src=topic.author.photo.exists ? topic.author.photo.thumbnail(60,60) : 'http://www.placehold.it/60x60')
+		.topic__count
+			.topic__count-number= topic.replyCount
+			.topic__count-label Answers
+		.topic__content
+			h2.topic__title: a(href=topic.url)= topic.name
+			.topic__info
+				| Posted 
+				time(datetime=topic.publishedOn)= moment(topic.publishedOn).format('DD MMM YYYY')
+				|  by 
+				strong= topic.author.name.full
+			if topic.category
+				.topic__meta
+					span.topic__category
+						span(class=topic.category.key).category-indicator
+						span= topic.category.name
+
+
+block content
+	.container
+		.row
+			.col-sm-9
+				nav.filter-nav
+					ul
+						for filter in globals.forum.topic.filters
+							li(class=current.filter && filter.value == current.filter.value ? 'is-active' : null)
+								a(href='/' + filter.value + (current.category ? ('/' + current.category.key) : ''))= filter.label
+				//- h3 Forum
+				if topics.total
+					ol.topics
+						for topic in topics.results
+							+topic(topic)
+				else
+					h3 Sorry, we couldn't find any topics matching your criteria.
+
+			.col-sm-3
+				.categories-heading Categories
+				.categories-list: ul
+					li(class=!current.category ? 'is-active' : null): a(href=current.filter ? ('/' + current.filter.value) : '/')
+						span.category-indicator
+						span All topics
+					for category in categories
+						li(class=current.category && category.key == current.category.key ? 'is-active' : null)
+							a(href='/' + current.filter.value + '/' + category.key)
+								span(class=category.key).category-indicator
+								span= category.name

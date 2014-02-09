@@ -10,9 +10,10 @@ block content
 					.flag__body
 						strong.font-lg= current.user.name.full
 				hr
-				p You have asked #{plural(current.user.topicCount, '* question', '* questions')} 
-				p You have answered to #{plural(current.user.replyCount, '* question', '* questions')}
-				p Since #{moment(current.user.createdOn).format('DD MMMM YYYY')}
+				p
+					| You have asked #{plural(current.user.topicCount, '* question', '* questions')} 
+					| and answered to #{current.user.replyCount}
+					| since joining on #{moment(current.user.createdOn).format('D MMMM YYYY')}
 				p: strong: a(href=current.user.url) View your profile
 			.col-sm-9
 				form(method='post', autocomplete='off').profile-form.form-horizontal

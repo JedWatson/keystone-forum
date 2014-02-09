@@ -37,8 +37,8 @@ exports = module.exports = function(app) {
 	
 	// Forum
 	app.get('/', routes.views.index);
-	app.get('/:filter(newest|active|unanswered|featured)', routes.views.index); // TODO use globals to pull out filters
-	app.get('/:filter(newest|active|unanswered|featured)/:category?', routes.views.index); // TODO use globals to pull out filters
+	app.get('/:filter(newest|popular|unanswered|featured)', routes.views.index); // TODO use globals to pull out filters
+	app.get('/:filter(newest|popular|unanswered|featured)/:category?', routes.views.index); // TODO use globals to pull out filters
 	
 	app.all('/topic/:topic', routes.views.topic);
 	
@@ -61,6 +61,7 @@ exports = module.exports = function(app) {
 	app.all('/me', routes.views.me);
 	app.all('/me/ask', routes.views.ask);
 	
+	app.all('/profile/:profile', routes.views.profile);
 	
 	// API
 	app.all('/api*', keystone.initAPI);

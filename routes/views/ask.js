@@ -12,6 +12,7 @@ exports = module.exports = function(req, res) {
 		
 	locals.form = {
 		name: '',
+		category: '',
 		content: {
 			full: ''
 		}
@@ -33,7 +34,7 @@ exports = module.exports = function(req, res) {
 		var updater = newTopic.getUpdateHandler(req);
 		
 		updater.process(req.body, {
-			fields: 'name, content.extended',
+			fields: 'name, category, content.full',
 			flashErrors: true,
 			logErrors: true
 		}, function(err) {
@@ -45,7 +46,7 @@ exports = module.exports = function(req, res) {
 				
 				return next();
 			} else {
-				return res.redirect('/topic/' + data.newTopic.key);
+				return res.redirect('/topic/' + newTopic.key);
 			}
 		
 		});

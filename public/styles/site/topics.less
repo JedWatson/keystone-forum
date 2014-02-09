@@ -13,7 +13,6 @@
 	max-width: 100%;
 }
 
-
 .topic-category {
 	background-color: @gray-lighter;
 	border-radius: 3px;
@@ -30,6 +29,25 @@
 			text-decoration: none;
 		}
 	}
+}
+
+.category-indicator {
+	.square( 10px );
+	background-color: @gray-light;
+	border-radius: 50%;
+	border: 2px solid @body-bg;
+	display: inline-block;
+	margin-right: 8px;
+	position: relative;
+	top: -1px;
+	vertical-align: middle;
+
+	&.express { background-color: red; }
+	&.mongoose { background-color: green; }
+	&.nodejs { background-color: lime; }
+	&.announcement { background-color: yellow; }
+	&.demo { background-color: purple; }
+	&.forum { background-color: blue; }
 }
 
 
@@ -72,12 +90,14 @@
 .topic__count {
 	color: @gray-light;
 	float: right;
-	font-weight: 400;
 	text-align: center;
 }
 .topic__count-number {
 	font-size: 2.6em;
-	// font-weight: bold;
+	font-weight: 400;
+}
+.topic__count-label {
+	font-size: @font-size-small;
 }
 .topic__info {
 	color: @gray-light;
@@ -93,7 +113,7 @@
 
 // no results
 .no-results {
-	background-color: @gray-lighter;
+	background-color: #fafafa;
 	border-radius: 2px;
 	margin-top: 2em;
 	padding-bottom: 6em;
@@ -117,11 +137,15 @@
 
 	.subheading {
 		color: @gray-light;
+		display: inline-block;
+		margin-left: 1em;
+		vertical-align: middle;
+
 		a {
-			color: @gray-light;
+			color: @gray;
 
 			&:hover {
-				color: @gray;
+				color: @gray-dark;
 			}
 		}
 	}
@@ -146,7 +170,8 @@
 .filter-nav {
 	border-bottom: 1px solid @gray-lighter;
 	list-style: none;
-	font-weight: bold;
+	font-weight: 400;
+	font-size: @font-size-large;
 	margin: 0;
 	padding: 0;
 
@@ -159,6 +184,11 @@
 		color: @gray-light;
 		display: block;
 		padding: 15px;
+
+		&:hover {
+			color: @gray;
+			text-decoration: none;
+		}
 	}
 	.is-active > a {
 		color: @gray-dark;
@@ -205,8 +235,9 @@
 // sidebar navigation
 .categories-heading {
 	border-bottom: 1px solid @gray-lighter;
-	font-weight: bold;
 	display: block;
+	font-size: @font-size-large;
+	font-weight: 400;
 	margin-bottom: 2em;
 	padding: 15px;
 }
@@ -244,35 +275,14 @@
 		}
 	}
 	.is-active .categories-list__item {
-		background-color: @gray-light;
-		color: white;
+		background-color: darken(@gray-lighter, 5%);
+		// color: white;
 	}
 
-	.is-active.express .categories-list__item { background-color: red; }
-	.is-active.mongoose .categories-list__item { background-color: green; }
-	.is-active.nodejs .categories-list__item { background-color: lime; }
-	.is-active.announcement .categories-list__item { background-color: yellow; }
-	.is-active.demo .categories-list__item { background-color: purple; }
-	.is-active.forum .categories-list__item { background-color: blue; }
-}
-
-
-// indicators
-.category-indicator {
-	.square( 10px );
-	background-color: @gray-light;
-	border-radius: 50%;
-	border: 2px solid @body-bg;
-	display: inline-block;
-	margin-right: 10px;
-	position: relative;
-	top: -1px;
-	vertical-align: middle;
-
-	&.express { background-color: red; }
-	&.mongoose { background-color: green; }
-	&.nodejs { background-color: lime; }
-	&.announcement { background-color: yellow; }
-	&.demo { background-color: purple; }
-	&.forum { background-color: blue; }
+	// .is-active.express .categories-list__item { background-color: red; }
+	// .is-active.mongoose .categories-list__item { background-color: green; }
+	// .is-active.nodejs .categories-list__item { background-color: lime; }
+	// .is-active.announcement .categories-list__item { background-color: yellow; }
+	// .is-active.demo .categories-list__item { background-color: purple; }
+	// .is-active.forum .categories-list__item { background-color: blue; }
 }

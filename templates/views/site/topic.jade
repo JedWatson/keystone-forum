@@ -6,6 +6,7 @@ block content
 	.container
 		.row
 			.col-sm-9
+				h4: a(href='/').text-muted &larr; Back to all questions
 				article.topic-details
 					header.topic-details__header
 						h1.heading=topic.name
@@ -20,7 +21,7 @@ block content
 									=moment(topic.publishedOn).format('dddd, D MMM YYYY')
 								if topic.author
 									span  by 
-									a(href=topic.author.url).text-muted=topic.author.name.full
+									a(href=topic.author.url)= topic.author.name.full
 								if replies.length
 									|  &middot; 
 									a(href='#answers')= plural(replies.length, '* answer', '* answers')

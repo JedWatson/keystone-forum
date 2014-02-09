@@ -9,10 +9,12 @@ mixin comment-form(action)
 				img(src='http://placehold.it/60x60', alt='Comment author placeholder', width=60, height=60).img-avatar
 		.comment-box.media-body
 			.comment-field
-				.form-group: textarea(name='content', placeholder=current.user ? 'Leave a message...' : 'Please sign in to comment', disabled=!current.user).comment-field-input.form-control
+				.form-group: textarea(name='content', rows=5, placeholder=current.user ? 'Leave a reply...' : 'Please sign in to comment', disabled=!current.user).comment-field-input.form-control
 			if current.user
 				.form-inline.mv-5
-					button(type='submit').btn.btn-sm.btn-primary Post Comment
+					p.help-block.pull-right Replies use 
+						a(href='http://daringfireball.net/projects/markdown/', target='_blank', title='Markdown Guide (new window)') Markdown
+					button(type='submit').btn.btn-sm.btn-primary Post Reply
 					//- TODO
 					//- This would be nice to have later
 					//- .checkbox: label

@@ -73,7 +73,7 @@ ForumReply.schema.post('save', function() {
 */
 
 ForumReply.addPattern('standard meta');
-ForumReply.defaultColumns = 'topic, author, publishedOn';
+ForumReply.defaultColumns = 'topic, author|17%, publishedOn|17%';
 ForumReply.register();
 
 

@@ -133,7 +133,7 @@ ForumTopic.schema.post('save', function() {
 // ------------------------------
 
 ForumTopic.addPattern('standard meta');
-ForumTopic.defaultColumns = 'name';
+ForumTopic.defaultColumns = 'name, category|20%, publishedOn|20%';
 ForumTopic.register();
 
 

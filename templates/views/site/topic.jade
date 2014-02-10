@@ -7,6 +7,7 @@ block content
 		.row
 			.col-sm-9
 				h4: a(href='/').text-muted &larr; Back to all questions
+				hr
 				article.topic-details
 					header.topic-details__header
 						h1.heading=topic.name
@@ -43,11 +44,8 @@ block content
 							+comment-thread(replies)
 						+comment-form()
 			.col-sm-3
-				h4.text-muted Tips for answering
-				p Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam blandit pretium est, in lobortis enim lobortis nec. Cras consequat lacus a mauris semper eleifend.
-
-				hr
 				h4.text-muted Found a bug?
+				hr
 				p If you're experiencing what appears to be a bug or something that doesn't seem to be working correctly, please 
 					a(href='https://github.com/JedWatson/keystone/issues') log&nbsp;an&nbsp;issue
 					|  in the Github project

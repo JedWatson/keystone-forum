@@ -16,7 +16,7 @@ block content
 					| since joining on #{moment(current.user.createdOn).format('D MMMM YYYY')}
 				p: strong: a(href=current.user.url) View your profile
 			.col-sm-9
-				form(method='post', autocomplete='off').profile-form.form-horizontal
+				form(method='post', enctype='multipart/form-data', autocomplete='off', novalidate).profile-form.form-horizontal
 					input(type='hidden', name='action', value='user.update')
 					.profile-form__section
 						h3.profile-form__heading Your Profile
@@ -56,7 +56,7 @@ block content
 							.col-sm-10
 								if current.user.photo.exists
 									.row
-										.col-sm-3: img(src=current.user._.photo.thumbnail(120,120)).img-responsive
+										.col-sm-3: img(src=current.user._.photo.thumbnail(120,120)).img-avatar
 										.col-sm-9: input(type='file', name='photo_upload')
 								else
 									input(type='file', name='photo_upload')
@@ -64,7 +64,7 @@ block content
 					.profile-form__section
 						h3.profile-form__heading Change password
 						.form-group
-							label.col-sm-2.control-label Photo
+							label.col-sm-2.control-label Security
 							.col-sm-10
 								.form-group
 									label(for='change-password').sr-only Current Password
@@ -82,10 +82,10 @@ block content
 							label.col-sm-2.control-label Email me when
 							.col-sm-10
 								label.checkbox
-									input(type='checkbox' name='notifications.topics')
+									input(type='checkbox' name='notifications.topics', value=true, checked=current.user.notifications.topics ? 'checked' : null)
 									|  Someone asks a question
 								label.checkbox
-									input(type='checkbox' name='notifications.replies')
+									input(type='checkbox' name='notifications.replies', value=true, checked=current.user.notifications.topics ? 'checked' : null)
 									|  Someone answers a question I've asked
 
 

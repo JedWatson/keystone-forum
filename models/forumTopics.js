@@ -1,13 +1,13 @@
-var _ = require('underscore'),
-	keystone = require('keystone'),
-	utils = keystone.utils,
+var keystone = require('keystone'),
+	_ = require('underscore'),
 	async = require('async'),
+	utils = keystone.utils,
 	Types = keystone.Field.Types;
 
-/** 
-	Forum Topics
-	============
- */
+
+// ==============================
+// Forum Topics
+// ==============================
 
 var ForumTopic = new keystone.List('ForumTopic', {
 	autokey: { from: 'name', path: 'key', unique: true },
@@ -15,17 +15,13 @@ var ForumTopic = new keystone.List('ForumTopic', {
 	singular: 'Topic'
 });
 
-var deps = {
-	videoEmbed: { videoEmbed: true, videoEmbedData: { exists: true } }
-};
-
 ForumTopic.add({
-	name: { type: String, required: true },
+	name: { type: String, label: 'Title', required: true },
 	author: { type: Types.Relationship, initial: true, ref: 'User', index: true },
 	likedBy: { type: Types.Relationship, ref: 'User', index: true },
 	state: { type: Types.Select, options: 'published, archived', default: 'published', index: true },
 	publishedOn: { type: Types.Date, default: Date.now, noedit: true, index: true },
-	category: { type: Types.Relationship, ref: 'ForumCategory', index: true }
+	category: { type: Types.Relationship, ref: 'ForumCategory', initial: true, required: true, index: true }
 });
 
 /** Content */
@@ -47,28 +43,28 @@ ForumTopic.add('Meta', {
 });
 
 
-/**
-	Virtuals
-	========
-*/
+
+
+// Virtuals
+// ------------------------------
 
 ForumTopic.schema.virtual('url').get(function() {
 	return '/topic/' + this.key;
 });
 
 
-/** 
-	Relationships
-	=============
-*/
+
+
+// Relationships
+// ------------------------------
 
 ForumTopic.relationship({ path: 'replies', ref: 'ForumReply', refPath: 'topic' });
 
 
-/** 
-	Methods
-	=======
-*/
+
+
+// Methods
+// ------------------------------
 
 ForumTopic.schema.pre('save', function(next) {
 	
@@ -122,13 +118,19 @@ ForumTopic.schema.post('save', function() {
 		});
 	}
 	
+	if (this.category) {
+		keystone.list('ForumCategory').model.findById(this.category).exec(function(err, category) {
+			return category && category.wasActive().save();
+		});
+	}
+	
 });
 
 
-/** 
-	Registration
-	============
-*/
+
+
+// Registration
+// ------------------------------
 
 ForumTopic.addPattern('standard meta');
 ForumTopic.defaultColumns = 'name';

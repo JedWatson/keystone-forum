@@ -2,39 +2,38 @@ extends ../../layouts/default
 
 block content
 	.container
-		.row
-			.col-sm-9
-				h4 New question
-				hr
-				form(method='post', enctype='multipart/form-data', autocomplete='off', novalidate).management-form
-					
-					input(type='hidden', name='action', value='topic.create')
-
+		form(method='post', autocomplete='off', novalidate).management-form
+			input(type='hidden', name='action', value='topic.create')
+			+flash-messages(messages)
+			.row
+				.col-sm-9
+					h4 New question
+					hr
 					.form-group
-						input(type='text', name='name', placeholder='Title', value=form.name).form-control.input-lg
+						input(type='text', name='name', placeholder='Title', value=form.name, tabindex=1).form-control.input-lg
 					.form-group
 						p.help-block Questions are parsed with 
 							a(href='http://daringfireball.net/projects/markdown/', target='_blank', title='Markdown Guide (new window)') Markdown
-						textarea(name='content.full', placeholder='', style='min-height: 300px;').form-control.js-wysiwyg!= form['content.full']
+						textarea(name='content.full', placeholder='', style='min-height: 300px;', tabindex=2).form-control.js-wysiwyg!= form['content.full']
 								
 					.spotlight-footer
 						button(type='submit', data-loading-text='Saving...').btn.btn-primary Ask Question
 
-			.col-sm-3
-				h4 Select a Category
-				hr
-				.categories-list: ul
-					for category in categories
-						li(class=category.key)
-							label.categories-list__item
-								input(type='radio', name='category', value=category.id, checked=category.id == form.category)
-								span(class=category.key).category-indicator
-								span= category.name
-				hr
-				h4.text-muted Asking Tips
-				p Is your question about KeystoneJS?
-				p We prefer questions that can be answered, not just discussed.
-				p Provide details. Share your research.
+				.col-sm-3
+					h4 Select a Category
+					hr
+					.categories-list: ul
+						each category, i in categories
+							li(class=category.key)
+								label(tabindex=i+3).categories-list__item
+									input(type='radio', name='category', value=category.id, checked=category.id == form.category)
+									span(class=category.key).category-indicator
+									span= category.name
+					hr
+					h4.text-muted Found a bug?
+					p If you're experiencing what appears to be a bug or something that doesn't seem to be working correctly, please 
+						a(href='https://github.com/JedWatson/keystone/issues') log&nbsp;an&nbsp;issue
+						|  in the Github project
 						
 block js
 	//- script(src='/js/lib/bootstrap/button.js')

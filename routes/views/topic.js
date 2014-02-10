@@ -38,7 +38,7 @@ exports = module.exports = function(req, res) {
 			.where( 'topic', locals.topic.id )
 			.where( 'state', 'published' )
 			.where( 'author' ).ne( null )
-			.populate( 'author', 'name photo' )
+			.populate( 'author', 'name key photo' )
 			.sort('-publishedOn')
 			.exec(function(err, replies) {
 				if (err) return res.err(err);

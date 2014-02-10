@@ -58,6 +58,12 @@ ForumReply.schema.post('save', function() {
 		});
 	}
 	
+	if (this.category) {
+		keystone.list('ForumCategory').model.findById(this.category).exec(function(err, category) {
+			return category && category.wasActive().save();
+		});
+	}
+	
 });
 
 

@@ -30,5 +30,6 @@ block content
 					for category in categories
 						li(class=current.category && category.key == current.category.key ? 'is-active #{category.key}' : category.key)
 							a(href='/' + current.filter.value + '/' + category.key).categories-list__item
+								span.category-count= category.topicCount
 								span(class=category.key).category-indicator
 								span= category.name

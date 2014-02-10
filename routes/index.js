@@ -37,8 +37,8 @@ exports = module.exports = function(app) {
 	
 	// Forum
 	app.get('/', routes.views.index);
-	app.get('/:filter(newest|popular|unanswered|featured)', routes.views.index); // TODO use globals to pull out filters
-	app.get('/:filter(newest|popular|unanswered|featured)/:category?', routes.views.index); // TODO use globals to pull out filters
+	app.get('/' + globals.forum.routePatterns.filters, routes.views.index);
+	app.get('/' + globals.forum.routePatterns.filters + '/:category?', routes.views.index);
 	
 	app.all('/topic/:topic', routes.views.topic);
 	

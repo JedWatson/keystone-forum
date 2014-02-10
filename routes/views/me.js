@@ -11,7 +11,7 @@ exports = module.exports = function(req, res) {
 	view.on('post', { action: 'user.update' }, function(next) {
 	
 		req.user.getUpdateHandler(req).process(req.body, {
-			fields: 'name,email,twitter,website,github,bio,photo',
+			fields: 'name, email, twitter, website, github, bio, photo, notifications.topics, notifications.replies',
 			flashErrors: true
 		}, function(err) {
 		

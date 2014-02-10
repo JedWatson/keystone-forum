@@ -7,6 +7,7 @@
 
 // common
 .img-avatar {
+	.img-responsive();
 	border-radius: 50%;
 	border: 4px solid @gray-lighter;
 	height: auto;
@@ -42,12 +43,12 @@
 	top: -1px;
 	vertical-align: middle;
 
-	&.express { background-color: red; }
-	&.mongoose { background-color: green; }
-	&.nodejs { background-color: lime; }
-	&.announcement { background-color: yellow; }
-	&.demo { background-color: purple; }
-	&.forum { background-color: blue; }
+	&.express { background-color: @category-express; }
+	&.mongoose { background-color: @category-mongoose; }
+	&.nodejs { background-color: @category-nodejs; }
+	&.announcement { background-color: @category-announcement; }
+	&.demo { background-color: @category-demo; }
+	&.forum { background-color: @category-forum; }
 }
 
 
@@ -56,6 +57,7 @@
 // ------------------------------
 
 @avatar-width: 60px;
+@topic-gutter: 15px;
 
 .topics {
 	// border-bottom: 1px solid @gray-lighter;
@@ -64,13 +66,14 @@
 	padding: 0;
 
 	li {
-		padding: 0 0 15px;
-		margin-top: 15px;
+		padding: 0 0 @topic-gutter;
+		margin-top: @topic-gutter;
 		border-bottom: 1px solid @gray-lighter;
 	}
 }
 .topic {
-	padding-left: @avatar-width + 15;
+	min-height: @avatar-width + (@topic-gutter * 2);
+	padding-left: @avatar-width + @topic-gutter;
 }
 .topic__avatar {
 	.square( @avatar-width );
@@ -238,7 +241,7 @@
 	display: block;
 	font-size: @font-size-large;
 	font-weight: 400;
-	margin-bottom: 2em;
+	margin-bottom: 25px;
 	padding: 15px;
 }
 .categories-list {
@@ -254,6 +257,10 @@
 	input {
 		.sr-only();
 	}
+	.category-count {
+		color: @gray-light;
+		float: right;
+	}
 	.categories-list__item {
 		// border-left: 3px solid transparent;
 		border-radius: 2px;
@@ -267,7 +274,7 @@
 		&:hover,
 		&:active,
 		&:focus {
-			background-color: #fafafa;
+			background-color: @gray-lighter;
 			border-left-color: @gray-light;
 			color: @text-color;
 			outline: none;
@@ -279,10 +286,10 @@
 		// color: white;
 	}
 
-	// .is-active.express .categories-list__item { background-color: red; }
-	// .is-active.mongoose .categories-list__item { background-color: green; }
-	// .is-active.nodejs .categories-list__item { background-color: lime; }
-	// .is-active.announcement .categories-list__item { background-color: yellow; }
-	// .is-active.demo .categories-list__item { background-color: purple; }
-	// .is-active.forum .categories-list__item { background-color: blue; }
+	.is-active.express .categories-list__item { background-color: mix(white, @category-express, 90%); }
+	.is-active.mongoose .categories-list__item { background-color: mix(white, @category-mongoose, 90%); }
+	.is-active.nodejs .categories-list__item { background-color: mix(white, @category-nodejs, 90%); }
+	.is-active.announcement .categories-list__item { background-color: mix(white, @category-announcement, 90%); }
+	.is-active.demo .categories-list__item { background-color: mix(white, @category-demo, 90%); }
+	.is-active.forum .categories-list__item { background-color: mix(white, @category-forum, 90%); }
 }

@@ -15,11 +15,11 @@ block content
 							a(href='/newest/' + topic.category.key).topic-category
 								span(class=topic.category.key).category-indicator
 								span= topic.category.name
-						if topic.author || topic.publishedOn
+						if topic.author || topic.publishedAt
 							span.subheading
-								if topic.publishedOn
+								if topic.publishedAt
 									span  started on  
-									=moment(topic.publishedOn).format('dddd, D MMM YYYY')
+									= topic._.publishedAt.format('dddd, D MMM YYYY')
 								if topic.author
 									span  by 
 									a(href=topic.author.url)= topic.author.name.full
@@ -33,8 +33,9 @@ block content
 							.media-body.media-body-column
 								p.hidden-xs.text-muted
 									strong: a(href='/profile/' + topic.author.key)=topic.author.name.full
-									|  &middot; 
-									span #{moment(topic.publishedOn).fromNow()}
+									if topic.publishedAt
+										|  &middot; 
+										span #{moment(topic.publishedAt).fromNow()}
 								.details-content-wrapper!=topic.content.full.html
 					
 					//-comments

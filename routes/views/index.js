@@ -26,7 +26,7 @@ exports = module.exports = function(req, res) {
 	
 	// FILTER topics
 	if (locals.current.filter.value == 'newest') {
-		query.sort('-publishedOn')
+		query.sort('-publishedAt')
 	} else if (locals.current.filter.value == 'active') {
 		query.sort('-replyCount')
 	} else if (locals.current.filter.value == 'unanswered') {

@@ -16,7 +16,8 @@ ForumReply.add({
 	author: { type: Types.Relationship, initial: true, ref: 'User', index: true },
 	topic: { type: Types.Relationship, initial: true, ref: 'ForumTopic', index: true },
 	state: { type: Types.Select, options: 'published, archived', default: 'published', index: true },
-	publishedOn: { type: Types.Date, default: Date.now, noedit: true, index: true }
+	createdAt: { type: Types.Date, default: Date.now, noedit: true, index: true },
+	publishedAt: { type: Types.Date, collapse: true, noedit: true, index: true }
 });
 
 ForumReply.add('Content', {
@@ -30,10 +31,8 @@ ForumReply.add('Content', {
 
 ForumReply.schema.pre('save', function(next) {
 	
-	this.wasNew = this.isNew;
-	
-	if (!this.isModified('publishedOn') && this.isModified('postState') && this.postState == 'published') {
-		this.publishedOn = new Date();
+	if (!this.isModified('publishedAt') && this.isModified('state') && this.state == 'published') {
+		this.publishedAt = new Date();
 	}
 	
 	next();
@@ -73,7 +72,7 @@ ForumReply.schema.post('save', function() {
 */
 
 ForumReply.addPattern('standard meta');
-ForumReply.defaultColumns = 'topic, author|17%, publishedOn|17%';
+ForumReply.defaultColumns = 'topic, author|17%, publishedAt|17%';
 ForumReply.register();
 
 

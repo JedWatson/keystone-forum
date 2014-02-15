@@ -36,7 +36,8 @@ mixin comment-post(comment)
 				.media-body
 					p
 						strong: a(href=comment.author.url)=comment.author.name.full
-						span.text-muted  &middot; #{moment(comment.publishedOn).fromNow()}
+						if comment.publishedAt
+							span.text-muted  &middot; #{moment(comment.publishedAt).fromNow()}
 					p!=comment.content.html
 
 mixin comment-thread(comments)

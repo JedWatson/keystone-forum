@@ -20,7 +20,8 @@ ForumTopic.add({
 	author: { type: Types.Relationship, initial: true, ref: 'User', index: true },
 	likedBy: { type: Types.Relationship, ref: 'User', index: true },
 	state: { type: Types.Select, options: 'published, archived', default: 'published', index: true },
-	publishedOn: { type: Types.Date, default: Date.now, noedit: true, index: true },
+	createdAt: { type: Types.Date, default: Date.now, noedit: true, index: true },
+	publishedAt: { type: Types.Date, collapse: true, noedit: true, index: true },
 	category: { type: Types.Relationship, ref: 'ForumCategory', initial: true, required: true, index: true }
 });
 
@@ -70,23 +71,21 @@ ForumTopic.schema.pre('save', function(next) {
 	
 	var topic = this;
 	
-	this.wasNew = this.isNew;
-	
 	if (this.isModified('content.full')) {
 		this.content.summary = utils.cropHTMLString(this.content.full, 160, '...', true);
 	}
 	
-	if (!this.isModified('publishedOn') && this.isModified('state') && this.state == 'published') {
-		this.publishedOn = new Date();
+	if (!this.isModified('publishedAt') && this.isModified('state') && this.state == 'published') {
+		this.publishedAt = new Date();
 	}
 	
 	async.parallel([
 		
 		// cache the last reply date and author
 		function(done) {
-			keystone.list('ForumReply').model.findOne().where('topic', topic.id).where('state', 'published').sort('-createdOn').exec(function(err, reply) {
+			keystone.list('ForumReply').model.findOne().where('topic', topic.id).where('state', 'published').sort('-publishedAt').exec(function(err, reply) {
 				if (reply) {
-					topic.lastReplyDate = reply.createdOn;
+					topic.lastReplyDate = reply.publishedAt;
 					topic.lastReplyAuthor = reply.author;
 				}
 				done(err);
@@ -133,7 +132,7 @@ ForumTopic.schema.post('save', function() {
 // ------------------------------
 
 ForumTopic.addPattern('standard meta');
-ForumTopic.defaultColumns = 'name, category|20%, publishedOn|20%';
+ForumTopic.defaultColumns = 'name, category|20%, publishedAt|20%';
 ForumTopic.register();
 
 

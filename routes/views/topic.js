@@ -39,7 +39,7 @@ exports = module.exports = function(req, res) {
 			.where( 'state', 'published' )
 			.where( 'author' ).ne( null )
 			.populate( 'author', 'name key photo' )
-			.sort('-publishedOn')
+			.sort('-publishedAt')
 			.exec(function(err, replies) {
 				if (err) return res.err(err);
 				if (!replies) return res.notfound('Topic replies not found');
@@ -186,7 +186,7 @@ exports = module.exports = function(req, res) {
 		ForumTopic.model.find()
 			.where('_id').ne(locals.topic.id)
 			.where('author', locals.topic.author)
-			.sort('-publishedOn')
+			.sort('-publishedAt')
 			.limit(4)
 			.populate('author')
 			.exec(function(err, authorTopics) {

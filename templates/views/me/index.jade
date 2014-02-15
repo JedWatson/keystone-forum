@@ -13,7 +13,7 @@ block content
 				p
 					| You have asked #{plural(current.user.topicCount, '* question', '* questions')} 
 					| and answered to #{current.user.replyCount}
-					| since joining on #{moment(current.user.createdOn).format('D MMMM YYYY')}
+					| since joining on #{current.user._.joinedAt.format('D MMMM YYYY')}
 				p: strong: a(href=current.user.url) View your profile
 			.col-sm-9
 				form(method='post', enctype='multipart/form-data', autocomplete='off', novalidate).profile-form.form-horizontal

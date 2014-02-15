@@ -38,7 +38,7 @@ exports = module.exports = function(req, res) {
 			.where('author', locals.profile.id)
 			.populate( 'author', 'name photo' )
 			.populate( 'category')
-			.sort('-publishedOn')
+			.sort('-publishedAt')
 			.exec(function(err, topics) {
 				if (err) return res.err(err);
 				locals.topics = topics;
@@ -55,7 +55,7 @@ exports = module.exports = function(req, res) {
 			.where( 'state', 'published' )
 			.where('author', locals.profile.id)
 			.populate( 'author', 'name photo' )
-			.sort('-publishedOn')
+			.sort('-publishedAt')
 			.exec(function(err, replies) {
 				if (err) return res.err(err);
 				locals.replies = replies;

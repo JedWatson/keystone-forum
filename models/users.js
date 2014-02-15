@@ -28,7 +28,8 @@ User.add({
 	github: { type: String, width: 'short' },
 	twitter: { type: String, width: 'short' },
 	website: { type: Types.Url },
-	bio: { type: Types.Markdown }
+	bio: { type: Types.Markdown },
+	joinedAt: { type: Date, default: Date.now },
 }, 'Notifications', {
 	notifications: {
 		topics: Boolean,
@@ -136,8 +137,8 @@ User.schema.pre('save', function(next) {
 	
 	this.wasNew = this.isNew;
 	
-	if (!this.isModified('publishedOn') && this.isModified('state') && this.state == 'published') {
-		this.publishedOn = new Date();
+	if (!this.isModified('publishedAt') && this.isModified('state') && this.state == 'published') {
+		this.publishedAt = new Date();
 	}
 	
 	async.parallel([
@@ -168,6 +169,5 @@ User.schema.pre('save', function(next) {
  * ============
 */
 
-User.addPattern('standard meta');
 User.defaultColumns = 'name, email, isAdmin';
 User.register();

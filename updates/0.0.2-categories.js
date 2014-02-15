@@ -24,6 +24,3 @@ function createCategory(category, done) {
 exports = module.exports = function(done) {
 	async.forEach(categories, createCategory, done);
 };
-
-// safe to run
-exports.__defer__ = true;

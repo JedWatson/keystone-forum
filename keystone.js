@@ -1,5 +1,11 @@
 // Load .env for development environments
-require('dotenv')().load();
+try { require('dotenv')().load(); }
+catch(e) { if (e.code == 'MODULE_NOT_FOUND') {
+	console.log("\nCould not find the 'dotenv' module. Have you run npm install?\n");
+	process.exit();
+} else {
+	throw e;
+}}
 
 // Initialise New Relic if an app name and license key exists
 if (process.env.NEW_RELIC_APP_NAME && process.env.NEW_RELIC_LICENSE_KEY) {
@@ -50,7 +56,7 @@ keystone.init({
 	
 });
 
-require('./models');
+keystone.import('models');
 
 keystone.set('routes', require('./routes'));
 

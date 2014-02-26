@@ -17,7 +17,7 @@ mixin topic-item(topic)
 					| Posted 
 					time(datetime=topic.publishedAt)= topic._.publishedAt.format('DD MMM YYYY')
 					|  by 
-					strong= topic.author.name.full
+					span.text-dimmed= topic.author.name.full
 			if topic.category
 				.topic__meta
 					span.topic-category

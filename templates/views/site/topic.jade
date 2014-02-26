@@ -6,9 +6,10 @@ block content
 	.container
 		.row
 			.col-sm-9
-				a(href=watchedByUser ? '?unwatch' : '?watch').btn.btn-sm.btn-default.pull-right
-					span.entypo.entypo-eye
-					=watchedByUser ? ' Unwatch' : ' Watch'
+				if current.user
+					a(href=watchedByUser ? '?unwatch' : '?watch', title=watchedByUser ? 'Stop email notifications' : 'Get email notifications', rel='tooltip', data-placement='left').btn.btn-sm.btn-default.pull-right
+						span.entypo.entypo-eye
+						=watchedByUser ? ' Unwatch' : ' Watch'
 				h4: a(href='/').text-muted &larr; Back to all questions
 				hr
 				article.topic-details
@@ -32,7 +33,7 @@ block content
 									a(href='#comments', data-scrollduratio=300).js-scrollto-anchor= plural(replies.length, '* answer', '* answers')
 								if current.user && current.user.id == topic.author.id
 									|  &middot; 
-									a(href='?remove=topic&topic=' + topic.id, title='Delete this topic', rel='tooltip', data-placement='left').topic-delete.js-delete-confirm Delete
+									a(href='?remove=topic&topic=' + topic.id, title='Delete this topic', rel='tooltip', data-placement='right').topic-delete.js-delete-confirm Delete
 					.topic-details__body
 						.media
 							a(href='/profile/' + topic.author.key).pull-left.media-avatar
@@ -52,13 +53,23 @@ block content
 							+comment-thread(replies)
 						+comment-form()
 			.col-sm-3
-				h4.text-muted More from #{topic.author.name.first}
+				h4.text-muted Meta
 				hr
-				ul.list-unstyled
-					for authorTopic in authorTopics
-						li
-							a(href=authorTopic.url)=authorTopic.name
-							.text-muted: time(datetime=authorTopic.publishedAt)= authorTopic._.publishedAt.format('DD MMM YYYY')
+				p This topic has #{plural(topic.replyCount, '* reply', '* replies')}
+					if topic.replyCount
+						| , the most recent was on #{topic._.lastReplyDate.format('DD MMM YYYY')}
+				p #{plural(topic.watchedBy, '* person is', '* people are')} watching this topic
+				
+
+				//- more-topics from author
+				//- if authorTopics.length
+					h4.text-muted More from #{topic.author.name.first} is 
+					hr
+					ul.list-unstyled
+						for authorTopic in authorTopics
+							li
+								a(href=authorTopic.url)=authorTopic.name
+								.text-muted: time(datetime=authorTopic.publishedAt)= authorTopic._.publishedAt.format('DD MMM YYYY')
 				//- h4.text-muted Found a bug?
 				//- hr
 				//- p If you're experiencing what appears to be a bug or something that doesn't seem to be working correctly, please 
@@ -66,10 +77,18 @@ block content
 					|  in the Github project
 
 block js
+	script(src='/js/lib/bootstrap/tooltip.js')
+	script(src='/js/lib/bootstrap/popover.js')
 	script(src='/js/ui.js')
 	script(src='/js/lib/moment/moment.min.js')
 	script.
 		jQuery(function($) {
+
+			// init popover
+
+			$("[rel='tooltip']").tooltip();
+			$("[data-toggle='popover']").popover();
+
 			$('.js-timeago').each(function() {
 				var timeEl = $(this),
 					timeData = timeEl.data();

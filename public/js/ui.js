@@ -53,7 +53,7 @@ jQuery(function($) {
 	// Scroll to comments when there's a new comment
 	if ($('.has-new-comment').length) {
 		setTimeout(function() {
-			$('html, body').animate({ scrollTop: comments.offset().top }, 250);
+			$('html, body').animate({ scrollTop: comments.find('.comment-post').last().offset().top }, 250);
 		}, 1000);
 	}
 	

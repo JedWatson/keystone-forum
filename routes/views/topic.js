@@ -34,42 +34,23 @@ exports = module.exports = function(req, res) {
 	
 	
 	
-	// // LOAD Users who are watching
-	// // ------------------------------
-	
+	// LOAD replies on the Topic
 	// view.on('init', function(next) {
 		
-	// 	User.model.find()
-	// 		.where('watchedTopics').in(locals.topic.watchedBy)
-	// 		.exec(function(err, watchers) {
+	// 	ForumReply.model.find()
+	// 		.where( 'topic', locals.topic.id )
+	// 		.where( 'state', 'published' )
+	// 		.where( 'author' ).ne( null )
+	// 		.populate( 'author', 'name key photo' )
+	// 		.sort('publishedAt')
+	// 		.exec(function(err, replies) {
 	// 			if (err) return res.err(err);
-	// 			if (!watchers) return res.notfound('Topic not found');
-	// 			locals.watchers = watchers;
+	// 			if (!replies) return res.notfound('Topic replies not found');
+	// 			locals.replies = replies;
 	// 			next();
 	// 		});
 		
 	// });
-	
-	
-	
-	
-	// LOAD replies on the Topic
-	view.on('init', function(next) {
-		
-		ForumReply.model.find()
-			.where( 'topic', locals.topic.id )
-			.where( 'state', 'published' )
-			.where( 'author' ).ne( null )
-			.populate( 'author', 'name key photo' )
-			.sort('publishedAt')
-			.exec(function(err, replies) {
-				if (err) return res.err(err);
-				if (!replies) return res.notfound('Topic replies not found');
-				locals.replies = replies;
-				next();
-			});
-		
-	});
 	
 	
 	
@@ -86,8 +67,9 @@ exports = module.exports = function(req, res) {
 		
 		locals.topic.save(function(err) {
 			if (err) return res.err(err);
-			req.flash('success', 'You will receive email notifications about this topic.');
-			return res.redirect(locals.topic.url);
+			// req.flash('success', 'You will receive email notifications about this topic.');
+			// return res.redirect(locals.topic.url);
+			next();
 		});
 	});
 	
@@ -98,7 +80,7 @@ exports = module.exports = function(req, res) {
 	view.on('get', { unwatch: true }, function(next) {
 		
 		if (!req.user) {
-			req.flash('error', 'You must be signed in to watch a topic.');
+			req.flash('error', 'You must be signed in to unwatch a topic.');
 			return next();
 		}
 		
@@ -111,8 +93,9 @@ exports = module.exports = function(req, res) {
 		
 		locals.topic.save(function(err) {
 			if (err) return res.err(err);
-			req.flash('success', 'You will NO LONGER receive email notifications about this topic.');
-			return res.redirect(locals.topic.url);
+			// req.flash('success', 'You will NOT receive anymore email notifications about this topic.');
+			// return res.redirect(locals.topic.url);
+			next();
 		});
 	});
 	
@@ -145,8 +128,8 @@ exports = module.exports = function(req, res) {
 				req.flash('success', 'Thank you for your reply.');
 				
 				// used to scroll down to the comments
-				return res.redirect(locals.topic.url + '#comment-id-' + newReply.id);
-				locals.newComment = true;
+				// return res.redirect(locals.topic.url + '#comment-id-' + newReply.id);
+				locals.newComment = newReply.id;
 				
 			}
 			next();
@@ -190,7 +173,8 @@ exports = module.exports = function(req, res) {
 				comment.save(function(err) {
 					if (err) return res.err(err);
 					req.flash('success', 'Your reply has been removed.');
-					return res.redirect(locals.topic.url);
+					// return res.redirect(locals.topic.url);
+					next();
 				});
 			});
 	});
@@ -257,14 +241,30 @@ exports = module.exports = function(req, res) {
 		locals.page.name = locals.topic.title;
 		locals.page.title = locals.page.name + ' on KeystoneJS Forum';
 		
-		locals.topic.populate('watchedBy', next);
+		locals.topic.populate('watchedBy');
 		
 		for (var i = 0; i < locals.topic.watchedBy.length; i++) {
-			if (locals.topic.watchedBy[i] == req.user.id) {
+			if (req.user && req.user.id == locals.topic.watchedBy[i]) {
 				locals.watchedByUser = true;
 				break;
 			}
 		}
+		
+		
+		// load replies last so they're aware of create/delete
+
+		ForumReply.model.find()
+			.where( 'topic', locals.topic.id )
+			.where( 'state', 'published' )
+			.where( 'author' ).ne( null )
+			.populate( 'author', 'name key photo' )
+			.sort('publishedAt')
+			.exec(function(err, replies) {
+				if (err) return res.err(err);
+				if (!replies) return res.notfound('Topic replies not found');
+				locals.replies = replies;
+				next();
+			});
 		
 	});
 	

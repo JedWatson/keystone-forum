@@ -28,6 +28,7 @@ exports = module.exports = function(req, res) {
 		
 		var newTopic = new ForumTopic.model({
 			author: req.user,
+			watchedBy: req.user,
 			state: 'published'
 		});
 		

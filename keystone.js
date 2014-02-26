@@ -1,5 +1,5 @@
 // Load .env for development environments
-try { require('dotenv')().load(); }
+try { require('dotenv').load(); }
 catch(e) { if (e.code == 'MODULE_NOT_FOUND') {
 	console.log("\nCould not find the 'dotenv' module. Have you run npm install?\n");
 	process.exit();
@@ -33,6 +33,10 @@ keystone.init({
 	'view engine': 'jade',
 	
 	'emails': 'templates/emails',
+	'email rules': {
+		find: '/images/',
+		replace: (keystone.get('env') == 'production') ? 'http://forum.keystonejs.com/images/' : 'http://localhost:3000/images/'
+	},
 
 	'auto update': true,
 	'mongo': process.env.MONGO_URI || 'mongodb://localhost/' + pkg.name,

@@ -1,0 +1,6 @@
+extends /layouts/default
+
+block body-contents
+	p=topic.summary
+	p Head over to the forum and <a href="#{url}">check it out</a>.
+	+button({ url: url, label: 'View Topic', background_color: '#2697de', border_color: '#1a7cb7', border_width: '1px', border_radius: 4, color: '#fff', height: 40, width: '100%' })

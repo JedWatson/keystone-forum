@@ -13,7 +13,7 @@ exports = module.exports = function(req, res) {
 	locals.current.category = _.where(req.categories, { key: req.params.category })[0];
 	
 	
-	// QUERY Topics
+	// QUERY topics
 
 	var query = ForumTopic.paginate({
 		page: req.query.page || 1
@@ -25,6 +25,7 @@ exports = module.exports = function(req, res) {
 		
 	
 	// FILTER topics
+	
 	if (locals.current.filter.value == 'newest') {
 		query.sort('-publishedAt')
 	} else if (locals.current.filter.value == 'active') {
@@ -32,8 +33,8 @@ exports = module.exports = function(req, res) {
 	} else if (locals.current.filter.value == 'unanswered') {
 		query.where('replyCount', 0)
 	} else if (locals.current.filter.value == 'featured') {
-		query.where('author.isAdmin', true)
-		// TODO how can you do nested queries?
+		query.where('isFeatured', true)
+		query.sort('-publishedAt')
 	}
 		
 	

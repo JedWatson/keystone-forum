@@ -4,14 +4,16 @@ include ../../mixins/topic-item
 
 block content
 	.container-md
+		+flash-messages(messages)
 		.text-center
-			if profile.photo.exists
-				img(src=profile._.photo.thumbnail(240,240), alt=profile.name.full, width=240, height=240).img-avatar
+			//- if profile.photo.exists
+				img(src=profile._.photo.thumbnail(180,180), alt=profile.name.full, width=180, height=180).img-avatar
 			h1= profile.name.full
 			ul.list-inline.text-muted
 				li= plural(topics.length, '* Question', '* Questions')
 				li &middot;
 				li= plural(replies.length, '* Answer', '* Answers')
+			!=profile.bio.html
 		hr
 		
 		//- topics

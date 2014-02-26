@@ -17,18 +17,25 @@ var ForumTopic = new keystone.List('ForumTopic', {
 
 ForumTopic.add({
 	name: { type: String, label: 'Title', required: true },
+	isFeatured: { type: Boolean },
 	author: { type: Types.Relationship, initial: true, ref: 'User', index: true },
-	likedBy: { type: Types.Relationship, ref: 'User', index: true },
+	watchedBy: { type: Types.Relationship, ref: 'User', many: true, index: true },
 	state: { type: Types.Select, options: 'published, archived', default: 'published', index: true },
+	
+	/*
+		TODO
+		Should be Types.DateTime when fieldType is mature enough.
+	*/
 	createdAt: { type: Types.Date, default: Date.now, noedit: true, index: true },
 	publishedAt: { type: Types.Date, collapse: true, noedit: true, index: true },
+	
 	category: { type: Types.Relationship, ref: 'ForumCategory', initial: true, required: true, index: true }
 });
 
 /** Content */
 
 ForumTopic.add('Content', {
-	image: { type: Types.CloudinaryImage, collapse: true },
+	// image: { type: Types.CloudinaryImage, collapse: true },
 	content: {
 		summary: { type: Types.Textarea, hidden: true },
 		full: { type: Types.Markdown, height: 400 }
@@ -64,7 +71,7 @@ ForumTopic.relationship({ path: 'replies', ref: 'ForumReply', refPath: 'topic' }
 
 
 
-// Methods
+// Pre-Save
 // ------------------------------
 
 ForumTopic.schema.pre('save', function(next) {
@@ -105,6 +112,11 @@ ForumTopic.schema.pre('save', function(next) {
 });
 
 
+
+
+// Post-Save
+// ------------------------------
+
 ForumTopic.schema.post('save', function() {
 	
 	if (!this.wasNew) {
@@ -124,6 +136,40 @@ ForumTopic.schema.post('save', function() {
 	}
 	
 });
+
+
+
+
+// Methods
+// ------------------------------
+
+ForumTopic.schema.methods.notifyForumSubscribers = function(callback) {
+	
+	var topic = this;
+	
+	// TODO
+	// should use req.get('host')
+	
+	async.parallel({
+		subscribers: keystone.list('User').model.find().where('notifications.topics', true).exec
+	}, function(err, results) {
+		
+		if (err) return callback(err);
+		
+		new keystone.Email('notification-new-topic').send({
+			to: results.subscribers,
+			from: {
+				name: 'KeystoneJS Forum',
+				email: 'forums@keystonejs.com'
+			},
+			subject: '(KeystoneJS topic) ' + topic.name,
+			url: 'http://localhost:3000' + topic.url,
+			topic: topic
+		}, callback);
+		
+	});
+	
+}
 
 
 

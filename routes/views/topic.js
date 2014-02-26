@@ -1,4 +1,6 @@
 var keystone = require('keystone'),
+	_ = require('underscore'),
+	User = keystone.list('User'),
 	ForumTopic = keystone.list('ForumTopic'),
 	ForumReply = keystone.list('ForumReply');
 
@@ -8,6 +10,7 @@ exports = module.exports = function(req, res) {
 		locals = res.locals;
 	
 	locals.section = 'forum';
+	locals.newComment = false;
 	
 	
 	// LOAD Topic
@@ -31,6 +34,25 @@ exports = module.exports = function(req, res) {
 	
 	
 	
+	// // LOAD Users who are watching
+	// // ------------------------------
+	
+	// view.on('init', function(next) {
+		
+	// 	User.model.find()
+	// 		.where('watchedTopics').in(locals.topic.watchedBy)
+	// 		.exec(function(err, watchers) {
+	// 			if (err) return res.err(err);
+	// 			if (!watchers) return res.notfound('Topic not found');
+	// 			locals.watchers = watchers;
+	// 			next();
+	// 		});
+		
+	// });
+	
+	
+	
+	
 	// LOAD replies on the Topic
 	view.on('init', function(next) {
 		
@@ -39,7 +61,7 @@ exports = module.exports = function(req, res) {
 			.where( 'state', 'published' )
 			.where( 'author' ).ne( null )
 			.populate( 'author', 'name key photo' )
-			.sort('-publishedAt')
+			.sort('publishedAt')
 			.exec(function(err, replies) {
 				if (err) return res.err(err);
 				if (!replies) return res.notfound('Topic replies not found');
@@ -52,33 +74,45 @@ exports = module.exports = function(req, res) {
 	
 	
 	
-	// DELETE the Topic
-	view.on('get', { remove: true }, function(next) {
+	// WATCH a topic
+	view.on('get', { watch: true }, function(next) {
 		
 		if (!req.user) {
-			req.flash('error', 'You must be signed in to delete a topic.');
+			req.flash('error', 'You must be signed in to watch a topic.');
 			return next();
 		}
 		
-		locals.topic.remove(function(err) {
-			if (err) {
-				if (err.name == 'CastError') {
-					req.flash('error', 'The topic ' + req.params.topic + ' could not be found.');
-					return next();
-				}
-				return res.err(err);
-			}
-			if (!locals.topic) {
-				req.flash('error', 'The topic ' + req.params.topic + ' could not be found.');
-				return next();
-			}
-			if (locals.topic.author != req.user.id && !req.user.isAdmin) {
-				req.flash('error', 'You must be the author of a topic to delete it.');
-				return next();
-			}
+		locals.topic.watchedBy.push(req.user.id);
+		
+		locals.topic.save(function(err) {
 			if (err) return res.err(err);
-			req.flash('success', 'Your topic has been deleted.');
-			return res.redirect(req.user.url);
+			req.flash('success', 'You will receive email notifications about this topic.');
+			return res.redirect(locals.topic.url);
+		});
+	});
+	
+	
+	
+	
+	// UNWATCH a topic
+	view.on('get', { unwatch: true }, function(next) {
+		
+		if (!req.user) {
+			req.flash('error', 'You must be signed in to watch a topic.');
+			return next();
+		}
+		
+		for (var i = 0; i < locals.topic.watchedBy.length; i++) {
+			if (locals.topic.watchedBy[i] == req.user.id) {
+				locals.topic.watchedBy.splice(i, 1);
+				break;
+			}
+		}
+		
+		locals.topic.save(function(err) {
+			if (err) return res.err(err);
+			req.flash('success', 'You will NO LONGER receive email notifications about this topic.');
+			return res.redirect(locals.topic.url);
 		});
 	});
 	
@@ -104,32 +138,16 @@ exports = module.exports = function(req, res) {
 			logErrors: true
 		}, function(err) {
 			if (err) {
-				data.validationErrors = err.errors;
+				locals.validationErrors = err.errors;
 			} else {
-				req.flash('success', 'You replied to this topic');
 				
+				// may be unecessary, but whatever
+				req.flash('success', 'Thank you for your reply.');
 				
-				// SEND email notification
-				if (keystone.get('env') == 'production') {
-					new keystone.Email('listing/comment').send({
-						subject: locals.current.user.name.first + ' replied to your topic - ' + locals.topic.title,
-						
-						authorName: locals.current.user.name.full,
-						authorPath: locals.current.user.url,
-						media: locals.topic.title,
-						mediaPath: locals.topic.url,
-						commentType: 'Topic',
-						commentContent: newReply.content
-					},{
-						to: locals.topic.author.email,
-						from: {
-							name: 'KeystoneJS Forum',
-							email: 'system@keystonejs.com'
-						}
-					});
-				}
-				
+				// used to scroll down to the comments
 				return res.redirect(locals.topic.url + '#comment-id-' + newReply.id);
+				locals.newComment = true;
+				
 			}
 			next();
 		});
@@ -168,13 +186,46 @@ exports = module.exports = function(req, res) {
 					req.flash('error', 'Sorry, you must be the author of a reply to delete it.');
 					return next();
 				}
-				comment.replyState = 'archived';
+				comment.state = 'archived';
 				comment.save(function(err) {
 					if (err) return res.err(err);
-					req.flash('success', 'Your reply has been deleted.');
+					req.flash('success', 'Your reply has been removed.');
 					return res.redirect(locals.topic.url);
 				});
 			});
+	});
+	
+	
+	
+	
+	// DELETE the Topic
+	view.on('get', { remove: 'topic' }, function(next) {
+		
+		if (!req.user) {
+			req.flash('error', 'You must be signed in to delete a topic.');
+			return next();
+		}
+		
+		locals.topic.remove(function(err) {
+			if (err) {
+				if (err.name == 'CastError') {
+					req.flash('error', 'The topic ' + req.params.topic + ' could not be found.');
+					return next();
+				}
+				return res.err(err);
+			}
+			if (!locals.topic) {
+				req.flash('error', 'The topic ' + req.params.topic + ' could not be found.');
+				return next();
+			}
+			if (locals.topic.author != req.user.id && !req.user.isAdmin) {
+				req.flash('error', 'You must be the author of a topic to delete it.');
+				return next();
+			}
+			if (err) return res.err(err);
+			req.flash('success', 'Your topic has been deleted.');
+			return res.redirect(req.user.url);
+		});
 	});
 	
 	
@@ -202,9 +253,19 @@ exports = module.exports = function(req, res) {
 	// ------------------------------
 	
 	view.on('render', function(next) {
+		
 		locals.page.name = locals.topic.title;
 		locals.page.title = locals.page.name + ' on KeystoneJS Forum';
-		next();
+		
+		locals.topic.populate('watchedBy', next);
+		
+		for (var i = 0; i < locals.topic.watchedBy.length; i++) {
+			if (locals.topic.watchedBy[i] == req.user.id) {
+				locals.watchedByUser = true;
+				break;
+			}
+		}
+		
 	});
 	
 	

@@ -2,9 +2,21 @@
 // UTILS
 // ==============================
 
-.caps {
-	text-transform: uppercase;
-}
+.caps { text-transform: uppercase; }
+
 .font-sm { font-size: @font-size-small; }
 .font-md { font-size: @font-size-base; }
 .font-lg { font-size: @font-size-large; }
+
+.inline { display: inline; }
+.inline-block { display: inline-block; }
+.block { display: block; }
+
+.text-dimmed { color: @gray; }
+.text-danger-impending {
+	color: @gray;
+	
+	&:hover {
+		color: @brand-danger;
+	}
+}

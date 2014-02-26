@@ -7,19 +7,19 @@
 
 // common
 .img-avatar {
-	.img-responsive();
+	.img-responsive(inline-block);
 	border-radius: 50%;
 	border: 4px solid @gray-lighter;
-	height: auto;
-	max-width: 100%;
 }
 
 .topic-category {
+	.inline-align();
 	background-color: @gray-lighter;
 	border-radius: 3px;
 	color: @gray-light;
 	font-size: 11px;
 	font-weight: 400;
+	margin-right: 1em;
 	padding: 5px 10px;
 
 	a& {
@@ -73,7 +73,6 @@
 }
 .topic {
 	min-height: @avatar-width + (@topic-gutter * 2);
-	padding-left: @avatar-width + @topic-gutter;
 }
 .topic__avatar {
 	.square( @avatar-width );
@@ -82,7 +81,7 @@
 	// border: 5px solid @gray-lighter;
 	background-position: center;
 	background-size: contain;
-	display: inline-block;
+	display: none;
 	float: left;
 	margin-left: -(@avatar-width + 15);
 	overflow: hidden;
@@ -112,12 +111,19 @@
 .topic__title {
 	font-size: @font-size-large;
 }
+@media (min-width: @screen-sm-min) {
+	.topic {
+		padding-left: @avatar-width + @topic-gutter;
+	}
+	.topic__avatar {
+		display: block;
+	}
+}
 
 
 // no results
 .no-results {
-	background-color: #fafafa;
-	border-radius: 2px;
+	border: 2px dashed @gray-lighter;
 	margin-top: 2em;
 	padding-bottom: 6em;
 	padding-top: 6em;
@@ -125,6 +131,7 @@
 }
 .no-results__message {
 	.lead();
+	color: @gray-light;
 	margin: 0;
 }
 
@@ -140,9 +147,9 @@
 
 	.subheading {
 		color: @gray-light;
-		display: inline-block;
-		margin-left: 1em;
-		vertical-align: middle;
+		// display: inline-block;
+		// margin-left: 1em;
+		// vertical-align: middle;
 
 		a {
 			color: @gray;
@@ -162,6 +169,34 @@
 	border-bottom: 1px dashed @gray-lighter;
 	margin-bottom: 2em;
 	padding-bottom: 2em;
+	position: relative;
+}
+.comment-delete {
+	.transition( ~"opacity 200ms ease, right 200ms ease" );
+	position: absolute;
+	color: @gray-light;
+	opacity: 0;
+	position: absolute;
+	right: 0;
+	top: 8px;
+	
+	&:hover,
+	&:active,
+	&:focus {
+		color: @brand-danger;
+		outline: 0 none;
+	}
+}
+.comment-post:hover .comment-delete {
+	opacity: 1;
+}
+.media-avatar {
+	display: none;
+}
+@media (min-width: @screen-sm-min) {
+	.media-avatar {
+		display: block;
+	}
 }
 
 
@@ -208,6 +243,15 @@
 
 // type settings
 // ------------------------------
+
+// code
+pre {
+	background-color: @gray-lightest;
+	border-color: @gray-lighter;
+	margin-bottom: 1.5em;
+	margin-top: 1.5em;
+}
+
 
 // notes
 .note {

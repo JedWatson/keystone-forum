@@ -1,0 +1,138 @@
+//
+// Buttons
+// ==============================
+
+
+
+
+// Base styles
+// ------------------------------
+
+.btn {
+	.button-size(@padding-base-vertical; @padding-base-horizontal; @font-size-base; 1.6; @border-radius-base);
+	.user-select(none);
+	background-image: none; // Reset unusual Firefox-on-Android default style
+	border: 1px solid transparent; // For input.btn
+	display: inline-block;
+	cursor: pointer;
+	font-weight: @btn-font-weight;
+	margin-bottom: 0; // For input.btn
+	text-align: center;
+	vertical-align: middle;
+	white-space: nowrap;
+
+	&:focus {
+		.tab-focus();
+	}
+
+	&:hover,
+	&:focus {
+		color: @btn-default-color;
+		text-decoration: none;
+	}
+
+	&:active,
+	&.active {
+		outline: 0;
+		background-image: none;
+	}
+
+	&.disabled,
+	&[disabled],
+	fieldset[disabled] & {
+		cursor: not-allowed;
+		pointer-events: none; // Future-proof disabling of clicks
+		.opacity(.65);
+		.box-shadow(none);
+	}
+}
+
+
+// Alternate buttons
+// --------------------------------------------------
+
+.btn-default {
+	.button-base(@btn-default-color; @btn-default-bg; @btn-default-border);
+}
+.btn-primary {
+	.button-base(@btn-primary-color; @btn-primary-bg; @btn-primary-border);
+}
+.btn-create {
+	.button-base(@btn-create-color; @btn-create-bg; @btn-create-border);
+}
+.btn-warning {
+	.button-base(@btn-warning-color; @btn-warning-bg; @btn-warning-border);
+}
+.btn-danger {
+	.button-base(@btn-danger-color; @btn-danger-bg; @btn-danger-border);
+}
+
+
+// Link buttons
+// -------------------------
+
+// Make a button look and behave like a link
+.btn-link {
+	color: @link-color;
+	font-weight: normal;
+	cursor: pointer;
+	border-radius: 0;
+
+	&,
+	&:active,
+	&[disabled],
+	fieldset[disabled] & {
+		background-color: transparent;
+		.box-shadow(none);
+	}
+	&,
+	&:hover,
+	&:focus,
+	&:active {
+		border-color: transparent;
+	}
+	&:hover,
+	&:focus {
+		color: @link-hover-color;
+		text-decoration: underline;
+		background-color: transparent;
+	}
+	&[disabled],
+	fieldset[disabled] & {
+		&:hover,
+		&:focus {
+		  color: @btn-link-disabled-color;
+		  text-decoration: none;
+		}
+	}
+}
+
+
+// Button Sizes
+// ------------------------------
+
+.btn-lg {
+	// line-height: ensure even-numbered height of button next to large input
+	.button-size(@padding-large-vertical; @padding-large-horizontal; @font-size-large; @line-height-large; @border-radius-large);
+}
+.btn-sm {
+	// line-height: ensure proper height of button next to small input
+	.button-size(@padding-small-vertical; @padding-small-horizontal; @font-size-small; @line-height-small; @border-radius-small);
+}
+.btn-xs {
+	.button-size(@padding-xs-vertical; @padding-xs-horizontal; @font-size-small; @line-height-small; @border-radius-small);
+}
+
+
+// Block button
+// ------------------------------
+
+.btn-block {
+	display: block;
+	width: 100%;
+	padding-left: 0;
+	padding-right: 0;
+}
+
+
+

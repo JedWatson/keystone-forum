@@ -10,10 +10,16 @@ var _ = require('underscore'),
 
 exports.init = function(req, res, next) {
 	
-	var locals = res.locals;
-	locals.current = {
-		user: req.user
-	};
+	// set locals
+	
+	var locals = res.locals,
+		current = locals.current = {
+			user: req.user
+		};
+	
+	
+	// set page basics
+	
 	locals.page = {
 		title: 'KeystoneJS',
 		path: req.url,

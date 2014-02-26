@@ -5,18 +5,6 @@
 
 
 
-body {
-	font-weight: 300;
-}
-
-strong,
-label {
-	font-weight: 400;
-}
-
-
-
-
 // small container
 .container-sm {
 	.container-fixed();
@@ -83,10 +71,10 @@ label {
 	margin: 0;
 	padding: 0;
 	
-	li {
+	> li {
 		margin-left: 2px;
 	}
-	a {
+	> li > a {
 		color: @gray;
 		display: block;
 		padding: 0 15px;
@@ -123,10 +111,12 @@ label {
 		.collapse {
 			display: block;
 		}
-		li {
+	}
+	.docs-nav__nav {
+		> li {
 			float: left;
 		}
-		a {
+		> li > a {
 			&:hover,
 			&:focus {
 				@shadow: 0 -2px white inset, 0 -5px mix(@link-color, white, 50%) inset;
@@ -136,7 +126,7 @@ label {
 		}
 	
 		// active
-		li.active a {
+		> li.active > a {
 			@shadow: 0 -2px white inset, 0 -5px @link-color inset;
 			.box-shadow( @shadow );
 			background: none transparent;
@@ -235,4 +225,7 @@ label {
 }
 label.checkbox {
 	font-weight: 300;
+}
+textarea {
+	.resizable(vertical);
 }

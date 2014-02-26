@@ -46,6 +46,7 @@ exports = module.exports = function(req, res) {
 				
 				return next();
 			} else {
+				newTopic.notifyForumSubscribers();
 				return res.redirect('/topic/' + newTopic.key);
 			}
 		

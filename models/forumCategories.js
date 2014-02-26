@@ -53,8 +53,6 @@ ForumCategory.schema.pre('save', function(next) {
 	
 	var category = this;
 	
-	this.wasNew = this.isNew;
-	
 	async.parallel([
 		
 		// cache the count of topics to this category

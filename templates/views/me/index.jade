@@ -4,15 +4,10 @@ block content
 	.container
 		.row
 			.col-sm-3
-				.flag
-					.flag__image
-						img(src=current.user.photo.exists ? current.user._.photo.thumbnail(30,30) : 'http://placehold.it/30x30', alt=current.user.name.full, width=30, height=30)
-					.flag__body
-						strong.font-lg= current.user.name.full
-				hr
+				h3.profile-form__heading= current.user.name.full
 				p
 					| You have asked #{plural(current.user.topicCount, '* question', '* questions')} 
-					| and answered to #{current.user.replyCount}
+					| and answered #{current.user.replyCount}
 					| since joining on #{current.user._.joinedAt.format('D MMMM YYYY')}
 				p: strong: a(href=current.user.url) View your profile
 			.col-sm-9
@@ -20,6 +15,7 @@ block content
 					input(type='hidden', name='action', value='user.update')
 					.profile-form__section
 						h3.profile-form__heading Your Profile
+						+flash-messages(messages)
 						.form-group
 							label.col-sm-2.control-label Name
 							.col-sm-10: .row
@@ -47,7 +43,7 @@ block content
 						.form-group
 							label.col-sm-2.control-label Bio
 								br
-								a(href='http://daringfireball.net/projects/markdown/', target='_blank', title='Markdown Guide (new window)').text-muted (markdown)
+								a(href='http://daringfireball.net/projects/markdown/syntax', target='_blank', title='Markdown Guide (new window)').text-muted (markdown)
 							.col-sm-10
 								textarea(name='bio', rows=5).form-control=current.user.bio.md
 						
@@ -85,14 +81,11 @@ block content
 									input(type='checkbox' name='notifications.topics', value='true', checked=current.user.notifications.topics ? 'checked' : null)
 									|  Someone asks a question
 								label.checkbox
-									input(type='checkbox' name='notifications.replies', value='true', checked=current.user.notifications.topics ? 'checked' : null)
+									input(type='checkbox' name='notifications.replies', value='true', checked=current.user.notifications.replies ? 'checked' : null)
 									|  Someone answers a question I've asked
 
 
 					.form-group
 						.col-sm-10.col-sm-offset-2
 							button(type='submit', data-loading-text="Saving...").btn.btn-primary Save profile
-							
-block js
-	script(src='/js/lib/bootstrap/button.js')
-	script(src='/js/views/me.js')
+

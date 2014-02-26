@@ -32,8 +32,8 @@ User.add({
 	joinedAt: { type: Date, default: Date.now },
 }, 'Notifications', {
 	notifications: {
-		topics: Boolean,
-		replies: Boolean
+		topics: { type: Boolean, default: true},
+		replies: { type: Boolean, default: true}
 	}
 }, 'Permissions', {
 	isAdmin: { type: Boolean, label: 'Can Admin KeystoneJS Forum' }
@@ -75,7 +75,7 @@ User.add('Meta', {
 	=============
 */
 
-User.relationship({ path: 'likedTopics', ref: 'ForumTopic', refPath: 'likedBy' });
+User.relationship({ path: 'watchedTopics', ref: 'ForumTopic', refPath: 'watchedBy' });
 User.relationship({ path: 'authoredTopics', ref: 'ForumTopic', refPath: 'author' });
 User.relationship({ path: 'authoredReplies', ref: 'ForumReply', refPath: 'author' });
 

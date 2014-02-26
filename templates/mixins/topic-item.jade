@@ -7,11 +7,17 @@ mixin topic-item(topic)
 			.topic__count-label Answers
 		.topic__content
 			h2.topic__title: a(href=topic.url)= topic.name
-			.topic__info
-				| Posted 
-				time(datetime=topic.publishedOn)= moment(topic.publishedOn).format('DD MMM YYYY')
-				|  by 
-				strong= topic.author.name.full
+			if (current.user && current.user.id == topic.author.id) && section == 'profile'
+				.topic__info
+					time(datetime=topic.publishedAt)= topic._.publishedAt.format('DD MMM YYYY')
+					|  &middot; 
+					a(href=topic.url + '?remove=topic&topic=' + topic.id, title='Delete this topic', rel='tooltip', data-placement='left').text-danger-impending.js-delete-confirm Delete
+			else
+				.topic__info
+					| Posted 
+					time(datetime=topic.publishedAt)= topic._.publishedAt.format('DD MMM YYYY')
+					|  by 
+					strong= topic.author.name.full
 			if topic.category
 				.topic__meta
 					span.topic-category

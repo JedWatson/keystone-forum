@@ -1,10 +1,25 @@
 extends ../../layouts/default
 
 block content
-	.container
+	.container-sm
 		h1!=errorTitle || 'Not found (404)'
 		if 'object' == typeof errorMsg
 			div(style='margin: 30px 0;').debug!= htmlStringify(errorMsg)
 		else
-			p.lead!= utils.textToHTML(errorMsg) || 'If you found this page, you probably know what it means. Good luck on your travels :)'
-		p: a(href='/').btn.btn-primary.btn-lg KeystoneJS Forum Home
+			p.lead!= utils.textToHTML(errorMsg) || 'The page you requested has been moved or deleted.'
+			
+		
+		//- Categories
+		.categories-heading Categories
+		.categories-list: ul
+			li
+				a(href='/').categories-list__item
+					span.category-indicator
+					span All topics
+			for category in categories
+				li(class=category.key)
+					a(href='/newest/' + category.key).categories-list__item
+						span.category-count= category.topicCount
+						span(class=category.key).category-indicator
+						span= category.name
+

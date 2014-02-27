@@ -24,7 +24,7 @@ exports = module.exports = function(req, res) {
 			.populate('author category')
 			.exec(function(err, topic) {
 				if (err) return res.err(err);
-				if (!topic) return res.notfound('Topic not found');
+				if (!topic) return res.notfound('Topic not found', 'That topic has been moved or deleted.');
 				locals.topic = topic;
 				next();
 			});

@@ -149,12 +149,18 @@ ForumTopic.schema.methods.notifyForumSubscribers = function(callback) {
 	
 	var topic = this;
 	
+	// keystone.list('User').model.find().select('name email').exec(function(err, results) {
+	// 	console.log(results);
+	// });
+	
 	// TODO
 	// should use req.get('host')
 	
 	async.parallel({
-		subscribers: keystone.list('User').model.find().where('notifications.topics', true).exec
+		subscribers: keystone.list('User').model.find().where('notifications.topics', true).select('name email').exec
 	}, function(err, results) {
+		
+		console.log(results.subscribers);
 		
 		if (err) return callback(err);
 		

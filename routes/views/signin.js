@@ -13,6 +13,7 @@ exports = module.exports = function(req, res) {
 	
 	locals.section = 'login';
 	locals.form = req.body;
+	locals.returnto = req.query.returnto;
 	
 	view.on('post', { action: 'signin' }, function(next) {
 		
@@ -22,8 +23,8 @@ exports = module.exports = function(req, res) {
 		}
 		
 		var onSuccess = function() {
-			if (req.query && req.query.from) {
-				res.redirect(req.query.from);
+			if (req.query && req.query.returnto) {
+				res.redirect(req.query.returnto + '?performFunction=focusOnCommentField');
 			} else {
 				res.redirect('/me');
 			}

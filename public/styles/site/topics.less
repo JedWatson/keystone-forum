@@ -165,11 +165,21 @@
 	margin-top: 2em;
 	padding-top: 2em;
 }
+
+
+
+
+// commenting
 .comment-post {
 	border-bottom: 1px dashed @gray-lighter;
 	margin-bottom: 2em;
 	padding-bottom: 2em;
 	position: relative;
+}
+.comment-field-input {
+	&,&:focus {
+		.box-shadow(0 1px 1px rgba(0, 0, 0, 0.075) inset);
+	}
 }
 .comment-delete {
 	.transition( ~"opacity 200ms ease, right 200ms ease" );

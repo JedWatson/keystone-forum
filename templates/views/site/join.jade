@@ -26,7 +26,7 @@ block content
 			button(type='submit').btn.btn-primary.btn-block.btn-submit Join the Forum
 		
 		p.text-center
-			a(href=js, style='display: none;').btn.btn-block.btn-link.js-toggle-signin Sign In
+			a(href='/login' + (returnto ? '?returnto=' + returnto : '')) Log In
 
 block js
 	script.

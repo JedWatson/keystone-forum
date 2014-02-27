@@ -50,11 +50,23 @@ jQuery(function($) {
 		input = $('.comment-field-input'),
 		submit = comments.find('button[type=submit]');
 	
-	// Scroll to comments when there's a new comment
-	if ($('.has-new-comment').length) {
+	
+	// Passing around queries as classes to fire off functions
+	
+	// scroll to the last comment
+	if ($('.scrollToLastComment').length) {
 		setTimeout(function() {
 			$('html, body').animate({ scrollTop: comments.find('.comment-post').last().offset().top }, 250);
 		}, 1000);
+	}
+	// focus on the comment field
+	if ($('.focusOnCommentField').length) {
+		
+		$('html, body').animate({
+			scrollTop: $('.comment-form').offset().top
+		}, 300, function() {
+			input.focus();
+		});
 	}
 	
 	

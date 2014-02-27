@@ -12,6 +12,7 @@ exports = module.exports = function(req, res) {
 	
 	locals.section = 'join';
 	locals.form = req.body;
+	locals.returnto = req.query.returnto;
 	
 	view.on('post', { action: 'join' }, function(next) {
 		
@@ -79,8 +80,8 @@ exports = module.exports = function(req, res) {
 			if (err) return next();
 			
 			var onSuccess = function() {
-				if (req.query.returnto) {
-					return res.redirect(req.query.returnto);
+				if (req.query && req.query.returnto) {
+					return res.redirect(req.query.returnto + '?performFunction=focusOnCommentField');
 				} else {
 					return res.redirect('/me');
 				}

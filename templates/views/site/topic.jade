@@ -3,7 +3,7 @@ extends ../../layouts/default
 include ../../mixins/commenting
 
 block content
-	.container
+	.container(class=performFunction ? performFunction : null)
 		.row
 			.col-sm-9
 				if current.user
@@ -47,7 +47,7 @@ block content
 								.details-content-wrapper!=topic.content.full.html
 					
 					//-comments
-					#comments(class=newComment ? 'has-new-comment' : null).topic-details__footer
+					#comments.topic-details__footer
 						if replies.length
 							h4.text-muted=plural(replies.length, '* answer', '* answers')
 							+comment-thread(replies)

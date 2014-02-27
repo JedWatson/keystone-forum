@@ -10,7 +10,7 @@ exports = module.exports = function(req, res) {
 		locals = res.locals;
 	
 	locals.section = 'forum';
-	locals.newComment = false;
+	locals.performFunction = req.query.performFunction || false;
 	
 	
 	// LOAD Topic
@@ -68,8 +68,9 @@ exports = module.exports = function(req, res) {
 		locals.topic.save(function(err) {
 			if (err) return res.err(err);
 			// req.flash('success', 'You will receive email notifications about this topic.');
-			// return res.redirect(locals.topic.url);
-			next();
+					
+			// tidy up the url
+			return res.redirect(locals.topic.url);
 		});
 	});
 	
@@ -94,8 +95,9 @@ exports = module.exports = function(req, res) {
 		locals.topic.save(function(err) {
 			if (err) return res.err(err);
 			// req.flash('success', 'You will NOT receive anymore email notifications about this topic.');
-			// return res.redirect(locals.topic.url);
-			next();
+					
+			// tidy up the url
+			return res.redirect(locals.topic.url);
 		});
 	});
 	
@@ -128,8 +130,7 @@ exports = module.exports = function(req, res) {
 				req.flash('success', 'Thank you for your reply.');
 				
 				// used to scroll down to the comments
-				// return res.redirect(locals.topic.url + '#comment-id-' + newReply.id);
-				locals.newComment = newReply.id;
+				locals.performFunction = 'scrollToLastComment';
 				
 			}
 			next();
@@ -150,6 +151,7 @@ exports = module.exports = function(req, res) {
 		
 		ForumReply.model.findOne({
 				_id: req.query.comment,
+				state: 'published',
 				topic: locals.topic.id
 			})
 			.exec(function(err, comment) {
@@ -173,8 +175,9 @@ exports = module.exports = function(req, res) {
 				comment.save(function(err) {
 					if (err) return res.err(err);
 					req.flash('success', 'Your reply has been removed.');
-					// return res.redirect(locals.topic.url);
-					next();
+					
+					// tidy up the url
+					return res.redirect(locals.topic.url);
 				});
 			});
 	});

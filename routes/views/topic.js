@@ -190,7 +190,8 @@ exports = module.exports = function(req, res) {
 			return next();
 		}
 		
-		locals.topic.remove(function(err) {
+		locals.topic.state = 'archived';
+		locals.topic.save(function(err) {
 			if (err) {
 				if (err.name == 'CastError') {
 					req.flash('error', 'The topic ' + req.params.topic + ' could not be found.');

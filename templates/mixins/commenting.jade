@@ -4,7 +4,7 @@ mixin comment-form(action)
 		
 		.comment-author.media-avatar.pull-left
 			if current.user
-				img(src=current.user.photo.exists ? current.user._.photo.thumbnail(60,60) : '/images/scaffolding/60x60.png', alt=current.user.name.full, width=60, height=60).img-avatar
+				img(src=current.user.photo.exists ? current.user._.photo.fill(60,60) : '/images/scaffolding/60x60.png', alt=current.user.name.full, width=60, height=60).img-avatar
 			else
 				img(src='/images/scaffolding/60x60.png', alt='Comment author placeholder', width=60, height=60).img-avatar
 		.comment-box.media-body
@@ -27,17 +27,17 @@ mixin comment-post(comment)
 	if comment.author
 		div(id='comment-id-' + comment.id).comment-post
 			if current.user && current.user.id == comment.author.id
-				a(href='?remove=comment&comment=' + comment.id, title='Delete this comment', rel='tooltip', data-placement='left').comment-delete.js-delete-confirm Delete
+				a(href='?remove=comment&comment=' + comment.id, title='Delete your comment', rel='tooltip', data-placement='left').comment-delete.js-delete-confirm Delete
 						
 			.media
 				a(href=comment.author.url).pull-left.media-avatar
-					img(src=comment.author.photo.exists ? comment.author._.photo.thumbnail(60,60) : '/images/scaffolding/60x60.png', alt=comment.author.name.full, width=60, height=60).img-avatar
+					img(src=comment.author.photo.exists ? comment.author._.photo.fill(60,60) : '/images/scaffolding/60x60.png', alt=comment.author.name.full, width=60, height=60).img-avatar
 				.media-body
 					p
 						strong: a(href=comment.author.url)=comment.author.name.full
 						if comment.publishedAt
 							|  &middot; 
-							time(datetime=comment.publishedAt, data-datetime=comment.publishedAt).js-timeago.text-muted= comment._.publishedAt.format('D MMM YYYY')
+							time(datetime=comment._.publishedAt.format('YYYY-MM-DDTHH:mm:ssZ'), title=comment.publishedAt).js-timeago.text-muted= comment._.publishedAt.format('D MMM YYYY')
 					p!=comment.content.html
 
 mixin comment-thread(comments)

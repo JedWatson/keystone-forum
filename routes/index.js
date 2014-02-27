@@ -54,6 +54,7 @@ exports = module.exports = function(app) {
 	// Authentication
 	app.get('/authentication/github', routes.authentication.github);
 	app.get('/authentication/twitter', routes.authentication.twitter);
+	app.get('/authentication/google', routes.authentication.google);
 	
 	
 	// User

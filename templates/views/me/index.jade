@@ -52,7 +52,7 @@ block content
 							.col-sm-10
 								if current.user.photo.exists
 									.row
-										.col-sm-3: img(src=current.user._.photo.thumbnail(120,120)).img-avatar
+										.col-sm-3: img(src=current.user._.photo.fill(120,120)).img-avatar
 										.col-sm-9: input(type='file', name='photo_upload')
 								else
 									input(type='file', name='photo_upload')

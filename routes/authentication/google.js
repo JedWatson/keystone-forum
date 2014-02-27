@@ -1,7 +1,7 @@
 var async = require('async'),
 	keystone = require('keystone');
 
-var facebook = require('../../lib/services/facebook');
+var google = require('../../lib/services/google');
 
 exports = module.exports = function(req, res, next) {
 	
@@ -22,7 +22,7 @@ exports = module.exports = function(req, res, next) {
 		
 	], function(err) {
 	
-		facebook.authenticateUser(req, res, next, function(err, type) {
+		google.authenticateUser(req, res, next, function(err, type) {
 		
 			/*
 				/signin
@@ -40,14 +40,14 @@ exports = module.exports = function(req, res, next) {
 			// Redirect based on response
 			if (err) {
 			
-				console.log('[auth.facebook] - Facebook authentication failed - ' + JSON.stringify(err));
+				console.log('[auth.google] - Google authentication failed - ' + JSON.stringify(err));
 				console.log('------------------------------------------------------------');
 				
 				return res.redirect(redirects.fail);
 			
 			} else {
 			
-				console.log('[auth.facebook] - Facebook authentication was successful.');
+				console.log('[auth.google] - Google authentication was successful.');
 				console.log('------------------------------------------------------------');
 				
 				return res.redirect(redirects.success);

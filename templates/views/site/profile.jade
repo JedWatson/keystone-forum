@@ -7,7 +7,7 @@ block content
 		+flash-messages(messages)
 		.text-center
 			//- if profile.photo.exists
-				img(src=profile._.photo.thumbnail(180,180), alt=profile.name.full, width=180, height=180).img-avatar
+				img(src=profile._.photo.fill(180,180), alt=profile.name.full, width=180, height=180).img-avatar
 			h1= profile.name.full
 			ul.list-inline.text-muted
 				li= plural(topics.length, '* Question', '* Questions')

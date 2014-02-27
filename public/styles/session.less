@@ -8,18 +8,11 @@
 // Core variables and mixins
 @import "bootstrap/variables.less";
 @import "bootstrap/mixins.less";
-@import "variables.less";
 
-// Reset
-@import "bootstrap/normalize.less";
-@import "bootstrap/scaffolding.less";
+@import "site/variables.less";
+@import "site/mixins.less";
 
-@import "bootstrap/buttons.less";
-@import "bootstrap/utilities.less";
-@import "bootstrap/alerts.less";
-@import "bootstrap/grid.less";
-
-@import "entypo.less";
+@import "site/entypo.less";
 
 
 
@@ -75,7 +68,7 @@ h2, .h2 {
 		width: 440px;
 	}
 	.session-form {
-		margin-top: 100px;
+		margin: 20% 0 0;
 	}
 }
 
@@ -88,13 +81,13 @@ h2, .h2 {
 	color: mix(@body-bg, @text-color, 50%);
 }
 .social-signup-buttons {
-	.clearfix();
 	margin-bottom: 20px;
 	margin-left: -5px;
 	margin-right: -5px;
 	
 	.signup-button {
-		float: left;
+		// float: left;
+		display: table-cell;
 		margin: 0;
 		padding-left: 5px;
 		padding-right: 5px;
@@ -105,6 +98,11 @@ h2, .h2 {
 			vertical-align: middle;
 		}
 	}
+}
+.social-signup-buttons-inner {
+	display: table;
+	width: 100%;
+	table-layout: fixed;
 }
 .signup-button__text {
 	display: none;
@@ -120,14 +118,36 @@ h2, .h2 {
 
 
 // Social Buttons
-.btn-facebook {
-  .button-variant(white; @brand-facebook; @brand-facebook);
+.btn-google {
+  .button-base(white; @brand-google; @brand-google);
 }
 .btn-twitter {
-  .button-variant(white; @brand-twitter; @brand-twitter);
+  .button-base(white; @brand-twitter; @brand-twitter);
 }
 .btn-github {
-  .button-variant(white; @brand-github; @brand-github);
+  .button-base(white; @brand-github; @brand-github);
+}
+
+
+
+// divider
+.or-divider {
+	color: @gray-light;
+	border-top: 1px solid @gray-lighter;
+	margin-bottom: 2em;
+	margin-top: 2em;
+	position: relative;
+	text-align: center;
+}
+.or-divider-text {
+	.translate(-50%,-50%);
+	background-color: white;
+	display: inline-block;
+	left: 50%;
+	line-height: 1.9;
+	padding: 0 1em;
+	position: absolute;
+	text-transform: uppercase;
 }
 
 
@@ -137,9 +157,11 @@ form {
 	margin-bottom: 40px;
 }
 .form-control {
+	.box-shadow(none);
 	border-radius: 0;
 	border: 1px solid #ccc;
 	display: block;
+	height: 3em;
 	margin-bottom: -1px;
 	padding: @padding-base-vertical @padding-base-horizontal;
 	position: relative;
@@ -156,7 +178,7 @@ form {
 	
 	// pop the focused field to the top so the border is visible
 	&:focus {
-		.box-shadow( 0 0 7px -2px fade(@link-color, 60%) );
+		.box-shadow( 0 0 6px -2px fade(@link-color, 50%) );
 		border-color: @link-color;
 		z-index: 1;
 	}

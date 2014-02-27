@@ -70,7 +70,7 @@ ForumReply.schema.post('save', function() {
 	
 	if (this.wasModified.category && this.category) {
 		keystone.list('ForumCategory').model.findById(this.category).exec(function(err, category) {
-			return category && category.wasActive().save();
+			return category && category.save();
 		});
 	}
 	

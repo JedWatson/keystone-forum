@@ -78,6 +78,8 @@ ForumTopic.schema.pre('save', function(next) {
 	
 	var topic = this;
 	
+	this.wasNew = this.isNew;
+	
 	if (this.isModified('content.full')) {
 		this.content.summary = utils.cropHTMLString(this.content.full, 160, '...', true);
 	}
@@ -131,7 +133,7 @@ ForumTopic.schema.post('save', function() {
 	
 	if (this.category) {
 		keystone.list('ForumCategory').model.findById(this.category).exec(function(err, category) {
-			return category && category.wasActive().save();
+			return category && category.save();
 		});
 	}
 	

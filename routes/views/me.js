@@ -26,10 +26,10 @@ exports = module.exports = function(req, res) {
 	
 	});
 	
-	view.on('post', { action: 'profile.password' }, function(next) {
+	view.on('post', { action: 'user.password' }, function(next) {
 	
 		if (!req.body.password || !req.body.password_confirm) {
-			req.flash('error', 'Please enter a password.');
+			req.flash('error', 'Please complete all password fields.');
 			return next();
 		}
 	

@@ -2,20 +2,41 @@ extends ../../layouts/default
 
 block content
 	.container
+		+flash-messages(messages)
 		.row
 			.col-sm-3
-				h3.profile-form__heading= current.user.name.full
-				p
-					| You have asked #{plural(current.user.topicCount, '* question', '* questions')} 
-					| and answered #{current.user.replyCount}
-					| since joining on #{current.user._.joinedAt.format('D MMMM YYYY')}
-				p: strong: a(href=current.user.url) View your profile
+				.profile-form__section
+					h3.profile-form__heading= current.user.name.full
+					p
+						| You have asked #{plural(current.user.topicCount, '* question', '* questions')} 
+						| and answered #{current.user.replyCount}
+						| since joining on #{current.user._.joinedAt.format('D MMMM YYYY')}
+					p: a(href=current.user.url).btn.btn-primary.btn-block View your profile &rarr;
+					p: button(type='button').btn.btn-link.btn-block.js-show-password-form Change Password
+				
+				//- change password form
+				.profile-form__section.password-form(style='display: none;')
+					form(method='post', enctype='multipart/form-data', autocomplete='off', novalidate).profile-form
+						input(type='hidden', name='action', value='user.password')
+						h3.profile-form__heading Change password
+						.form-group
+							label(for='change-password').sr-only Current Password
+							input(type='password', name='currentPassword', placeholder='Current Password', id='change-password').form-control
+						.form-group
+							label(for='change-passwordNew').sr-only New Password
+							input(type='password', name='password', placeholder='New Password', id='change-passwordNew').form-control
+						.form-group
+							label(for='change-passwordConfirm').sr-only Confirm Password
+							input(type='password', name='password_confirm', placeholder='Confirm Password', id='signin-passwordConfirm').form-control
+						button(type='submit', data-loading-text="Saving...").btn.btn-primary Change
+								
+								
+								
 			.col-sm-9
 				form(method='post', enctype='multipart/form-data', autocomplete='off', novalidate).profile-form.form-horizontal
 					input(type='hidden', name='action', value='user.update')
 					.profile-form__section
 						h3.profile-form__heading Your Profile
-						+flash-messages(messages)
 						.form-group
 							label.col-sm-2.control-label Name
 							.col-sm-10: .row
@@ -58,21 +79,6 @@ block content
 									input(type='file', name='photo_upload')
 						
 					.profile-form__section
-						h3.profile-form__heading Change password
-						.form-group
-							label.col-sm-2.control-label Security
-							.col-sm-10
-								.form-group
-									label(for='change-password').sr-only Current Password
-									input(type='password', name='currentPassword', placeholder='Current Password', id='change-password').form-control
-								.form-group
-									label(for='change-passwordNew').sr-only New Password
-									input(type='password', name='password', placeholder='New Password', id='change-passwordNew').form-control
-								.form-group
-									label(for='change-passwordConfirm').sr-only Confirm Password
-									input(type='password', name='password_confirm', placeholder='Confirm Password', id='signin-passwordConfirm').form-control
-						
-					.profile-form__section
 						h3.profile-form__heading Email notifications
 						.form-group
 							label.col-sm-2.control-label Email me when
@@ -91,3 +97,15 @@ block content
 						.col-sm-10.col-sm-offset-2
 							button(type='submit', data-loading-text="Saving...").btn.btn-primary Save profile
 
+
+
+
+block js
+	script.
+		jQuery(function($){
+			$('.js-show-password-form').click(function() {
+				$('.password-form').show().find('.form-control').eq(0).focus();
+				$(this).hide();
+			});
+			
+		});

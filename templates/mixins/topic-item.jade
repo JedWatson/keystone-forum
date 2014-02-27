@@ -1,25 +1,20 @@
 mixin topic-item(topic)
-	li: .topic
-		.topic__avatar
-			img(src=topic.author.photo.exists ? topic.author._.photo.fill(60,60) : 'http://www.placehold.it/60x60').img-avatar
-		.topic__count
-			.topic__count-number= topic.replyCount
-			.topic__count-label Answers
-		.topic__content
-			h2.topic__title: a(href=topic.url)= topic.name
-			if (current.user && current.user.id == topic.author.id) && section == 'profile'
-				.topic__info
-					time(datetime=topic.publishedAt)= topic._.publishedAt.format('DD MMM YYYY')
-					|  &middot; 
-					a(href=topic.url + '?remove=topic&topic=' + topic.id, title='Delete this topic', rel='tooltip', data-placement='left').text-danger-impending.js-delete-confirm Delete
-			else
+	li
+		a(href=topic.url).topic
+			.topic__avatar
+				img(src=topic.author.photo.exists ? topic.author._.photo.fill(60,60) : 'http://www.placehold.it/60x60').img-avatar
+			.topic__count
+				.topic__count-number= topic.replyCount
+				.topic__count-label Answers
+			.topic__content
+				h2.topic__title= topic.name
 				.topic__info
 					| Posted 
 					time(datetime=topic.publishedAt)= topic._.publishedAt.format('DD MMM YYYY')
 					|  by 
 					span.text-dimmed= topic.author.name.full
-			if topic.category
-				.topic__meta
-					span.topic-category
-						span(class=topic.category.key).category-indicator
-						span= topic.category.name
+				if topic.category
+					.topic__meta
+						span.topic-category
+							span(class=topic.category.key).category-indicator
+							span= topic.category.name

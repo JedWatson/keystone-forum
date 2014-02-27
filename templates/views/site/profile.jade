@@ -13,7 +13,20 @@ block content
 				li= plural(topics.length, '* Question', '* Questions')
 				li &middot;
 				li= plural(replies.length, '* Answer', '* Answers')
-			!=profile.bio.html
+			if profile.bio
+				!=profile.bio.html
+			if profile.twitter || profile.github
+			ul.list-inline.text-muted
+				if profile.twitter
+					li: a(href='http://twitter.com/' + profile.twitter.replace('@', ''), target='_blank', title="@#{profile.twitter.replace('@', '')}")
+						span.entypo-social.entypo-twitter
+						//- |  @#{profile.twitter.replace('@', '')}
+				if profile.twitter && profile.github
+					//- li &middot;
+				if profile.github
+					li: a(href='http://github.com/' + profile.github.replace('@', ''), target='_blank', title="@#{profile.github.replace('@', '')}")
+						span.entypo-social.entypo-github
+						//- |  @#{profile.github.replace('@', '')}
 		hr
 		
 		//- topics

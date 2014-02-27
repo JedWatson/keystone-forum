@@ -32,11 +32,11 @@ block content
 						.form-group
 							label.col-sm-2.control-label Twitter
 							.col-sm-10
-								input(type='text', name='twitter' value=current.user.twitter).form-control.form-control-labelled
+								.at-username-field: input(type='text', name='twitter' value=current.user.twitter, placeholder='Twitter username').form-control.form-control-labelled
 						.form-group
 							label.col-sm-2.control-label Github
 							.col-sm-10
-								input(type='text', name='github' value=current.user.github).form-control.form-control-labelled
+								.at-username-field: input(type='text', name='github' value=current.user.github, placeholder='Github username').form-control.form-control-labelled
 						
 					.profile-form__section
 						h3.profile-form__heading Public info
@@ -80,9 +80,11 @@ block content
 								label.checkbox
 									input(type='checkbox' name='notifications.topics', value='true', checked=current.user.notifications.topics ? 'checked' : null)
 									|  Someone asks a question
+								.help-block You will receive an email for each new topic created on the forum
 								label.checkbox
-									input(type='checkbox' name='notifications.replies', value='true', checked=current.user.notifications.replies ? 'checked' : null)
+									input(type='checkbox' name='notifications.replies', value='true', checked='checked', disabled)
 									|  Someone answers a question I've asked
+								.help-block By default you are watching topics you create. You can unwatch them at any time.
 
 
 					.form-group

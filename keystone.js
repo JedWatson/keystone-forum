@@ -39,7 +39,7 @@ keystone.init({
 	},
 
 	'auto update': true,
-	'mongo': process.env.MONGO_URI || 'mongodb://localhost/' + pkg.name,
+	'mongo': process.env.MONGOLAB_URI || 'mongodb://localhost/' + pkg.name,
 
 	'session': true,
 	'auth': true,

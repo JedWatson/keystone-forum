@@ -47,10 +47,17 @@ User.add({
 			profileUrl: { type: String, label: 'Profile URL', dependsOn: deps.github },
 			
 			username: { type: String, label: 'Username', dependsOn: deps.github },
-			accessToken: { type: String, label: 'Access Token', dependsOn: deps.github }
+			accessToken: { type: String, label: 'Access Token', dependsOn: deps.github },
+			refreshToken: { type: String, label: 'Refresh Token', dependsOn: deps.github }
 		},
 		google: {
-			isConfigured: { type: Boolean, label: 'Google has been authenticated' }
+			isConfigured: { type: Boolean, label: 'Google has been authenticated' },
+			
+			profileId: { type: String, label: 'Profile ID', dependsOn: deps.google },
+			
+			username: { type: String, label: 'Username', dependsOn: deps.google },
+			accessToken: { type: String, label: 'Access Token', dependsOn: deps.google },
+			refreshToken: { type: String, label: 'Refresh Token', dependsOn: deps.google }
 		},
 		twitter: {
 			isConfigured: { type: Boolean, label: 'Twitter has been authenticated' },
@@ -58,7 +65,8 @@ User.add({
 			profileId: { type: String, label: 'Profile ID', dependsOn: deps.twitter },
 			
 			username: { type: String, label: 'Username', dependsOn: deps.twitter },
-			accessToken: { type: String, label: 'Access Token', dependsOn: deps.twitter }
+			accessToken: { type: String, label: 'Access Token', dependsOn: deps.twitter },
+			refreshToken: { type: String, label: 'Refresh Token', dependsOn: deps.twitter }
 		}
 	}
 });

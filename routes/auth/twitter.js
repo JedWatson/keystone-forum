@@ -1,7 +1,7 @@
 var async = require('async'),
 	keystone = require('keystone');
 
-var twitter = require('../../lib/services/twitter');
+var twitter = require('../../lib/auth/twitter');
 
 exports = module.exports = function(req, res, next) {
 	

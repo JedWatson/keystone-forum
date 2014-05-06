@@ -2,14 +2,14 @@ mixin social-signin()
 	//- p.session-form-heading Use a social account
 	.social-signup-buttons: .social-signup-buttons-inner
 			
-		.signup-button: a(href='/authentication/github', title='Log in with Github').btn.btn-github.btn-block
+		.signup-button: a(href='/auth/github', title='Log in with Github').btn.btn-github.btn-block
 			span.entypo-social.entypo-github
 			span.signup-button__text  Github
 			
-		.signup-button: a(href='/authentication/twitter', title='Log in with Twitter').btn.btn-twitter.btn-block
+		.signup-button: a(href='/auth/twitter', title='Log in with Twitter').btn.btn-twitter.btn-block
 			span.entypo-social.entypo-twitter
 			span.signup-button__text  Twitter
 		
-		.signup-button: a(href='/authentication/google', title='Log in with Google').btn.btn-google.btn-block
+		.signup-button: a(href='/auth/google', title='Log in with Google').btn.btn-google.btn-block
 			span(class='entypo-google-circles').entypo-social
 			span.signup-button__text  Google

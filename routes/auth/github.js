@@ -1,7 +1,7 @@
 var async = require('async'),
 	keystone = require('keystone');
 
-var google = require('../../lib/services/google');
+var github = require('../../lib/auth/github');
 
 exports = module.exports = function(req, res, next) {
 	
@@ -22,7 +22,7 @@ exports = module.exports = function(req, res, next) {
 		
 	], function(err) {
 	
-		google.authenticateUser(req, res, next, function(err, type) {
+		github.authenticateUser(req, res, next, function(err, type) {
 		
 			/*
 				/signin
@@ -40,14 +40,14 @@ exports = module.exports = function(req, res, next) {
 			// Redirect based on response
 			if (err) {
 			
-				console.log('[auth.google] - Google authentication failed - ' + JSON.stringify(err));
+				console.log('[auth.github] - GitHub authentication failed - ' + JSON.stringify(err));
 				console.log('------------------------------------------------------------');
 				
 				return res.redirect(redirects.fail);
 			
 			} else {
 			
-				console.log('[auth.google] - Google authentication was successful.');
+				console.log('[auth.github] - GitHub authentication was successful.');
 				console.log('------------------------------------------------------------');
 				
 				return res.redirect(redirects.success);

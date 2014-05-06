@@ -29,7 +29,7 @@ keystone.set('500', function(err, req, res, next) {
 var routes = {
 	api: importRoutes('./api'),
 	views: importRoutes('./views'),
-	authentication: importRoutes('./authentication')
+	auth: importRoutes('./auth')
 };
 
 // Bind Routes
@@ -51,10 +51,10 @@ exports = module.exports = function(app) {
 	app.all('/reset-password/:key', routes.views['reset-password']);
 	
 	
-	// Authentication
-	app.get('/authentication/github', routes.authentication.github);
-	app.get('/authentication/twitter', routes.authentication.twitter);
-	app.get('/authentication/google', routes.authentication.google);
+	// Auth
+	app.get('/auth/github', routes.auth.github);
+	app.get('/auth/twitter', routes.auth.twitter);
+	app.get('/auth/google', routes.auth.google);
 	
 	
 	// User

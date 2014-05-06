@@ -7,17 +7,18 @@
     "url": "https://github.com/JedWatson/keystone-forum.git"
   },
   "dependencies": {
-    "keystone": "~0.2.14",
-    "underscore": "~1.6.0",
-    "moment": "~2.6.0",
-    "moment-timezone": "~0.0.6",
     "async": "~0.8.0",
     "dotenv": "~0.2.8",
+    "keystone": "~0.2.14",
+    "moment": "~2.6.0",
+    "moment-timezone": "~0.0.6",
     "newrelic": "~1.5.3",
     "passport": "~0.2.0",
     "passport-github": "~0.1.5",
+    "passport-google-oauth": "~0.1.5",
     "passport-twitter": "~1.0.2",
-    "passport-google-oauth": "~0.1.5"
+    "request": "^2.34.0",
+    "underscore": "~1.6.0"
   },
   "engines": {
     "node": "0.10.x",

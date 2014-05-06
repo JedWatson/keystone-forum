@@ -68,6 +68,26 @@ jQuery(function($) {
 			input.focus();
 		});
 	}
+
+	// delete confirm UI
+
+	$('.comment-delete__hidden').hide();
+	$('.comment-delete__confirm').each(function() {
+
+		var button = $(this),
+			wrapper = button.closest('.comment-delete'),
+			content = wrapper.find('.comment-delete__hidden'),
+			cancel = wrapper.find('.comment-delete__cancel');
+
+		button.click(function() {
+			content.show();
+			button.hide();
+		});
+		cancel.click(function() {
+			content.hide();
+			button.show();
+		});
+	});
 	
 	
 	

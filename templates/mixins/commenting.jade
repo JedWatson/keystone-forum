@@ -27,7 +27,12 @@ mixin comment-post(comment)
 	if comment.author
 		div(id='comment-id-' + comment.id).comment-post
 			if current.user && current.user.id == comment.author.id
-				a(href='?remove=comment&comment=' + comment.id, title='Delete your comment', rel='tooltip', data-placement='left').comment-delete.js-delete-confirm Delete
+				.comment-delete
+					button(type='button').btn.btn-narrow.btn-link.comment-delete__confirm.text-confirm Delete
+					.comment-delete__hidden
+						//- | Remove your reply from this topic?
+						a(href='?remove=comment&comment=' + comment.id).btn.btn-narrow.btn-danger Delete
+						button(type='button').btn.btn-narrow.btn-default.comment-delete__cancel Cancel
 						
 			.media
 				a(href=comment.author.url).pull-left.media-avatar

@@ -176,6 +176,20 @@ cite    { font-style: normal; }
 	.text-emphasis-variant(@state-danger-text);
 }
 
+.text-confirm {
+	&,
+	&button,
+	&a,
+	&.btn-link {
+		color: @gray-light;
+		
+		&:hover,
+		&:focus {
+			color: @brand-danger;
+		}
+	}
+}
+
 // Contextual backgrounds
 // For now we'll leave these alongside the text classes until v4 when we can
 // safely shift things around (per SemVer rules).

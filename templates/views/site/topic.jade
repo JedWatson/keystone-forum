@@ -29,9 +29,9 @@ block content
 								if topic.author
 									span  by 
 									a(href=topic.author.url, itemprop='author')= topic.author.name.full
-								if replies.length
+								if topic.replyCount
 									|  &middot; 
-									a(href='#comments', data-scrollduratio=300).js-scrollto-anchor= plural(replies.length, '* reply', '* replies')
+									a(href='#comments', data-scrollduration=300).js-scrollto-anchor= plural(topic.replyCount, '* reply', '* replies')
 								if current.user && current.user.id == topic.author.id
 									|  &middot; 
 									a(href='?remove=topic&topic=' + topic.id, title='Delete this topic', rel='tooltip', data-placement='right', data-container='body').topic-delete.js-delete-confirm Delete

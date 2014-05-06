@@ -58,19 +58,19 @@ block content
 						.form-group
 							label.col-sm-2.control-label Twitter
 							.col-sm-10
-								a(href=(current.user.services.twitter.isConfigured ? '/deauth' : '/auth') + '/twitter', title='Connect your Twitter account').btn.btn-twitter
+								a(href=(current.user.services.twitter.isConfigured ? '?deauth=' : '/auth/') + 'twitter', title='Connect your Twitter account').btn.btn-twitter
 									span.entypo-social.entypo-twitter
 									span.signup-button__text= current.user.services.twitter.isConfigured ? ' Connected' : ' Connect'
 						.form-group
 							label.col-sm-2.control-label Github
 							.col-sm-10
-								a(href=(current.user.services.github.isConfigured ? '/deauth' : '/auth') + '/github', title='Connect your Github account').btn.btn-github
+								a(href=(current.user.services.github.isConfigured ? '?deauth=' : '/auth/') + 'github', title='Connect your Github account').btn.btn-github
 									span.entypo-social.entypo-github
 									span.signup-button__text= current.user.services.github.isConfigured ? ' Connected' : ' Connect'
 						.form-group
 							label.col-sm-2.control-label Google
 							.col-sm-10
-								a(href=(current.user.services.google.isConfigured ? '/deauth' : '/auth') + '/google', title='Connect your Google account').btn.btn-google
+								a(href=(current.user.services.google.isConfigured ? '?deauth=' : '/auth/') + 'google', title='Connect your Google account').btn.btn-google
 									span(class='entypo-google-circles').entypo-social
 									span.signup-button__text= current.user.services.google.isConfigured ? ' Connected' : ' Connect'
 						

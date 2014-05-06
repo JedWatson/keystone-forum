@@ -1,5 +1,6 @@
 var keystone = require('keystone'),
-	moment = require('moment');
+	moment = require('moment'),
+	_ = require('underscore'),
 	config = require('../../config');
 
 exports = module.exports = function(req, res) {
@@ -58,6 +59,49 @@ exports = module.exports = function(req, res) {
 		});
 	}
 	
+	
+	// Deauth anything
+	
+	/*
+	view.on('init', function(next) {
+	
+		if (!_.has(req.query, 'deauth')) return next();
+		
+		switch(req.query.deauth)
+		{
+			case 'twitter':
+				req.user.services.twitter = false;
+			break;
+			
+			case 'github':
+				req.user.services.github = false;
+			break;
+			
+			case 'google':
+				req.user.services.google = false;
+			break;
+		}
+		
+		console.log(req.user.services)
+		
+		req.user.save(function(err) {
+		
+			if (err) {
+				return next();
+			}
+			
+			req.flash('success', 'Your changes have been saved.');
+			return next();
+		
+		});
+	
+	});
+	*/
+	
+	
 	view.render('site/settings');
 	
 }
+
+
+

@@ -1,30 +1,11 @@
-var keystone = require('keystone'),
-	async = require('async'),
-	User = keystone.list('User');
-
-var admins = [
-	{ email: 'boris@thinkmill.com.au', password: 'allthetopics', name: { first: 'Boris', last: 'Bozic' } },
-	{ email: 'joss@thinkmill.com.au', password: 'allthetopics', name: { first: 'Joss', last: 'Mackison' } },
-	{ email: 'jed@thinkmill.com.au', password: 'allthetopics', name: { first: 'Jed', last: 'Watson' } },
-	{ email: 'tuan@thinkmill.com.au', password: 'allthetopics', name: { first: 'Tuan', last: 'Hoang' } },
-	{ email: 'tom@thinkmill.com.au', password: 'allthetopics', name: { first: 'Tom', last: 'Walker' } }
-];
-
-function createAdmin(admin, done) {
-	User.model.findOne({ email: admin.email }).exec(function(err, user) {
-		admin.isAdmin = true;
-		new User.model(admin).save(function(err) {
-			if (err) {
-				console.error("Error adding admin " + admin.email + " to the database:");
-				console.error(err);
-			} else {
-				console.log("Added admin " + admin.email + " to the database.");
-			}
-			done();
-		});
-	});
+exports.create = {
+	User: [
+		{ email: 'boris@thinkmill.com.au',   'name.full': 'Boris Bozic',         password: 'allthetopics', isAdmin: true },
+		{ email: 'joss@thinkmill.com.au',    'name.full': 'Joss Mackison',       password: 'allthetopics', isAdmin: true },
+		{ email: 'jed@thinkmill.com.au',     'name.full': 'Jed Watson',          password: 'allthetopics', isAdmin: true },
+		{ email: 'tuan@thinkmill.com.au',    'name.full': 'Tuan Hoang',          password: 'allthetopics', isAdmin: true },
+		{ email: 'tom@thinkmill.com.au',     'name.full': 'Tom Walker',          password: 'allthetopics', isAdmin: true },
+		{ email: 'rob@prismatik.com.au',     'name.full': 'Rob Morris',          password: 'allthetopics', isAdmin: true },
+		{ email: 'michael@prismatik.com.au', 'name.full': 'Michael Zaporozhets', password: 'allthetopics', isAdmin: true }
+	]
 }
-
-exports = module.exports = function(done) {
-	async.forEach(admins, createAdmin, done);
-};

@@ -4,7 +4,7 @@ block content
 	.container
 		h1.page-header-heading!=errorTitle || 'Error (500)'
 		if 'object' == typeof errorMsg
-			div(style='margin: 30px 0;').debug!= htmlStringify(errorMsg)
+			div(style='margin: 30px 0;').debug!= utils.htmlStringify(errorMsg)
 		else
 			p.lead.page-header-lead!= utils.textToHTML(errorMsg) || 'Sorry, the server encountered an error.<br><br>Please try again shortly, or contact us if the problem continues.'
 		
@@ -14,5 +14,5 @@ block content
 				if 'string' == typeof err
 					!= utils.textToHTML(err)
 				else
-					!= htmlStringify(err)
+					!= utils.htmlStringify(err)
 		p: a(href='/').btn.btn-default.btn-lg KeystoneJS Forum Home

@@ -5,30 +5,31 @@ block content
 		+flash-messages(messages)
 		.row
 			.col-sm-3
-				.profile-form__section
+				.profile-form__section.sticky-content
 					h3.profile-form__heading= current.user.name.full
 					p
-						| You have asked #{plural(current.user.topicCount, '* question', '* questions')} 
-						| and answered #{current.user.replyCount}
+						| You have started #{plural(current.user.topicCount, '* topic', '* topics')} 
+						| and replied #{current.user.replyCount}
 						| since joining on #{current.user._.joinedAt.format('D MMMM YYYY')}
 					p: a(href=current.user.url).btn.btn-primary.btn-block View your profile &rarr;
-					p: button(type='button').btn.btn-link.btn-block.js-show-password-form Change Password
+					//- p: button(type='button').btn.btn-link.btn-block.js-show-password-form Change Password
 				
 				//- change password form
-				.profile-form__section.password-form(style='display: none;')
-					form(method='post', enctype='multipart/form-data', autocomplete='off', novalidate).profile-form
-						input(type='hidden', name='action', value='user.password')
-						h3.profile-form__heading Change password
-						.form-group
-							label(for='change-password').sr-only Current Password
-							input(type='password', name='currentPassword', placeholder='Current Password', id='change-password').form-control
-						.form-group
-							label(for='change-passwordNew').sr-only New Password
-							input(type='password', name='password', placeholder='New Password', id='change-passwordNew').form-control
-						.form-group
-							label(for='change-passwordConfirm').sr-only Confirm Password
-							input(type='password', name='password_confirm', placeholder='Confirm Password', id='signin-passwordConfirm').form-control
-						button(type='submit', data-loading-text="Saving...").btn.btn-primary Change
+				if config.enableNativeUserAccounts
+					.profile-form__section.password-form(style='display: none;')
+						form(method='post', enctype='multipart/form-data', autocomplete='off', novalidate).profile-form
+							input(type='hidden', name='action', value='user.password')
+							h3.profile-form__heading Change password
+							.form-group
+								label(for='change-password').sr-only Current Password
+								input(type='password', name='currentPassword', placeholder='Current Password', id='change-password').form-control
+							.form-group
+								label(for='change-passwordNew').sr-only New Password
+								input(type='password', name='password', placeholder='New Password', id='change-passwordNew').form-control
+							.form-group
+								label(for='change-passwordConfirm').sr-only Confirm Password
+								input(type='password', name='password_confirm', placeholder='Confirm Password', id='signin-passwordConfirm').form-control
+							button(type='submit', data-loading-text="Saving...").btn.btn-primary Change
 								
 								
 								
@@ -40,8 +41,8 @@ block content
 						.form-group
 							label.col-sm-2.control-label Name
 							.col-sm-10: .row
-								.col-sm-6: input(type='text', name='name.first' value=current.user.name.first).form-control
-								.col-sm-6: input(type='text', name='name.last' value=current.user.name.last).form-control
+								.col-xs-6: input(type='text', name='name.first' value=current.user.name.first).form-control
+								.col-xs-6: input(type='text', name='name.last' value=current.user.name.last).form-control
 						.form-group
 							label.col-sm-2.control-label Email
 							.col-sm-10
@@ -50,14 +51,28 @@ block content
 							label.col-sm-2.control-label Website
 							.col-sm-10
 								input(type='text', name='website' value=current.user.website).form-control.form-control-labelled
+					
+					.profile-form__section
+						h3.profile-form__heading Your Services
+						p.help-block You can authenticate with any of the services you connect. Connected services are displayed on your profile.
 						.form-group
 							label.col-sm-2.control-label Twitter
 							.col-sm-10
-								.at-username-field: input(type='text', name='twitter' value=current.user.twitter, placeholder='Twitter username').form-control.form-control-labelled
+								a(href='/authentication/twitter', title='Connect your Twitter account', disabled).btn.btn-twitter
+									span.entypo-social.entypo-twitter
+									span.signup-button__text  Connected
 						.form-group
 							label.col-sm-2.control-label Github
 							.col-sm-10
-								.at-username-field: input(type='text', name='github' value=current.user.github, placeholder='Github username').form-control.form-control-labelled
+								a(href='/authentication/github', title='Connect your Github account').btn.btn-github
+									span.entypo-social.entypo-github
+									span.signup-button__text  Connect
+						.form-group
+							label.col-sm-2.control-label Google
+							.col-sm-10
+								a(href='/authentication/google', title='Connect your Google account').btn.btn-google
+									span(class='entypo-google-circles').entypo-social
+									span.signup-button__text  Connect
 						
 					.profile-form__section
 						h3.profile-form__heading Public info
@@ -85,27 +100,38 @@ block content
 							.col-sm-10
 								label.checkbox
 									input(type='checkbox' name='notifications.topics', value='true', checked=current.user.notifications.topics ? 'checked' : null)
-									|  Someone asks a question
+									|  Someone starts a topic
 								.help-block You will receive an email for each new topic created on the forum
 								label.checkbox
 									input(type='checkbox' name='notifications.replies', value='true', checked='checked', disabled)
-									|  Someone answers a question I've asked
+									|  Someone replies to a topic I've started
 								.help-block By default you are watching topics you create. You can unwatch them at any time.
 
 
 					.form-group
 						.col-sm-10.col-sm-offset-2
 							button(type='submit', data-loading-text="Saving...").btn.btn-primary Save profile
-
-
-
-
+	
+	
 block js
+	script(src='/js/lib/bootstrap/affix.js')
 	script.
 		jQuery(function($){
+			
+			//- show password form
 			$('.js-show-password-form').click(function() {
 				$('.password-form').show().find('.form-control').eq(0).focus();
 				$(this).hide();
+			});
+			
+			//- fix the left col
+			$('.sticky-content').each(function() {
+				var self = $(this);
+				self.affix({
+					offset: {
+						top: self.offset().top - 20
+					}
+				});
 			});
 			
 		});

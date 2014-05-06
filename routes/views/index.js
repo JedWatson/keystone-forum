@@ -1,7 +1,8 @@
 var keystone = require('keystone'),
 	_ = require('underscore'),
+	async = require('async'),
 	globals = require('../../lib/globals'),
-	ForumTopic = keystone.list('ForumTopic');
+	Topic = keystone.list('Topic');
 
 exports = module.exports = function(req, res) {
 	
@@ -10,54 +11,65 @@ exports = module.exports = function(req, res) {
 	
 	locals.section = 'forum';
 	locals.current.filter = _.where(globals.forum.topic.filters, { value: req.params.filter })[0] || _.where(globals.forum.topic.filters, { value: 'newest' })[0];
-	locals.current.category = _.where(req.categories, { key: req.params.category })[0];
-	
+	locals.current.tag = _.where(req.tags, { key: req.params.tag })[0];
 	
 	// QUERY topics
 
-	var query = ForumTopic.paginate({
-		page: req.query.page || 1
-	});
-	
-	query.where('state', 'published')
+	var topicsQuery = Topic.paginate({
+			page: req.query.page || 1,
+			perPage: 20,
+			maxPages: 10
+		})
+		.where('state', 'published')
 		.where('author').ne(null)
-		.populate('author category')
+		.populate('author tags');
+		
+	var topicsCount = Topic.model.count()
+		.where('state', 'published')
+		.where('author').ne(null);
 		
 	
 	// FILTER topics
 	
 	if (locals.current.filter.value == 'newest') {
-		query.sort('-publishedAt')
+		topicsQuery.sort('-createdAt')
 	} else if (locals.current.filter.value == 'active') {
-		query.sort('-replyCount')
+		topicsQuery.sort('-replyCount')
 	} else if (locals.current.filter.value == 'unanswered') {
-		query.where('replyCount', 0)
+		topicsQuery.where('replyCount', 0)
 	} else if (locals.current.filter.value == 'featured') {
-		query.where('isFeatured', true)
-		query.sort('-publishedAt')
+		topicsQuery.where('isFeatured', true)
+		topicsQuery.sort('-createdAt')
 	}
 		
 	
 	// CATEGORISED topics
 	
-	if (locals.current.category) {
-		query.where('category', locals.current.category)
+	if (locals.current.tag) {
+		topicsQuery.where('tags').in([locals.current.tag]);
 	}
-	
-	
 
 
-	// RENDER topics
+	// COUNT and QUERY topics on render
 
-	view.on('init', function(next) {
-		query.exec(function(err, topics) {
+	view.on('render', function(next) {
+		async.parallel({
+			topics: function(done) {
+				topicsQuery.exec(done);
+			},
+			count: function(done) {
+				topicsCount.exec(done);
+			}
+		}, function(err, results) {
 			if (err) {
-				res.err(err, 'Error loading topics', 'Sorry, there was an error loading ' + locals.current.filter + ' topics');
+				res.err(err, 'Error loading topics', 'Sorry, there was an error loading ' + locals.current.filter.label + ' topics');
 			} else {
-				locals.topics = topics;
+				locals.topics = results.topics;
+				locals.topicCount = results.count;
 				next();
 			}
 		});
+		
 	});
 	
 	view.render('site/index');

@@ -6,15 +6,19 @@ html
 		include ../includes/htmlhead
 		block css
 	body
-		include ../includes/header
+		.page-wrapper
+			include ../includes/header
+			
+			block intro
+			
+			.forum-body
+				block content
 		
-		block intro
-		
-		.docs-body
-			block content
-		
+				
 		include ../includes/footer
 		
+		block modal
+			
 		script(src="/js/lib/jquery/jquery-1.10.2.min.js")
 		script(src='/js/lib/bootstrap/collapse.js')
 		script(src='/js/lib/bootstrap/dropdown.js')

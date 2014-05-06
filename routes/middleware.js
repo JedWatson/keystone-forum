@@ -1,7 +1,7 @@
 var _ = require('underscore'),
 	querystring = require('querystring'),
 	keystone = require('keystone'),
-	ForumCategory = keystone.list('ForumCategory');
+	Tag = keystone.list('Tag');
 
 
 /**
@@ -37,16 +37,16 @@ exports.init = function(req, res, next) {
 	Make categories universally available
 */
 
-exports.loadCategories = function(req, res, next) {
+exports.loadTags = function(req, res, next) {
 	
-	ForumCategory.model.find().exec(function(err, categories) {
+	Tag.model.find().exec(function(err, tags) {
 		if (err) {
 			return res.status(500).render('500', {
 				err: err
 			});
 		}
-		req.categories = categories;
-		res.locals.categories = categories;
+		req.tags = tags;
+		res.locals.tags = tags;
 		next();
 	});
 	
@@ -106,7 +106,7 @@ exports.requireUser = function(req, res, next) {
 	
 	if (!req.user) {
 		req.flash('error', 'Please sign in to access this page.');
-		res.redirect('/signin');
+		res.redirect('/login');
 	} else {
 		next();
 	}

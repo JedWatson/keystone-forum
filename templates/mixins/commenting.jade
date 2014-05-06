@@ -35,9 +35,9 @@ mixin comment-post(comment)
 				.media-body
 					p
 						strong: a(href=comment.author.url)=comment.author.name.full
-						if comment.publishedAt
+						if comment.createdAt
 							|  &middot; 
-							time(datetime=comment._.publishedAt.format('YYYY-MM-DDTHH:mm:ssZ'), title=comment.publishedAt).js-timeago.text-muted= comment._.publishedAt.format('D MMM YYYY')
+							time(datetime=comment._.createdAt.format('YYYY-MM-DDTHH:mm:ssZ'), title=comment.createdAt).js-timeago.text-muted= comment._.createdAt.format('D MMM YYYY')
 					p!=comment.content.html
 
 mixin comment-thread(comments)

@@ -10,30 +10,31 @@ block content
 					a(href=watchedByUser ? '?unwatch' : '?watch', title=watchedByUser ? 'Stop email notifications' : 'Get email notifications', rel='tooltip', data-placement='left').btn.btn-sm.btn-default.pull-right
 						span.entypo.entypo-eye
 						=watchedByUser ? ' Unwatch' : ' Watch'
-				h4: a(href='/').text-muted &larr; Back to all questions
+				h4: a(href='/').text-muted &larr; Back to all topics
 				hr
-				article.topic-details
+				article(itemscope itemtype="http://schema.org/Article").topic-details
 					header.topic-details__header
 						+flash-messages(messages)
-						h1.heading=topic.name
-						if topic.category
-							a(href='/newest/' + topic.category.key).topic-category
-								span(class=topic.category.key).category-indicator
-								span= topic.category.name
-						if topic.author || topic.publishedAt
+						h1(itemprop='name').heading=topic.name
+						if topic.tags
+							for tag in topic.tags
+								a(href='/newest/' + tag.key).tag
+									span(class=tag.key).tag-indicator
+									span.tag-label= tag.name
+						if topic.author || topic.createdAt
 							span.subheading
-								if topic.publishedAt
+								if topic.createdAt
 									span  started on  
-									= topic._.publishedAt.format('dddd, D MMM YYYY')
+									= topic._.createdAt.format('dddd, D MMM YYYY')
 								if topic.author
 									span  by 
-									a(href=topic.author.url)= topic.author.name.full
+									a(href=topic.author.url, itemprop='author')= topic.author.name.full
 								if replies.length
 									|  &middot; 
-									a(href='#comments', data-scrollduratio=300).js-scrollto-anchor= plural(replies.length, '* answer', '* answers')
+									a(href='#comments', data-scrollduratio=300).js-scrollto-anchor= plural(replies.length, '* reply', '* replies')
 								if current.user && current.user.id == topic.author.id
 									|  &middot; 
-									a(href='?remove=topic&topic=' + topic.id, title='Delete this topic', rel='tooltip', data-placement='right').topic-delete.js-delete-confirm Delete
+									a(href='?remove=topic&topic=' + topic.id, title='Delete this topic', rel='tooltip', data-placement='right', data-container='body').topic-delete.js-delete-confirm Delete
 					.topic-details__body
 						.media
 							a(href='/profile/' + topic.author.key).pull-left.media-avatar
@@ -41,15 +42,15 @@ block content
 							.media-body.media-body-column
 								p.hidden-xs.text-muted
 									strong: a(href='/profile/' + topic.author.key)=topic.author.name.full
-									if topic.publishedAt
+									if topic.createdAt
 										|  &middot; 
-										span=topic._.publishedAt.format('DD MMM YYYY')
-								.details-content-wrapper!=topic.content.full.html
+										span=topic._.createdAt.format('DD MMM YYYY')
+								.details-content-wrapper!=topic.content.html
 					
 					//-comments
 					#comments.topic-details__footer
 						if replies.length
-							h4.text-muted=plural(replies.length, '* answer', '* answers')
+							h4.text-muted=plural(replies.length, '* reply', '* replies')
 							+comment-thread(replies)
 						+comment-form()
 			.col-sm-3
@@ -57,7 +58,7 @@ block content
 				hr
 				p This topic has #{plural(topic.replyCount, '* reply', '* replies')}
 					if topic.replyCount
-						| , the most recent was on #{topic._.lastReplyDate.format('DD MMM YYYY')}
+						| , the most recent was on #{topic._.lastReplyAt.format('DD MMM YYYY')}
 				p #{plural(topic.watchedBy, '* person is', '* people are')} watching this topic
 				
 
@@ -69,7 +70,7 @@ block content
 						for authorTopic in authorTopics
 							li
 								a(href=authorTopic.url)=authorTopic.name
-								.text-muted: time(datetime=authorTopic.publishedAt)= authorTopic._.publishedAt.format('DD MMM YYYY')
+								.text-muted: time(datetime=authorTopic.createdAt)= authorTopic._.createdAt.format('DD MMM YYYY')
 				//- h4.text-muted Found a bug?
 				//- hr
 				//- p If you're experiencing what appears to be a bug or something that doesn't seem to be working correctly, please 

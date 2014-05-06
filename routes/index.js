@@ -7,7 +7,7 @@ var keystone = require('keystone'),
 // Common Middleware
 keystone.pre('routes', middleware.initErrorHandlers);
 keystone.pre('routes', middleware.init);
-keystone.pre('routes', middleware.loadCategories);
+keystone.pre('routes', middleware.loadTags);
 keystone.pre('render', middleware.flashMessages);
 
 // Handle 404 errors
@@ -38,7 +38,7 @@ exports = module.exports = function(app) {
 	// Forum
 	app.get('/', routes.views.index);
 	app.get('/' + globals.forum.routePatterns.filters, routes.views.index);
-	app.get('/' + globals.forum.routePatterns.filters + '/:category?', routes.views.index);
+	app.get('/' + globals.forum.routePatterns.filters + '/:tag?', routes.views.index);
 	
 	app.all('/topic/:topic', routes.views.topic);
 	
@@ -58,9 +58,11 @@ exports = module.exports = function(app) {
 	
 	
 	// User
-	app.all('/me*', middleware.requireUser);
-	app.all('/me', routes.views.me);
-	app.all('/me/ask', routes.views.ask);
+	app.all('/settings*', middleware.requireUser);
+	app.all('/settings', routes.views.settings);
+	
+	app.all('/new-topic', middleware.requireUser);
+	app.all('/new-topic', routes.views['new-topic']);
 	
 	app.all('/profile/:profile', routes.views.profile);
 	

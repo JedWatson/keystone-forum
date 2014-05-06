@@ -5,7 +5,7 @@ var keystone = require('keystone');
 exports = module.exports = function(req, res) {
 	
 	if (req.user) {
-		return res.redirect('/me');
+		return res.redirect('/settings');
 	}
 	
 	var view = new keystone.View(req, res),
@@ -26,7 +26,7 @@ exports = module.exports = function(req, res) {
 			if (req.query && req.query.returnto) {
 				res.redirect(req.query.returnto + '?performFunction=focusOnCommentField');
 			} else {
-				res.redirect('/me');
+				res.redirect('/settings');
 			}
 		}
 		
@@ -105,7 +105,7 @@ exports = module.exports = function(req, res) {
 			if (err) return next();
 			
 			var onSuccess = function() {
-				return res.redirect('/me');
+				return res.redirect('/settings');
 			}
 			
 			var onFail = function(e) {

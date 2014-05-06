@@ -1,20 +1,21 @@
 mixin topic-item(topic)
-	li
-		a(href=topic.url).topic
+	li(itemscope itemtype='http://schema.org/itemListElement')
+		a(href=topic.url, itemprop='url', itemscope, itemtype='http://schema.org/Article').topic
 			.topic__avatar
 				img(src=topic.author.photo.exists ? topic.author._.photo.fill(60,60) : 'http://www.placehold.it/60x60').img-avatar
 			.topic__count
 				.topic__count-number= topic.replyCount
-				.topic__count-label Answers
+				.topic__count-label= plural(topic.replyCount, 'Reply', 'Replies')
 			.topic__content
-				h2.topic__title= topic.name
-				.topic__info
-					| Posted 
-					time(datetime=topic.publishedAt)= topic._.publishedAt.format('DD MMM YYYY')
+				h2(itemprop='name').topic__title= topic.name
+				.topic__info 
+					time(datetime=topic.createdAt, itemprop='dateCreated')= topic._.createdAt.format('D MMM YYYY')
 					|  by 
-					span.text-dimmed= topic.author.name.full
-				if topic.category
+					span(itemprop='author').text-dimmed= topic.author.name.full
+					span.hidden-sm.hidden-md.hidden-lg  &middot; #{plural(topic.replyCount, '* Reply', '* Replies')}
+				if topic.tags
 					.topic__meta
-						span.topic-category
-							span(class=topic.category.key).category-indicator
-							span= topic.category.name
+						for tag in topic.tags
+							span.tag
+								span(class=tag.key).tag-indicator
+								span.tag-label= tag.name

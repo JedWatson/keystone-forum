@@ -12,45 +12,6 @@
 	border: 4px solid @gray-lighter;
 }
 
-.topic-category {
-	.inline-align();
-	background-color: @gray-lighter;
-	border-radius: 3px;
-	color: @gray-light;
-	font-size: 11px;
-	font-weight: 400;
-	margin-right: 1em;
-	padding: 5px 10px;
-
-	a& {
-
-		&:hover {
-			background-color: darken(@gray-lighter, 5%);
-			color: @gray;
-			text-decoration: none;
-		}
-	}
-}
-
-.category-indicator {
-	.square( 10px );
-	background-color: @gray-light;
-	border-radius: 50%;
-	border: 2px solid @body-bg;
-	display: inline-block;
-	margin-right: 8px;
-	position: relative;
-	top: -1px;
-	vertical-align: middle;
-
-	&.express { background-color: @category-express; }
-	&.mongoose { background-color: @category-mongoose; }
-	&.nodejs { background-color: @category-nodejs; }
-	&.announcement { background-color: @category-announcement; }
-	&.demo { background-color: @category-demo; }
-	&.forum { background-color: @category-forum; }
-}
-
 
 
 // topics list
@@ -73,7 +34,6 @@
 }
 .topic {
 	display: block;
-	min-height: @avatar-width + (@topic-gutter * 2);
 	
 	&:hover {
 		text-decoration: none;
@@ -99,6 +59,7 @@
 	*zoom: 1;
 }
 .topic__count {
+	display: none;
 	color: @gray-light;
 	float: right;
 	text-align: center;
@@ -114,6 +75,7 @@
 	color: @gray-light;
 }
 .topic__meta {
+	display: none;
 	margin-top: 1em;
 }
 
@@ -122,9 +84,12 @@
 }
 @media (min-width: @screen-sm-min) {
 	.topic {
+		min-height: @avatar-width + (@topic-gutter * 2);
 		padding-left: @avatar-width + @topic-gutter;
 	}
-	.topic__avatar {
+	.topic__count,
+	.topic__avatar,
+	.topic__meta {
 		display: block;
 	}
 }
@@ -168,6 +133,16 @@
 	.lead();
 	color: @gray-light;
 	margin: 0;
+}
+
+// hide the avatar on profile pages
+.profile-topics {
+	.topic {
+		padding-left: 0;
+	}
+	.topic__avatar {
+		display: none;
+	}
 }
 
 
@@ -254,7 +229,6 @@
 	border-bottom: 1px solid @gray-lighter;
 	list-style: none;
 	font-weight: 400;
-	font-size: @font-size-large;
 	margin: 0;
 	padding: 0;
 
@@ -263,10 +237,13 @@
 		margin: 0;
 		padding: 0;
 	}
+	li {
+		display: inline-block;
+	}
 	a {
 		color: @gray-light;
 		display: block;
-		padding: 15px;
+		padding: 5px;
 
 		&:hover {
 			color: @gray;
@@ -278,15 +255,18 @@
 	}
 }
 @media (min-width: @screen-sm-min) {
-	.filter-nav li {
-		display: inline-block;
+	.filter-nav {
+		font-size: 1.25em;
+		a {
+			padding: 15px;
+		}
 	}
 }
 
 
 
 
-// type settings
+// Type Settings
 // ------------------------------
 
 // code
@@ -295,33 +275,13 @@ pre {
 	border-color: @gray-lighter;
 	margin-bottom: 1.5em;
 	margin-top: 1.5em;
-}
-
-
-// notes
-.note {
-	font-style: italic;
-}
-.contextual-note {
-	background-color: mix(white, @brand-primary,95%);
-	border-left: 6px solid mix(white, @brand-primary,80%);
-	margin: 20px 0;
-	padding: 15px;
 	
-	h4 {
-		margin: 0 0 15px;
-	}
-	p {
-		margin: 15px 0 0;
-	}
-	pre {
-		margin: 15px 0 0;
-	}
-	pre, code {
-		border-color: mix(white, @brand-primary,80%);
-		background: mix(white, @brand-primary,98%)
+	// override 
+	code {
+		white-space: pre;
 	}
 }
+
 
 
 // sidebar navigation
@@ -331,54 +291,12 @@ pre {
 	font-size: @font-size-large;
 	font-weight: 400;
 	margin-bottom: 25px;
-	padding: 15px;
-}
-.categories-list {
+	padding-bottom: 15px;
+	padding-top: 15px;
 	
-	ul {
-		list-style: none;
-		margin: 0;
-		padding: 0;
+	@media (min-width: @screen-sm-min) {
+		padding-left: 15px;
+		padding-right: 15px;	
 	}
-	li {
-		margin: 1px 0;
-	}
-	input {
-		.sr-only();
-	}
-	.category-count {
-		color: @gray-light;
-		float: right;
-	}
-	.categories-list__item {
-		// border-left: 3px solid transparent;
-		border-radius: 2px;
-		color: @text-color;
-		cursor: pointer;
-		display: block;
-		font-weight: 300;
-		margin: 0;
-		padding: 5px 10px;
-		
-		&:hover,
-		&:active,
-		&:focus {
-			background-color: @gray-lighter;
-			border-left-color: @gray-light;
-			color: @text-color;
-			outline: none;
-			text-decoration: none;
-		}
-	}
-	.is-active .categories-list__item {
-		background-color: darken(@gray-lighter, 5%);
-		// color: white;
-	}
-
-	.is-active.express .categories-list__item { background-color: mix(white, @category-express, 90%); }
-	.is-active.mongoose .categories-list__item { background-color: mix(white, @category-mongoose, 90%); }
-	.is-active.nodejs .categories-list__item { background-color: mix(white, @category-nodejs, 90%); }
-	.is-active.announcement .categories-list__item { background-color: mix(white, @category-announcement, 90%); }
-	.is-active.demo .categories-list__item { background-color: mix(white, @category-demo, 90%); }
-	.is-active.forum .categories-list__item { background-color: mix(white, @category-forum, 90%); }
 }
+	

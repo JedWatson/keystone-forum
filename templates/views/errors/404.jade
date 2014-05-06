@@ -11,15 +11,15 @@ block content
 		
 		//- Categories
 		.categories-heading Categories
-		.categories-list: ul
+		ul.tag-list
 			li
-				a(href='/').categories-list__item
-					span.category-indicator
+				a(href='/').tag.tag-list__item
+					span.tag-indicator
 					span All topics
-			for category in categories
-				li(class=category.key)
-					a(href='/newest/' + category.key).categories-list__item
-						span.category-count= category.topicCount
-						span(class=category.key).category-indicator
-						span= category.name
+			for tag in tags
+				li(class=tag.key)
+					a(href='/newest/' + tag.key).tag.tag-list__item
+						span.tag-count= tag.topicCount
+						span(class=tag.key).tag-indicator
+						span= tag.name
 

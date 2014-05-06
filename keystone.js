@@ -23,7 +23,7 @@ keystone.init({
 
 	'name': 'KeystoneJS Forum',
 	'brand': 'KeystoneJS Forum',
-	'back': '/me',
+	'back': '/settings',
 
 	'favicon': 'public/favicon.ico',
 	'less': 'public',
@@ -71,6 +71,9 @@ keystone.set('locals', {
 	env: keystone.get('env'),
 	utils: keystone.utils,
 	plural: keystone.utils.plural,
+	
+	config: require('./config'),
+	
 	google_api_key: keystone.get('google api key'),
 	ga_property: keystone.get('ga property'),
 	ga_domain: keystone.get('ga domain'),
@@ -98,7 +101,7 @@ keystone.set('email tests', {
 
 keystone.set('nav', {
 	'users': ['users'],
-	'topics': ['forum-topics', 'forum-categories', 'forum-replies']
+	'topics': ['topics', 'replies', 'tags']
 });
 
 keystone.start();

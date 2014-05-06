@@ -21,6 +21,8 @@ User.add({
 	name: { type: Types.Name, required: true, index: true },
 	email: { type: Types.Email, initial: true, index: true },
 	password: { type: Types.Password, initial: true },
+	state: { type: Types.Select, options: 'enabled, banned' },
+	notes: { type: Types.Textarea, collapse: true },
 	resetPasswordKey: { type: String, hidden: true }
 }, 'Profile', {
 	isPublic: Boolean,
@@ -32,8 +34,7 @@ User.add({
 	joinedAt: { type: Date, default: Date.now },
 }, 'Notifications', {
 	notifications: {
-		topics: { type: Boolean, default: true},
-		replies: { type: Boolean, default: true}
+		topics: { type: Boolean, default: true }
 	}
 }, 'Permissions', {
 	isAdmin: { type: Boolean, label: 'Can Admin KeystoneJS Forum' }
@@ -65,6 +66,7 @@ User.add({
 /** Meta */
 
 User.add('Meta', {
+	createdAt: { type: Date, default: Date.now, noedit: true, index: true },
 	topicCount: { type: Number, default: 0, collapse: true, noedit: true },
 	replyCount: { type: Number, default: 0, collapse: true, noedit: true }
 });
@@ -75,9 +77,9 @@ User.add('Meta', {
 	=============
 */
 
-User.relationship({ path: 'watchedTopics', ref: 'ForumTopic', refPath: 'watchedBy' });
-User.relationship({ path: 'authoredTopics', ref: 'ForumTopic', refPath: 'author' });
-User.relationship({ path: 'authoredReplies', ref: 'ForumReply', refPath: 'author' });
+User.relationship({ path: 'watchedTopics', ref: 'Topic', refPath: 'watchedBy' });
+User.relationship({ path: 'authoredTopics', ref: 'Topic', refPath: 'author' });
+User.relationship({ path: 'authoredReplies', ref: 'Reply', refPath: 'author' });
 
 
 /**
@@ -137,15 +139,11 @@ User.schema.pre('save', function(next) {
 	
 	this.wasNew = this.isNew;
 	
-	if (!this.isModified('publishedAt') && this.isModified('state') && this.state == 'published') {
-		this.publishedAt = new Date();
-	}
-	
 	async.parallel([
 		
 		// cache the count of topics to this user
 		function(done) {
-			keystone.list('ForumTopic').model.count().where('author', user.id).where('state', 'published').exec(function(err, count) {
+			keystone.list('Topic').model.count().where('author', user.id).where('state', 'published').exec(function(err, count) {
 				user.topicCount = count || 0;
 				done(err);
 			});
@@ -153,7 +151,7 @@ User.schema.pre('save', function(next) {
 		
 		// cache the count of replies to this user
 		function(done) {
-			keystone.list('ForumReply').model.count().where('author', user.id).where('state', 'published').exec(function(err, count) {
+			keystone.list('Reply').model.count().where('author', user.id).where('state', 'published').exec(function(err, count) {
 				user.replyCount = count || 0;
 				done(err);
 			});

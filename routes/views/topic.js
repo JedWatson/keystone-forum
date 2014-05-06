@@ -1,8 +1,8 @@
 var keystone = require('keystone'),
 	_ = require('underscore'),
 	User = keystone.list('User'),
-	ForumTopic = keystone.list('ForumTopic'),
-	ForumReply = keystone.list('ForumReply');
+	Topic = keystone.list('Topic'),
+	Reply = keystone.list('Reply');
 
 exports = module.exports = function(req, res) {
 	
@@ -18,10 +18,10 @@ exports = module.exports = function(req, res) {
 	
 	view.on('init', function(next) {
 		
-		ForumTopic.model.findOne()
+		Topic.model.findOne()
 			.where({ key: req.params.topic })
 			.where('author').ne(null)
-			.populate('author category')
+			.populate('author tags')
 			.exec(function(err, topic) {
 				if (err) return res.err(err);
 				if (!topic) return res.notfound('Topic not found', 'That topic has been moved or deleted.');
@@ -30,27 +30,6 @@ exports = module.exports = function(req, res) {
 			});
 		
 	});
-	
-	
-	
-	
-	// LOAD replies on the Topic
-	// view.on('init', function(next) {
-		
-	// 	ForumReply.model.find()
-	// 		.where( 'topic', locals.topic.id )
-	// 		.where( 'state', 'published' )
-	// 		.where( 'author' ).ne( null )
-	// 		.populate( 'author', 'name key photo' )
-	// 		.sort('publishedAt')
-	// 		.exec(function(err, replies) {
-	// 			if (err) return res.err(err);
-	// 			if (!replies) return res.notfound('Topic replies not found');
-	// 			locals.replies = replies;
-	// 			next();
-	// 		});
-		
-	// });
 	
 	
 	
@@ -109,7 +88,7 @@ exports = module.exports = function(req, res) {
 	
 	view.on('post', { action: 'comment.create' }, function(next) {
 		
-		var newReply = new ForumReply.model({
+		var newReply = new Reply.model({
 			state: 'published',
 			topic: locals.topic.id,
 			author: locals.current.user.id
@@ -149,7 +128,7 @@ exports = module.exports = function(req, res) {
 			return next();
 		}
 		
-		ForumReply.model.findOne({
+		Reply.model.findOne({
 				_id: req.query.comment,
 				state: 'published',
 				topic: locals.topic.id
@@ -222,10 +201,10 @@ exports = module.exports = function(req, res) {
 	
 	view.on('init', function(next) {
 		
-		ForumTopic.model.find()
+		Topic.model.find()
 			.where('_id').ne(locals.topic.id)
 			.where('author', locals.topic.author)
-			.sort('-publishedAt')
+			.sort('-createdAt')
 			.limit(4)
 			.populate('author')
 			.exec(function(err, authorTopics) {
@@ -257,12 +236,12 @@ exports = module.exports = function(req, res) {
 		
 		// load replies last so they're aware of create/delete
 
-		ForumReply.model.find()
+		Reply.model.find()
 			.where( 'topic', locals.topic.id )
 			.where( 'state', 'published' )
 			.where( 'author' ).ne( null )
 			.populate( 'author', 'name key photo' )
-			.sort('publishedAt')
+			.sort('createdAt')
 			.exec(function(err, replies) {
 				if (err) return res.err(err);
 				if (!replies) return res.notfound('Topic replies not found');

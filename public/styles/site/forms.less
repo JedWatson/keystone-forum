@@ -1,0 +1,32 @@
+//
+// Forms
+// ==============================
+
+
+
+
+.form-horizontal .control-label {
+	text-align: left;
+}
+label.checkbox {
+	font-weight: 300;
+}
+textarea {
+	.resizable(vertical);
+}
+
+.at-username-field {
+	position: relative;
+	
+	.form-control {
+		padding-left: @font-size-base + @padding-base-horizontal;
+	}
+	
+	&:before {
+		color: @input-color-placeholder;
+		content: "\0040"; // @ symbol
+		left: @padding-base-horizontal;
+		position: absolute;
+		top: @padding-base-vertical;
+	}
+}

@@ -1,0 +1,85 @@
+/*
+
+	Theme
+	==============================
+	
+	Use this file to tweak existing Bootstrap components. For major changes
+	consider creating a complimentary LESS file (your-component.less) and
+	possibly removing the offending Bootstrap component to avoid conflicts.
+	
+	* Pagination
+	* Modals
+
+*/
+
+
+
+
+// Pagination
+// ------------------------------
+
+.pagination,
+.pagination-count {
+	.inline-align();
+	color: @gray-light;
+	margin: 0 1em 0 0;
+	
+	// because i'm lazy
+	.disabled {
+		pointer-events: none;
+	}
+}
+.pagination--below {
+	margin-top: 2em;
+}
+.pagination--above {
+	margin-bottom: 2em;
+}
+
+
+
+
+// Alerts
+// ------------------------------
+
+.alert {
+	border: 0 none;
+	padding: @alert-padding (@alert-padding * 2);
+	
+	h4 {
+		font-size: 1em;
+	}
+}
+
+
+
+
+// Modals
+// ------------------------------
+
+.modal-backdrop {
+	background-color: white;
+	
+	&.in {
+		opacity: .75;
+	}
+}
+.modal-content {
+	.box-shadow( 0 4px 16px rgba(0,0,0,.2) );
+	border-color: #aaa;
+	border-radius: 2px;
+	padding: 30px 40px;
+	
+	@media (min-width: @grid-float-breakpoint) {
+		margin-top: 2em;
+	}
+}
+.modal-header {
+	padding: 1em 0;
+}
+.modal-body {
+	padding: 1em 0;
+}
+.modal-title {
+	line-height: 1;
+}

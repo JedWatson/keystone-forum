@@ -1,20 +1,24 @@
-header(role='banner').docs-header
+header(role='banner').forum-header
 	.container
-		button.navbar-toggle.navbar-toggle-menu(type='button', data-toggle='collapse', data-target='.docs-nav__collapse')
+		button.navbar-toggle.navbar-toggle-menu(type='button', data-toggle='collapse', data-target='.forum-nav__collapse')
 			span.sr-only Toggle navigation
 			//- span.entypo.entypo-list
 			!='<span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>'
 		a(href='/', title='KeystoneJS').keystone-logo: img(src='/images/logo.svg', alt='KeystoneJS', width=207, height=70)
 		
-		nav.docs-nav
-			.docs-nav__collapse.collapse
-				ul.docs-nav__nav
+		nav.forum-nav
+			.forum-nav__collapse.collapse
+				ul.forum-nav__nav
 					if current.user
 						li(class=section == 'forum' ? 'active' : null): a(href='/') Forum
-						li(class=section == 'ask' ? 'active' : null): a(href='/me/ask') Ask Question
-						li(class=section == 'me' ? 'active' : null): a(href='/me') Settings
-						li: a(href='/signout') Log out
+						li(class=section == 'new-topic' ? 'active' : null): a(href='/new-topic') New Topic
+						li(class=section == 'settings' ? 'active' : null): a(href='/settings') Settings
+						li: a(href='/signout', title='Log out')
+							span.entypo.entypo-logout.hidden-xs
+							span.visible-xs Log out
 					else
 						li(class=section == 'login' ? 'active' : null): a(href='/login') Log in
 						li(class=section == 'join' ? 'active' : null): a(href='/join') Join
+					li.forum-nav__docs: a(href='http://keystonejs.com', title='Back to the docs') Docs 
+						//- span.entypo.entypo-chevron-thin-right
 		//- include ../includes/primary-nav

@@ -34,7 +34,7 @@ exports = module.exports = function(req, res) {
 		locals.found.save(function(err) {
 			if (err) return next(err);
 			req.flash('success', 'We changed your password, please sign in.');
-			res.redirect('/signin');
+			res.redirect('/login');
 		});
 		
 	});

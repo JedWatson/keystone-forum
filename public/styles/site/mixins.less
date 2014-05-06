@@ -4,52 +4,11 @@
 	
 	Helpers to pump out CSS
 	
-	* panel-base
-	* font-size
 	* fill-space
 	* scrollable
 	* inline-align
 	* button-base
 */
-
-
-
-
-
-/*
-  Panel base
-  ====================
-
-  Provides a base style for common elements
-*/
-.panel-base() {
-	.box-shadow( 0 2px 0 rgba(0,0,0,0.03) );
-	background-color: white;
-	border: 1px solid darken(@body-bg, 2%);
-	border-bottom-color: darken(@body-bg, 12%);
-	border-radius: @border-radius-base;
-}
-
-
-
-
-
-/*
-  Font size
-  ====================
-
-  Convert pixel sizes to rems
-
-  Notes
-  --------------------
-  * Assumes root font size of 62.5% (10px)
-*/
-.font-size(@sizeValue) {
-	@remValue: @sizeValue;
-	@pxValue: (@sizeValue * 10);
-	font-size: ~"@{pxValue}px"; 
-	font-size: ~"@{remValue}rem";
-}
 
 
 

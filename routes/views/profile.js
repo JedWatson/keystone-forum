@@ -1,7 +1,7 @@
 var keystone = require('keystone'),
 	User = keystone.list('User'),
-	ForumTopic = keystone.list('ForumTopic'),
-	ForumReply = keystone.list('ForumReply');
+	Topic = keystone.list('Topic'),
+	Reply = keystone.list('Reply');
 
 exports = module.exports = function(req, res) {
 	
@@ -33,12 +33,12 @@ exports = module.exports = function(req, res) {
 	
 	view.on('init', function(next) {
 		
-		ForumTopic.model.find()
+		Topic.model.find()
 			.where( 'state', 'published' )
 			.where('author', locals.profile.id)
 			.populate( 'author', 'name photo' )
-			.populate( 'category')
-			.sort('-publishedAt')
+			.populate( 'tags' )
+			.sort('-createdAt')
 			.exec(function(err, topics) {
 				if (err) return res.err(err);
 				locals.topics = topics;
@@ -51,11 +51,11 @@ exports = module.exports = function(req, res) {
 	// LOAD replies
 	view.on('init', function(next) {
 		
-		ForumReply.model.find()
+		Reply.model.find()
 			.where( 'state', 'published' )
 			.where('author', locals.profile.id)
 			.populate( 'author', 'name photo' )
-			.sort('-publishedAt')
+			.sort('-createdAt')
 			.exec(function(err, replies) {
 				if (err) return res.err(err);
 				locals.replies = replies;

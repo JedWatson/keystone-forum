@@ -24,7 +24,9 @@ block content
 		p.text-center
 			a(href='/forgot-password') Forgot your password?
 
+
 block js
+	script(src='/js/lib/bootstrap/modal.js')
 	script.
 		var $form = $('.session-form'),
 			$submit = $form.find("[type='submit']");

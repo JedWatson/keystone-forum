@@ -1,21 +1,19 @@
 var keystone = require('keystone'),
 	_ = require('underscore'),
-	ForumTopic = keystone.list('ForumTopic');
+	Topic = keystone.list('Topic');
 
 exports = module.exports = function(req, res) {
 	
 	var view = new keystone.View(req, res),
 		locals = res.locals;
 	
-	locals.section = 'ask';
+	locals.section = 'new-topic';
 	locals.title = 'Create a blog post - SydJS';
-		
+	
 	locals.form = {
 		name: '',
-		category: '',
-		content: {
-			full: ''
-		}
+		tags: '',
+		content: ''
 	}
 	
 	
@@ -26,7 +24,7 @@ exports = module.exports = function(req, res) {
 	// 
 	view.on('post', { action: 'topic.create' }, function(next) {
 		
-		var newTopic = new ForumTopic.model({
+		var newTopic = new Topic.model({
 			author: req.user,
 			watchedBy: req.user,
 			state: 'published'
@@ -35,7 +33,7 @@ exports = module.exports = function(req, res) {
 		var updater = newTopic.getUpdateHandler(req);
 		
 		updater.process(req.body, {
-			fields: 'name, category, content.full',
+			fields: 'name, tags, content',
 			flashErrors: true,
 			logErrors: true
 		}, function(err) {
@@ -55,6 +53,6 @@ exports = module.exports = function(req, res) {
 	
 	});
 	
-	view.render('me/ask');
+	view.render('site/new-topic');
 	
 }

@@ -33,8 +33,8 @@ exports = module.exports = function(req, res, next) {
 			
 			// Define redirects for success and fail responses
 			var redirects = {
-				success: '/me',
-				fail: '/signin'
+				success: '/settings',
+				fail: '/login'
 			}
 			
 			// Redirect based on response

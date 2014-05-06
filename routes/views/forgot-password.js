@@ -17,7 +17,7 @@ exports = module.exports = function(req, res) {
 			user.resetPassword(function(err) {
 				if (err) return next(err);
 				req.flash('success', 'We have emailed you a link to reset your password. Please follow the instructions in your email.');
-				res.redirect('/signin');
+				res.redirect('/login');
 			});
 		});
 		

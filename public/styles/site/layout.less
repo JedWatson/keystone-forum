@@ -2,7 +2,10 @@
 // LAYOUT
 // ==============================
 
-
+.page-wrapper {
+	background-color: white;
+	padding-bottom: 10em;
+}
 
 
 // small container
@@ -25,8 +28,13 @@
 	max-width: @container-lg;
 }
 
-// header
-.docs-header {
+
+
+
+// Header
+// ------------------------------
+
+.forum-header {
 	.clearfix();
 	border-bottom: 1px solid @gray-lighter;
 	height: @navbar-height;
@@ -64,8 +72,10 @@
 	}
 }
 
+
 // navigation
-.docs-nav__nav {
+
+.forum-nav__nav {
 	// font-weight: 400;
 	list-style: none;
 	margin: 0;
@@ -81,15 +91,19 @@
 		text-decoration: none;
 	}
 }
-.docs-nav__collapse.in {
+.forum-nav__collapse.in {
 	clear: left;
 }
+
+
+// tiny screens
+
 @media (max-width: @screen-xs-max) {
 	.keystone-logo > img {
 		height: 50px;
 		width: 148px;
 	}
-	.docs-nav {
+	.forum-nav {
 		.box-shadow( ~"0 1px 4px rgba(0,0,0,0.1), 0 1px 0 rgba(0,0,0,0.1)" );
 		background-color: white;
 		line-height: 4;
@@ -104,15 +118,19 @@
 		}
 	}
 }
+
+
+// large screens
+
 @media (min-width: @screen-sm-min) {
-	.docs-nav {
+	.forum-nav {
 		float: right;
 		
 		.collapse {
 			display: block;
 		}
 	}
-	.docs-nav__nav {
+	.forum-nav__nav {
 		> li {
 			float: left;
 		}
@@ -132,17 +150,27 @@
 			background: none transparent;
 			color: @gray-darker;
 		}
+		
+		.forum-nav__docs {
+			border-left: 1px solid @gray-lighter;
+			margin-left: 1em;
+			padding-left: 1em;
+		}
 	}
 }
 
-// footer
-.docs-footer {
+
+
+
+// Footer
+// ------------------------------
+
+.forum-footer {
 	background-color: #fafafa;
 	border-top: 1px solid @gray-lighter;
 	color: @gray-light;
 	font-size: @font-size-small;
 	font-weight: 300;
-	margin-top: 30px;
 	padding-bottom: 30px;
 	padding-top: 30px;
 	position: relative;
@@ -161,7 +189,6 @@
 	}
 	
 	@media (min-width: @screen-sm-min) {
-		margin-top: 100px;
 		padding-bottom: 60px;
 		padding-top: 60px;
 		
@@ -177,7 +204,11 @@
 	}
 	
 }
-.docs-footer-floor {
+
+
+// footer floor
+
+.forum-footer-floor {
 	background-color: @gray-lighter;
 	line-height: 1;
 	position: relative;
@@ -202,6 +233,8 @@
 
 
 // User Stuff
+// ------------------------------
+
 .profile-form__section {
 	margin-bottom: 6em;
 }
@@ -215,46 +248,29 @@
 	margin-top: 0;
 	padding-bottom: @line-height-computed;
 }
-
-
-
-
-// Theme
-.popover-content {
-	font-size: @font-size-small;
-}
-.alert {
-	line-height: 1;
-	padding-bottom: 10px;
-	padding-top: 10px;
-}
-
-
-
-
-// Form Stuff
-.form-horizontal .control-label {
-	text-align: left;
-}
-label.checkbox {
-	font-weight: 300;
-}
-textarea {
-	.resizable(vertical);
-}
-
-.at-username-field {
-	position: relative;
-	
-	.form-control {
-		padding-left: @font-size-base + @padding-base-horizontal;
+.sticky-content {
+	&.affix {
+		position: relative;
 	}
 	
-	&:before {
-		color: @input-color-placeholder;
-		content: "\0040"; // @ symbol
-		left: @padding-base-horizontal;
-		position: absolute;
-		top: @padding-base-vertical;
+	@media (min-width: @screen-sm-min) {
+		&.affix,
+		&.affix-bottom {
+			position: fixed;
+			top: 20px;
+			width: 158px;
+		}
+	}
+	@media (min-width: @screen-md-min) {
+		&.affix,
+		&.affix-bottom {
+			width: 213px;
+		}
+	}
+	@media (min-width: @screen-lg-min) {
+		&.affix,
+		&.affix-bottom {
+			width: 263px;
+		}
 	}
 }

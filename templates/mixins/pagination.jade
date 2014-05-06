@@ -1,0 +1,11 @@
+mixin pagination(results)
+	div(class=attributes.class, id=attributes.id).pagination-contaienr
+		if results.totalPages > 1
+			ul.pagination
+				li(class=results.previous ? '' : 'disabled'): a(href='?page=' + results.previous): span.entypo.entypo-chevron-thin-left
+				each page, i in results.pages
+					li(class=results.currentPage == page ? 'active' : null)
+						a(href='?page=' + page)
+							span= page
+				li(class=results.next ? '' : 'disabled'): a(href='?page=' + results.next): span.entypo.entypo-chevron-thin-right
+		p.pagination-count Showing #{results.first}-#{results.last} of #{results.total} results

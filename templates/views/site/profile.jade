@@ -6,32 +6,32 @@ block content
 	.container-md
 		+flash-messages(messages)
 		.text-center
-			//- if profile.photo.exists
+			if profile.photo.exists
 				img(src=profile._.photo.fill(180,180), alt=profile.name.full, width=180, height=180).img-avatar
 			h1= profile.name.full
 			ul.list-inline.text-muted
-				li= plural(topics.length, '* Question', '* Questions')
+				li= plural(topics.length, '* Topic', '* Topics')
 				li &middot;
-				li= plural(replies.length, '* Answer', '* Answers')
+				li= plural(replies.length, '* Reply', '* Replies')
 			if profile.bio
-				!=profile.bio.html
+				.mt-1.mb-2!=profile.bio.html
 			if profile.twitter || profile.github
-			ul.list-inline.text-muted
-				if profile.twitter
-					li: a(href='http://twitter.com/' + profile.twitter.replace('@', ''), target='_blank', title="@#{profile.twitter.replace('@', '')}")
-						span.entypo-social.entypo-twitter
-						//- |  @#{profile.twitter.replace('@', '')}
-				if profile.twitter && profile.github
-					//- li &middot;
-				if profile.github
-					li: a(href='http://github.com/' + profile.github.replace('@', ''), target='_blank', title="@#{profile.github.replace('@', '')}")
-						span.entypo-social.entypo-github
-						//- |  @#{profile.github.replace('@', '')}
+				ul.list-inline.text-muted
+					if profile.twitter
+						li: a(href='http://twitter.com/' + profile.twitter.replace('@', ''), target='_blank', title="@#{profile.twitter.replace('@', '')}")
+							span.entypo-social.entypo-twitter
+							span.sr-only  @#{profile.twitter.replace('@', '')}
+					if profile.twitter && profile.github
+						//- li &middot;
+					if profile.github
+						li: a(href='http://github.com/' + profile.github.replace('@', ''), target='_blank', title="@#{profile.github.replace('@', '')}")
+							span.entypo-social.entypo-github
+							span.sr-only  @#{profile.github.replace('@', '')}
 		hr
 		
 		//- topics
 		if topics.length
-			ol.topics
+			ol.topics.profile-topics
 				for topic in topics
 					+topic-item(topic)
 		//- if replies.length

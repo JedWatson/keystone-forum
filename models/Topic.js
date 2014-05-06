@@ -9,44 +9,43 @@ var keystone = require('keystone'),
 // Forum Topics
 // ==============================
 
-var ForumTopic = new keystone.List('ForumTopic', {
+var Topic = new keystone.List('Topic', {
 	autokey: { from: 'name', path: 'key', unique: true },
 	label: 'Topics',
 	singular: 'Topic'
 });
 
-ForumTopic.add({
+Topic.add({
 	name: { type: String, label: 'Title', required: true },
-	isFeatured: { type: Boolean },
 	author: { type: Types.Relationship, initial: true, ref: 'User', index: true },
-	watchedBy: { type: Types.Relationship, ref: 'User', many: true, index: true },
-	state: { type: Types.Select, options: 'published, archived', default: 'published', index: true },
-	
-	/*
-		TODO
-		Should be Types.DateTime when fieldType is mature enough.
-	*/
-	createdAt: { type: Types.Date, default: Date.now, noedit: true, index: true },
-	publishedAt: { type: Types.Date, collapse: true, noedit: true, index: true },
-	
-	category: { type: Types.Relationship, ref: 'ForumCategory', initial: true, required: true, index: true }
+	tags: { type: Types.Relationship, ref: 'Tag', many: true, initial: true, index: true }
 });
 
 /** Content */
 
-ForumTopic.add('Content', {
-	// image: { type: Types.CloudinaryImage, collapse: true },
-	content: {
-		summary: { type: Types.Textarea, hidden: true },
-		full: { type: Types.Markdown, height: 400 }
-	}
+Topic.add('Content', {
+	image: { type: Types.CloudinaryImage, collapse: true },
+	content: { type: Types.Markdown, height: 400, required: true }
+});
+
+/** State */
+
+Topic.add('State', {
+	state: { type: Types.Select, options: 'published, archived, spam', default: 'published', index: true },
+	isReviewed: Boolean,
+	isFeatured: Boolean,
+	needsResolution: Boolean,
+	isResolved: Boolean
 });
 
 /** Meta */
 
-ForumTopic.add('Meta', {
+Topic.add('Meta', {
+	watchedBy: { type: Types.Relationship, ref: 'User', many: true, index: true },
+	createdAt: { type: Date, default: Date.now, noedit: true, index: true },
+	lastActiveAt: { type: Date, default: Date.now, noedit: true, index: true },
 	replyCount: { type: Number, default: 0, collapse: true, noedit: true },
-	lastReplyDate: { type: Date, collapse: true, noedit: true },
+	lastReplyAt: { type: Date, collapse: true, noedit: true },
 	lastReplyAuthor: { type: Types.Relationship, ref: 'User', collapse: true, noedit: true }
 });
 
@@ -56,7 +55,7 @@ ForumTopic.add('Meta', {
 // Virtuals
 // ------------------------------
 
-ForumTopic.schema.virtual('url').get(function() {
+Topic.schema.virtual('url').get(function() {
 	return '/topic/' + this.key;
 });
 
@@ -66,7 +65,7 @@ ForumTopic.schema.virtual('url').get(function() {
 // Relationships
 // ------------------------------
 
-ForumTopic.relationship({ path: 'replies', ref: 'ForumReply', refPath: 'topic' });
+Topic.relationship({ path: 'replies', ref: 'Reply', refPath: 'topic' });
 
 
 
@@ -74,27 +73,21 @@ ForumTopic.relationship({ path: 'replies', ref: 'ForumReply', refPath: 'topic' }
 // Pre-Save
 // ------------------------------
 
-ForumTopic.schema.pre('save', function(next) {
+Topic.schema.pre('save', function(next) {
 	
 	var topic = this;
 	
 	this.wasNew = this.isNew;
 	
-	if (this.isModified('content.full')) {
-		this.content.summary = utils.cropHTMLString(this.content.full, 160, '...', true);
-	}
-	
-	if (!this.isModified('publishedAt') && this.isModified('state') && this.state == 'published') {
-		this.publishedAt = new Date();
-	}
+	next();
 	
 	async.parallel([
 		
 		// cache the last reply date and author
 		function(done) {
-			keystone.list('ForumReply').model.findOne().where('topic', topic.id).where('state', 'published').sort('-publishedAt').exec(function(err, reply) {
+			keystone.list('Reply').model.findOne().where('topic', topic.id).where('state', 'published').sort('-createdAt').exec(function(err, reply) {
 				if (reply) {
-					topic.lastReplyDate = reply.publishedAt;
+					topic.lastReplyAt = reply.createdAt;
 					topic.lastReplyAuthor = reply.author;
 				}
 				done(err);
@@ -103,7 +96,7 @@ ForumTopic.schema.pre('save', function(next) {
 		
 		// cache the count of replies to this topic
 		function(done) {
-			keystone.list('ForumReply').model.count().where('topic', topic.id).where('state', 'published').exec(function(err, count) {
+			keystone.list('Reply').model.count().where('topic', topic.id).where('state', 'published').exec(function(err, count) {
 				topic.replyCount = count || 0;
 				done(err);
 			});
@@ -119,7 +112,7 @@ ForumTopic.schema.pre('save', function(next) {
 // Post-Save
 // ------------------------------
 
-ForumTopic.schema.post('save', function() {
+Topic.schema.post('save', function() {
 	
 	if (!this.wasNew) {
 		return;
@@ -131,9 +124,9 @@ ForumTopic.schema.post('save', function() {
 		});
 	}
 	
-	if (this.category) {
-		keystone.list('ForumCategory').model.findById(this.category).exec(function(err, category) {
-			return category && category.save();
+	if (this.tag) {
+		keystone.list('Tag').model.findById(this.tag).exec(function(err, tag) {
+			return tag && tag.save();
 		});
 	}
 	
@@ -145,7 +138,7 @@ ForumTopic.schema.post('save', function() {
 // Methods
 // ------------------------------
 
-ForumTopic.schema.methods.notifyForumSubscribers = function(callback) {
+Topic.schema.methods.notifyForumSubscribers = function(callback) {
 	
 	var topic = this;
 	
@@ -185,8 +178,8 @@ ForumTopic.schema.methods.notifyForumSubscribers = function(callback) {
 // Registration
 // ------------------------------
 
-ForumTopic.addPattern('standard meta');
-ForumTopic.defaultColumns = 'name, category|20%, publishedAt|20%';
-ForumTopic.register();
+Topic.defaultSort = '-createdAt';
+Topic.defaultColumns = 'name, replyCount|10%, tags|20%, createdAt|20%';
+Topic.register();
 
 

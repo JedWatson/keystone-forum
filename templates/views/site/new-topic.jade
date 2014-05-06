@@ -6,7 +6,7 @@ block content
 			input(type='hidden', name='action', value='topic.create')
 			.row
 				.col-sm-9
-					h4 New question
+					h4 New topic
 					hr
 					+flash-messages(messages)
 					.form-group
@@ -16,31 +16,26 @@ block content
 							.col-md-9
 								h6.help-block Questions are parsed with 
 									a(href='http://daringfireball.net/projects/markdown/syntax', target='_blank', title='Markdown Guide (new window)') Markdown
-								textarea(name='content.full', placeholder='', style='min-height: 300px;', tabindex=2).form-control.js-wysiwyg!= form['content.full']
+								textarea(name='content', placeholder='', style='min-height: 300px;', tabindex=2).form-control.js-wysiwyg!= form['content.full']
 							.col-md-3
 								h6.help-block What's this about?
-								.categories-list: ul
-									each category, i in categories
-										li(class=category.key + (category.id == form.category ? ' is-active' : ''))
-											label.categories-list__item
-												input(type='radio', name='category', value=category.id, checked=category.id == form.category ? 'checked' : null)
-												span(class=category.key).category-indicator
-												span= category.name
+								ul.tag-list
+									each tag, i in tags
+										- var tagSelected = _.filter(String(form.tags).split(','), function(value) { return value == tag.id; }).length ? 'true' : false;
+										li(class=tag.key + (tagSelected ? ' is-active' : ''))
+											label.tag.tag-list__item
+												input(type='checkbox', name='tags', value=tag.id, checked=tagSelected ? 'checked' : null)
+												span(class=tag.key).tag-indicator
+												span= tag.name
+								//- Suggest a tag
+								//- form(method='post')
+									hr
+									input(type='text', name='name', placeholder='Suggest a tag').form-control
 								
 					.spotlight-footer
-						button(type='submit', data-loading-text='Saving...', tabindex=3).btn.btn-primary Ask Question
+						button(type='submit', data-loading-text='Saving...', tabindex=3).btn.btn-primary Post Topic
 
 				.col-sm-3
-					//- h4 Select a Category
-					//- hr
-					//- .categories-list: ul
-						each category, i in categories
-							li(class=category.key + (category.id == form.category ? ' is-active' : ''))
-								label(tabindex=i+3).categories-list__item
-									input(type='radio', name='category', value=category.id, checked=category.id == form.category ? 'checked' : null)
-									span(class=category.key).category-indicator
-									span= category.name
-					//- hr
 					h4 Found a bug?
 					hr
 					p If you're experiencing what appears to be a bug or something that doesn't seem to be working correctly, please 
@@ -50,7 +45,7 @@ block content
 block js
 	//- script(src='/js/lib/bootstrap/button.js')
 	script.
-		$(function() {
+		jQuery(function($) {
 			
 			var $form = $('.management-form'),
 				$submit = $form.find('[type="submit"]');
@@ -62,19 +57,24 @@ block js
 			$form.submit( function() {
 				$submit.button('loading');
 			});
-
-			//- select a category
-			$('[name="category"]').each( function() {
-				$(this).change( function() {
-					var $self = $(this),
-						$button = $self.closest('li');
-
-					$button.siblings().removeClass('is-active');
-
-					if ($self.prop('checked', true)) {
+			
+			
+			//- select a tag
+			
+			$('input[name="tags"]').each(function() {
+				
+				var $self = $(this),
+					$button = $self.closest('li');
+				
+				$self.change(function() {
+					console.log('thjis');
+					if ($self.prop('checked')) {
 						$button.addClass('is-active');
+					} else {
+						$button.removeClass('is-active');
 					}
 				});
 			});
+			
 			
 		});

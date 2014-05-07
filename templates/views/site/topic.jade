@@ -2,12 +2,18 @@ extends ../../layouts/default
 
 include ../../mixins/commenting
 
+block css
+	link(href="/js/lib/prism/prism.css", rel="stylesheet")
+
+//- On this view "replies.length" is used where one might expect "topic.replyCount"
+//- This is so we can return an accurate count when a reply is created/deleted
+
 block content
 	.container(class=performFunction ? performFunction : null)
 		.row
 			.col-sm-9
 				if current.user
-					a(href=watchedByUser ? '?unwatch' : '?watch', title=watchedByUser ? 'Stop email notifications' : 'Get email notifications', rel='tooltip', data-placement='left').btn.btn-sm.btn-default.pull-right
+					a(href=watchedByUser ? '?unwatch' : '?watch', title=watchedByUser ? 'Stop email notifications' : 'Get email notifications').btn.btn-sm.btn-default.pull-right.watch-button
 						span.entypo.entypo-eye
 						=watchedByUser ? ' Unwatch' : ' Watch'
 				h4: a(href='/').text-muted &larr; Back to all topics
@@ -29,22 +35,20 @@ block content
 								if topic.author
 									span  by 
 									a(href=topic.author.url, itemprop='author')= topic.author.name.full
-								if topic.replyCount
+								if replies.length
 									|  &middot; 
-									a(href='#comments', data-scrollduration=300).js-scrollto-anchor= plural(topic.replyCount, '* reply', '* replies')
-								if current.user && current.user.id == topic.author.id
-									|  &middot; 
-									a(href='?remove=topic&topic=' + topic.id, title='Delete this topic', rel='tooltip', data-placement='right', data-container='body').topic-delete.js-delete-confirm Delete
+									a(href='#comments', data-scrollduration=300).js-scrollto-anchor= plural(replies.length, '* reply', '* replies')
+								
 					.topic-details__body
 						.media
 							a(href='/profile/' + topic.author.key).pull-left.media-avatar
 								img(src=topic.author.photo.exists ? topic.author._.photo.fill(60,60) : '/images/scaffolding/60x60.png', alt=topic.author.name.full, width=60, height=60).img-avatar
 							.media-body.media-body-column
 								p.hidden-xs.text-muted
-									strong: a(href='/profile/' + topic.author.key)=topic.author.name.full
+									a(href='/profile/' + topic.author.key).comment-post__author=topic.author.name.full
 									if topic.createdAt
-										|  &middot; 
-										span=topic._.createdAt.format('DD MMM YYYY')
+										|  &middot;
+										time(datetime=topic._.createdAt.format('YYYY-MM-DDTHH:mm:ssZ'), title=topic.createdAt).js-timeago.text-muted= topic._.createdAt.format('D MMM YYYY') 
 								.details-content-wrapper!=topic.content.html
 					
 					//-comments
@@ -56,39 +60,36 @@ block content
 			.col-sm-3
 				h4.text-muted Meta
 				hr
-				p This topic has #{plural(topic.replyCount, '* reply', '* replies')}
-					if topic.replyCount
+				p This topic has #{plural(replies.length, '* reply', '* replies')}
+					if replies.length
 						| , the most recent was on #{topic._.lastReplyAt.format('DD MMM YYYY')}
 				p #{plural(topic.watchedBy, '* person is', '* people are')} watching this topic
-				
-
-				//- more-topics from author
-				//- if authorTopics.length
-					h4.text-muted More from #{topic.author.name.first} is 
-					hr
-					ul.list-unstyled
-						for authorTopic in authorTopics
-							li
-								a(href=authorTopic.url)=authorTopic.name
-								.text-muted: time(datetime=authorTopic.createdAt)= authorTopic._.createdAt.format('DD MMM YYYY')
-				//- h4.text-muted Found a bug?
-				//- hr
-				//- p If you're experiencing what appears to be a bug or something that doesn't seem to be working correctly, please 
-					a(href='https://github.com/JedWatson/keystone/issues') log&nbsp;an&nbsp;issue
-					|  in the Github project
+				if current.user && current.user.id == topic.author.id
+					hr.line-dashed
+					.item-delete
+						p.text-sm.text-muted You are the author of this topic. 
+							a(href='javascript:;').item-delete__confirm.text-confirm Delete?
+						.item-delete__hidden
+							button(type='button').btn.btn-sm.btn-narrow.btn-default.item-delete__cancel Cancel
+							|  
+							a(href='?remove=topic&topic=' + topic.id, data-confirm="Are you sure? Please only delete a topic when it has no replies.").btn.btn-sm.btn-narrow.btn-danger.js-delete-confirm Delete
 
 block js
-	script(src='/js/lib/bootstrap/tooltip.js')
-	script(src='/js/lib/bootstrap/popover.js')
+	//- script(src='/js/lib/bootstrap/tooltip.js')
+	//- script(src='/js/lib/bootstrap/popover.js')
 	script(src='/js/lib/timeago/timeago.min.js')
+	script(src='/js/lib/prism/prism.js' data-default-language="markup")
 	script.
 		jQuery(function($) {
 
 			// init popover
-			$("[rel='tooltip']").tooltip();
-			$("[data-toggle='popover']").popover();
+			//- $("[rel='tooltip']").tooltip();
+			//- $("[data-toggle='popover']").popover();
 			
 			// init timeago
 			$(".js-timeago").timeago();
+			
+			// init prism
+			$('pre').addClass('language-javascript');
 		});
 		

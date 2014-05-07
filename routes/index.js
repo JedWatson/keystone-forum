@@ -29,6 +29,7 @@ keystone.set('500', function(err, req, res, next) {
 var routes = {
 	api: importRoutes('./api'),
 	views: importRoutes('./views'),
+	dev: importRoutes('./dev'),
 	auth: importRoutes('./auth')
 };
 
@@ -65,6 +66,11 @@ exports = module.exports = function(app) {
 	app.all('/new-topic', routes.views['new-topic']);
 	
 	app.all('/profile/:profile', routes.views.profile);
+	
+	
+	// Test Emails
+	app.get('/email/:key', routes.dev.email);
+	
 	
 	// API
 	app.all('/api*', keystone.initAPI);

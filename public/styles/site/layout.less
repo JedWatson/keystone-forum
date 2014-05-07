@@ -60,7 +60,6 @@
 		display: inline-block;
 	}
 	.navbar-toggle {
-		.navbar-vertical-align(28);
 		background-color: transparent;
 		position: absolute;
 		right: 0;
@@ -99,9 +98,13 @@
 // tiny screens
 
 @media (max-width: @screen-xs-max) {
+	.forum-header {
+		height: 70px;
+		line-height: 70px;
+	}
 	.keystone-logo > img {
-		height: 50px;
-		width: 148px;
+		height: 40px;
+		width: 118px;
 	}
 	.forum-nav {
 		.box-shadow( ~"0 1px 4px rgba(0,0,0,0.1), 0 1px 0 rgba(0,0,0,0.1)" );
@@ -116,6 +119,10 @@
 		a:active {
 			background-color: #fafafa;
 		}
+	}
+	.navbar-toggle {
+		margin-bottom: 18px;
+		margin-top: 18px;
 	}
 }
 
@@ -156,6 +163,9 @@
 			margin-left: 1em;
 			padding-left: 1em;
 		}
+	}
+	.navbar-toggle {
+		.navbar-vertical-align(28);
 	}
 }
 

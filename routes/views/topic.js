@@ -13,8 +13,7 @@ exports = module.exports = function(req, res) {
 	locals.performFunction = req.query.performFunction || false;
 	
 	
-	// LOAD Topic
-	// ------------------------------
+	// LOAD the Topic
 	
 	view.on('init', function(next) {
 		
@@ -34,7 +33,8 @@ exports = module.exports = function(req, res) {
 	
 	
 	
-	// WATCH a topic
+	// WATCH the Topic
+	
 	view.on('get', { watch: true }, function(next) {
 		
 		if (!req.user) {
@@ -56,7 +56,8 @@ exports = module.exports = function(req, res) {
 	
 	
 	
-	// UNWATCH a topic
+	// UNWATCH the Topic
+	
 	view.on('get', { unwatch: true }, function(next) {
 		
 		if (!req.user) {
@@ -83,8 +84,7 @@ exports = module.exports = function(req, res) {
 	
 	
 	
-	// CREATE a reply
-	// ------------------------------
+	// CREATE a Reply
 	
 	view.on('post', { action: 'comment.create' }, function(next) {
 		
@@ -103,16 +103,26 @@ exports = module.exports = function(req, res) {
 		}, function(err) {
 			if (err) {
 				locals.validationErrors = err.errors;
+				
 			} else {
 				
-				// may be unecessary, but whatever
-				req.flash('success', 'Thank you for your reply.');
+				// send email
+				new keystone.Email('notification-new-reply').send({
+					reply: newReply,
+					link: 'http://forum.keystonejs.com' + locals.topic.url,
+					subject: '[KeystoneJS]' + locals.topic.name,
+					to: 'joss.mackison@gmail.com',
+					from: {
+						name: 'KeystoneJS Forum',
+						email: 'forum@keystonejs.com'
+					}
+				}, next);
 				
-				// used to scroll down to the comments
+				// show the success message then scroll to their reply 
+				req.flash('success', 'Thank you for your reply.');
 				locals.performFunction = 'scrollToLastComment';
 				
 			}
-			next();
 		});
 		
 	});
@@ -120,7 +130,8 @@ exports = module.exports = function(req, res) {
 	
 	
 	
-	// DELETE a reply
+	// DELETE (archive) a Reply
+	
 	view.on('get', { remove: 'comment' }, function(next) {
 		
 		if (!req.user) {
@@ -164,7 +175,8 @@ exports = module.exports = function(req, res) {
 	
 	
 	
-	// DELETE the Topic
+	// DELETE (archive) the Topic
+	
 	view.on('get', { remove: 'topic' }, function(next) {
 		
 		if (!req.user) {
@@ -173,6 +185,9 @@ exports = module.exports = function(req, res) {
 		}
 		
 		locals.topic.state = 'archived';
+		
+		// TODO archive the topic's replies
+		
 		locals.topic.save(function(err) {
 			if (err) {
 				if (err.name == 'CastError') {
@@ -185,7 +200,7 @@ exports = module.exports = function(req, res) {
 				req.flash('error', 'The topic ' + req.params.topic + ' could not be found.');
 				return next();
 			}
-			if (locals.topic.author != req.user.id && !req.user.isAdmin) {
+			if (locals.topic.author.id != req.user.id && !req.user.isAdmin) {
 				req.flash('error', 'You must be the author of a topic to delete it.');
 				return next();
 			}
@@ -194,30 +209,9 @@ exports = module.exports = function(req, res) {
 			return res.redirect(req.user.url);
 		});
 	});
-	
-	
-	// LOAD topics from the Topic's Author
-	// ------------------------------
-	
-	view.on('init', function(next) {
-		
-		Topic.model.find()
-			.where('_id').ne(locals.topic.id)
-			.where('author', locals.topic.author)
-			.sort('-createdAt')
-			.limit(4)
-			.populate('author')
-			.exec(function(err, authorTopics) {
-				if (err) return res.err(err);
-				locals.authorTopics = authorTopics;
-				next();
-			});
-		
-	});
 
 	
-	// Set page info
-	// ------------------------------
+	// SET page info
 	
 	view.on('render', function(next) {
 		

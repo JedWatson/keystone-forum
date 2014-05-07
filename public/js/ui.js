@@ -71,13 +71,13 @@ jQuery(function($) {
 
 	// delete confirm UI
 
-	$('.comment-delete__hidden').hide();
-	$('.comment-delete__confirm').each(function() {
+	$('.item-delete__hidden').hide();
+	$('.item-delete__confirm').each(function() {
 
 		var button = $(this),
-			wrapper = button.closest('.comment-delete'),
-			content = wrapper.find('.comment-delete__hidden'),
-			cancel = wrapper.find('.comment-delete__cancel');
+			wrapper = button.closest('.item-delete'),
+			content = wrapper.find('.item-delete__hidden'),
+			cancel = wrapper.find('.item-delete__cancel');
 
 		button.click(function() {
 			content.show();

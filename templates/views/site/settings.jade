@@ -54,25 +54,59 @@ block content
 					
 					.profile-form__section
 						h3.profile-form__heading Your Services
-						p.help-block You can authenticate with any of the services you connect. Connected services are displayed on your profile.
-						.form-group
-							label.col-sm-2.control-label Twitter
-							.col-sm-10
-								a(href=(current.user.services.twitter.isConfigured ? '?deauth=' : '/auth/') + 'twitter', title='Connect your Twitter account').btn.btn-twitter
-									span.entypo-social.entypo-twitter
-									span.signup-button__text= current.user.services.twitter.isConfigured ? ' Connected' : ' Connect'
-						.form-group
-							label.col-sm-2.control-label Github
-							.col-sm-10
-								a(href=(current.user.services.github.isConfigured ? '?deauth=' : '/auth/') + 'github', title='Connect your Github account').btn.btn-github
+						p.help-block.mb-2 You can authenticate yourself on the KeystoneJS Forum with any of the services you connect. When connected, links to your Twitter and Github will be displayed on your profile.
+						
+						
+						//- Unconfigured Services
+						
+						if !current.user.services.github.isConfigured
+							.form-group
+								label.col-sm-2.control-label Github
+								.col-sm-10
+									a(href=(current.user.services.github.isConfigured ? '?deauth=' : '/auth/') + 'github', title='Connect your Github account').btn.btn-github
+										span.entypo-social.entypo-github
+										span  Connect your Github account
+						if !current.user.services.twitter.isConfigured
+							.form-group
+								label.col-sm-2.control-label Twitter
+								.col-sm-10
+									a(href=(current.user.services.twitter.isConfigured ? '?deauth=' : '/auth/') + 'twitter', title='Connect your Twitter account').btn.btn-twitter
+										span.entypo-social.entypo-twitter
+										span  Connect your Twitter account
+						if !current.user.services.google.isConfigured
+							.form-group
+								label.col-sm-2.control-label Google
+								.col-sm-10
+									a(href=(current.user.services.google.isConfigured ? '?deauth=' : '/auth/') + 'google', title='Connect your Google account').btn.btn-google
+										span(class='entypo-google-circles').entypo-social
+										span  Connect your Google account
+						
+						
+						//- Configured Services
+						
+						if current.user.services.twitter.isConfigured || current.user.services.github.isConfigured || current.user.services.google.isConfigured
+							hr.line-dashed
+						if current.user.services.github.isConfigured
+							.form-group
+								label.col-sm-2.control-label Github
+								.col-sm-10.text-muted.faux-label
 									span.entypo-social.entypo-github
-									span.signup-button__text= current.user.services.github.isConfigured ? ' Connected' : ' Connect'
-						.form-group
-							label.col-sm-2.control-label Google
-							.col-sm-10
-								a(href=(current.user.services.google.isConfigured ? '?deauth=' : '/auth/') + 'google', title='Connect your Google account').btn.btn-google
-									span(class='entypo-google-circles').entypo-social
-									span.signup-button__text= current.user.services.google.isConfigured ? ' Connected' : ' Connect'
+									|  Github account is connected. 
+									a(href='?deauth=github', title='Revoke authorization of your Github account') Disconnect
+						if current.user.services.twitter.isConfigured
+							.form-group
+								label.col-sm-2.control-label Twitter
+								.col-sm-10.text-muted.faux-label
+									span.entypo-social.entypo-twitter
+									|  Twitter account is connected. 
+									a(href='?deauth=twitter', title='Revoke authorization of your Twitter account') Disconnect
+						if current.user.services.google.isConfigured
+							.form-group
+								label.col-sm-2.control-label Google
+								.col-sm-10.text-muted.faux-label
+									span.entypo-social.entypo-google
+									|  Google account is connected. 
+									a(href='?deauth=google', title='Revoke authorization of your Google account') Disconnect
 						
 					.profile-form__section
 						h3.profile-form__heading Public info

@@ -32,8 +32,8 @@ Topic.add('Content', {
 
 Topic.add('State', {
 	state: { type: Types.Select, options: 'published, archived, spam', default: 'published', index: true },
-	isReviewed: Boolean,
 	isFeatured: Boolean,
+	isReviewed: Boolean,
 	needsResolution: Boolean,
 	isResolved: Boolean
 });
@@ -77,9 +77,7 @@ Topic.schema.pre('save', function(next) {
 	
 	var topic = this;
 	
-	this.wasNew = this.isNew;
-	
-	next();
+	this._bubbleUpdate = this.isNew || this.isModified('state');
 	
 	async.parallel([
 		
@@ -114,7 +112,7 @@ Topic.schema.pre('save', function(next) {
 
 Topic.schema.post('save', function() {
 	
-	if (!this.wasNew) {
+	if (!this._bubbleUpdate) {
 		return;
 	}
 	
@@ -123,10 +121,15 @@ Topic.schema.post('save', function() {
 			return user && user.wasActive().save();
 		});
 	}
-	
-	if (this.tag) {
-		keystone.list('Tag').model.findById(this.tag).exec(function(err, tag) {
-			return tag && tag.save();
+	if (this.tags) {
+		keystone.list('Tag').model.find().where('_id').in(this.tags).exec(function(err, tags) {
+			if (err) {
+				console.error(err)	
+			} else {
+				tags.forEach(function(tag) {
+					tag.save();
+				});
+			}
 		});
 	}
 	
@@ -153,7 +156,7 @@ Topic.schema.methods.notifyForumSubscribers = function(callback) {
 		subscribers: keystone.list('User').model.find().where('notifications.topics', true).select('name email').exec
 	}, function(err, results) {
 		
-		console.log(results.subscribers);
+		// console.log(results.subscribers);
 		
 		if (err) return callback(err);
 		

@@ -5,33 +5,38 @@ include ../../mixins/topic-item
 block content
 	.container-md
 		+flash-messages(messages)
-		.text-center
+		.text-center(itemscope itemtype='http://schema.org/Person')
 			if profile.photo.exists
-				img(src=profile._.photo.fill(180,180), alt=profile.name.full, width=180, height=180).img-avatar
-			h1= profile.name.full
-			ul.list-inline.text-muted
+				img(src=profile._.photo.fill(360,360), alt=profile.name.full, width=180, height=180, itemprop='image').img-avatar
+			h1(itemprop='name')= profile.name.full
+			ul.list-inline.text-muted.mv-1
 				li= plural(topics.length, '* Topic', '* Topics')
 				li &middot;
 				li= plural(replies.length, '* Reply', '* Replies')
-			if profile.bio
-				.mt-1.mb-2!=profile.bio.html
-			if profile.twitter || profile.github
+			if profile.bio.md
+				.mt-1(itemprop='description')!=profile.bio.html
+			if profile.twitterUsername || profile.githubUsername || profile.website
 				ul.list-inline.text-muted
-					if profile.twitter
-						li: a(href='http://twitter.com/' + profile.twitter.replace('@', ''), target='_blank', title="@#{profile.twitter.replace('@', '')}")
-							span.entypo-social.entypo-twitter
-							span.sr-only  @#{profile.twitter.replace('@', '')}
-					if profile.twitter && profile.github
-						//- li &middot;
-					if profile.github
-						li: a(href='http://github.com/' + profile.github.replace('@', ''), target='_blank', title="@#{profile.github.replace('@', '')}")
+					if profile.githubUsername
+						li: a(href='http://github.com/' + profile.githubUsername, target='_blank', title="@#{profile.githubUsername} on GitHub")
 							span.entypo-social.entypo-github
-							span.sr-only  @#{profile.github.replace('@', '')}
-		hr
+							span.sr-only @#{profile.githubUsername}
+					if profile.twitterUsername
+						li: a(href='http://twitter.com/' + profile.twitterUsername, target='_blank', title="@#{profile.twitterUsername} on Twitter")
+							span.entypo-social.entypo-twitter
+							span.sr-only @#{profile.twitterUsername}
+					if profile.website
+						li: a(href=profile.website, target='_blank', title=profile.website, itemprop='url')
+							if !profile.githubUsername && !profile.twitterUsername
+								= profile.website.replace('http://', '')
+							else
+								span.entypo.entypo-globe
+								span.sr-only= profile.website
+		hr.mv-2
 		
 		//- topics
 		if topics.length
-			ol.topics.profile-topics
+			ol(itemscope itemtype='http://schema.org/ItemList').topics.profile-topics
 				for topic in topics
 					+topic-item(topic)
 		//- if replies.length

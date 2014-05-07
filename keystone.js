@@ -44,10 +44,10 @@ keystone.init({
 	'session': true,
 	'auth': true,
 	'user model': 'User',
-	'cookie secret': process.env.COOKIE_SECRET || 'sydjs',
+	'cookie secret': process.env.COOKIE_SECRET || 'keystonejs',
 	
 	// the default mandrill api key is a *test* key. it will 'work', but not send emails.
-	'mandrill api key': process.env.MANDRILL_KEY || 'v17RkIoARDkqTqPSbvrmkw',
+	'mandrill api key': process.env.MANDRILL_APIKEY || 'v17RkIoARDkqTqPSbvrmkw',
 
 	'google api key': process.env.GOOGLE_BROWSER_KEY,
 	'google server api key': process.env.GOOGLE_SERVER_KEY,
@@ -82,7 +82,7 @@ keystone.set('locals', {
 });
 
 keystone.set('email locals', {
-	keystoneURL: 'http://www.sydjs.com/keystone',
+	keystoneURL: 'http://www.keystonejs.com/keystone',
 	logo: '/images/logo_email.jpg',
 	logo_width: 120,
 	logo_height: 112,
@@ -95,7 +95,7 @@ keystone.set('email locals', {
 keystone.set('email tests', {
 	'forgotten-password': {
 		name: 'User',
-		link: 'http://www.sydjs.com/reset-password/key'
+		link: 'http://forum.keystonejs.com/reset-password/key'
 	}
 });
 

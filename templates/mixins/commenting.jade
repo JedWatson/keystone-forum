@@ -24,26 +24,25 @@ mixin comment-form(action)
 				a(href='/join?returnto=' + page.path).btn.btn-sm.btn-primary Log in or Join to Comment
 
 mixin comment-post(comment)
-	if comment.author
-		div(id='comment-id-' + comment.id).comment-post
-			if current.user && current.user.id == comment.author.id
-				.comment-delete
-					button(type='button').btn.btn-narrow.btn-link.comment-delete__confirm.text-confirm Delete
-					.comment-delete__hidden
-						//- | Remove your reply from this topic?
-						a(href='?remove=comment&comment=' + comment.id).btn.btn-narrow.btn-danger Delete
-						button(type='button').btn.btn-narrow.btn-default.comment-delete__cancel Cancel
-						
-			.media
-				a(href=comment.author.url).pull-left.media-avatar
-					img(src=comment.author.photo.exists ? comment.author._.photo.fill(60,60) : '/images/scaffolding/60x60.png', alt=comment.author.name.full, width=60, height=60).img-avatar
-				.media-body
-					p
-						strong: a(href=comment.author.url)=comment.author.name.full
-						if comment.createdAt
-							|  &middot; 
-							time(datetime=comment._.createdAt.format('YYYY-MM-DDTHH:mm:ssZ'), title=comment.createdAt).js-timeago.text-muted= comment._.createdAt.format('D MMM YYYY')
-					p!=comment.content.html
+	div(id='comment-id-' + comment.id, class=attributes.class).comment-post
+		if current.user && current.user.id == comment.author.id
+			.item-delete.comment-options
+				button(type='button').btn.btn-narrow.btn-link.item-delete__confirm.text-confirm Delete
+				.item-delete__hidden
+					//- | Remove your reply from this topic?
+					a(href='?remove=comment&comment=' + comment.id).btn.btn-narrow.btn-danger Delete
+					button(type='button').btn.btn-narrow.btn-default.item-delete__cancel Cancel
+					
+		.media
+			a(href=comment.author.url).pull-left.media-avatar
+				img(src=comment.author.photo.exists ? comment.author._.photo.fill(60,60) : '/images/scaffolding/60x60.png', alt=comment.author.name.full, width=60, height=60).img-avatar
+			.media-body
+				p.comment-post__header
+					a(href=comment.author.url).comment-post__author=comment.author.name.full
+					if comment.createdAt
+						|  &middot; 
+						time(datetime=comment._.createdAt.format('YYYY-MM-DDTHH:mm:ssZ'), title=comment.createdAt).js-timeago.text-muted= comment._.createdAt.format('D MMM YYYY')
+				p!=comment.content.html
 
 mixin comment-thread(comments)
 	if comments.length

@@ -27,8 +27,6 @@ User.add({
 }, 'Profile', {
 	isPublic: Boolean,
 	photo: { type: Types.CloudinaryImage },
-	github: { type: String, width: 'short' },
-	twitter: { type: String, width: 'short' },
 	website: { type: Types.Url },
 	bio: { type: Types.Markdown },
 	joinedAt: { type: Date, default: Date.now },
@@ -102,6 +100,14 @@ User.schema.virtual('canAccessKeystone').get(function() {
 
 User.schema.virtual('url').get(function() {
 	return '/profile/' + this.key;
+});
+
+// Usernames
+User.schema.virtual('twitterUsername').get(function() {
+	return (this.services.twitter && this.services.twitter.isConfigured) ? this.services.twitter.username : '';
+});
+User.schema.virtual('githubUsername').get(function() {
+	return (this.services.github && this.services.github.isConfigured) ? this.services.github.username : '';
 });
 
 

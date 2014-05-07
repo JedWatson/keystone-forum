@@ -15,8 +15,6 @@ exports = module.exports = function(req, res, next) {
 			// TODO: Work out in what cases we may actually want to sign out the user
 			return cb();
 			
-			console.log(1);
-			
 			if (!req.user) return cb();
 			
 			keystone.session.signout(req, res, function() {

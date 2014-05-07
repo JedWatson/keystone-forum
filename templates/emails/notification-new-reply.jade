@@ -1,6 +1,6 @@
 extends /layouts/default
 - console.log('reply notification triggered')
 block body-contents
-	p!=reply.content.html
+	!=reply.content.html
 	p Head over to the forum and <a href="#{url}">reply to it</a>.
 	+button({ url: url, label: 'View Reply', background_color: '#2697de', border_color: '#1a7cb7', border_width: '1px', border_radius: 4, color: '#fff', height: 40, width: '100%' })

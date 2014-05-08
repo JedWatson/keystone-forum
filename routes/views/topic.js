@@ -217,6 +217,7 @@ exports = module.exports = function(req, res) {
 	view.on('render', function(next) {
 		
 		locals.title = locals.topic.name;
+		locals.metadescription = keystone.utils.cropString(keystone.utils.htmlToText(locals.topic.content.html), 200, '...', true);
 		
 		locals.topic.populate('watchedBy');
 		

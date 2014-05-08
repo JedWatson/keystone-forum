@@ -11,7 +11,7 @@ block content
 				nav: ul.tag-list.mb-2
 					li(class=!current.tag ? 'is-active' : null)
 						a(href=current.filter ? ('/' + current.filter.value) : '/').tag.tag-list__item
-							span.tag-count= topicCount
+							span.tag-count= totalTopicCount
 							span.tag-indicator
 							span All topics
 					for tag in tags

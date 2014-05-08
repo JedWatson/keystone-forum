@@ -13,6 +13,7 @@ exports = module.exports = function(req, res) {
 	locals.current.filter = _.where(globals.forum.topic.filters, { value: req.params.filter })[0] || _.where(globals.forum.topic.filters, { value: 'newest' })[0];
 	locals.current.tag = _.where(req.tags, { key: req.params.tag })[0];
 	
+	
 	// QUERY topics
 
 	var topicsQuery = Topic.paginate({
@@ -24,9 +25,6 @@ exports = module.exports = function(req, res) {
 		.where('author').ne(null)
 		.populate('author tags');
 		
-	var topicsCount = Topic.model.count()
-		.where('state', 'published')
-		.where('author').ne(null);
 		
 	
 	// FILTER topics
@@ -43,29 +41,22 @@ exports = module.exports = function(req, res) {
 	}
 		
 	
-	// CATEGORISED topics
+	// CATEGORISE topics
 	
 	if (locals.current.tag) {
 		topicsQuery.where('tags').in([locals.current.tag]);
 	}
 
 
-	// COUNT and QUERY topics on render
+	// RUN topics query on render
 
 	view.on('render', function(next) {
-		async.parallel({
-			topics: function(done) {
-				topicsQuery.exec(done);
-			},
-			count: function(done) {
-				topicsCount.exec(done);
-			}
-		}, function(err, results) {
+		
+		topicsQuery.exec(function(err, topics) {
 			if (err) {
 				res.err(err, 'Error loading topics', 'Sorry, there was an error loading ' + locals.current.filter.label + ' topics');
 			} else {
-				locals.topics = results.topics;
-				locals.topicCount = results.count;
+				locals.topics = topics;
 				next();
 			}
 		});

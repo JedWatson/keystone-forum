@@ -58,7 +58,7 @@ exports.loadTags = function(req, res, next) {
 
 exports.countTopics = function(req, res, next) {
 	
-	keystone.list('Topic').model.count().where('state', 'published').exec(function(err, count) {
+	keystone.list('Topic').model.count().where('state', 'published').where('author').ne(null).exec(function(err, count) {
 		req.totalTopicCount = count;
 		res.locals.totalTopicCount = count;
 		next();

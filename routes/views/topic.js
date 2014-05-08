@@ -107,8 +107,9 @@ exports = module.exports = function(req, res) {
 			} else {
 				
 				// send email
-				new keystone.Email('notification-new-reply').send({
+				new keystone.Email('new-reply').send({
 					reply: newReply,
+					topic: locals.topic,
 					link: 'http://forum.keystonejs.com' + locals.topic.url,
 					subject: '[KeystoneJS]' + locals.topic.name,
 					to: 'joss.mackison@gmail.com',

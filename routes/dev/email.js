@@ -70,14 +70,15 @@ exports = module.exports = function(req, res) {
 			
 		break;
 
-		case 'notification-new-reply':
+		case 'new-reply':
 			
-			var email = new keystone.Email('notification-new-reply');
+			var email = new keystone.Email('new-reply');
 			
 			loadReply(function() {
 				email.render({
 					subject: 'KeystoneJS reply',
 					reply: data.reply,
+					topic: { name: 'Testing email notifications on replies' }
 				}, renderCallback);
 			});
 			

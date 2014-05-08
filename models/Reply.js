@@ -88,7 +88,7 @@ Reply.schema.methods.notifyTopicWatchers = function(callback) {
 		
 		if (err) return callback(err);
 		
-		new keystone.Email('notification-new-reply').send({
+		new keystone.Email('new-reply').send({
 			to: results.watchers,
 			from: {
 				name: 'KeystoneJS Forum',

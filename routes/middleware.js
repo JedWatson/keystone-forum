@@ -1,7 +1,6 @@
 var _ = require('underscore'),
 	querystring = require('querystring'),
-	keystone = require('keystone'),
-	Tag = keystone.list('Tag');
+	keystone = require('keystone');
 
 
 /**
@@ -39,7 +38,7 @@ exports.init = function(req, res, next) {
 
 exports.loadTags = function(req, res, next) {
 	
-	Tag.model.find().exec(function(err, tags) {
+	keystone.list('Tag').model.find().exec(function(err, tags) {
 		if (err) {
 			return res.status(500).render('500', {
 				err: err
@@ -47,6 +46,21 @@ exports.loadTags = function(req, res, next) {
 		}
 		req.tags = tags;
 		res.locals.tags = tags;
+		next();
+	});
+	
+}
+
+
+/**
+	Count all topics
+*/
+
+exports.countTopics = function(req, res, next) {
+	
+	keystone.list('Topic').model.count().where('state', 'published').exec(function(err, count) {
+		req.totalTopicCount = count;
+		res.locals.totalTopicCount = count;
 		next();
 	});
 	

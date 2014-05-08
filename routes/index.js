@@ -8,6 +8,7 @@ var keystone = require('keystone'),
 keystone.pre('routes', middleware.initErrorHandlers);
 keystone.pre('routes', middleware.init);
 keystone.pre('routes', middleware.loadTags);
+keystone.pre('routes', middleware.countTopics);
 keystone.pre('render', middleware.flashMessages);
 
 // Handle 404 errors

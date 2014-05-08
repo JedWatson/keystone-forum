@@ -8,7 +8,7 @@ exports = module.exports = function(req, res) {
 		locals = res.locals;
 	
 	locals.section = 'new-topic';
-	locals.title = 'Create a blog post - SydJS';
+	locals.title = 'New Topic';
 	
 	locals.form = {
 		name: '',

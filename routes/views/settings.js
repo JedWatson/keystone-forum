@@ -9,6 +9,7 @@ exports = module.exports = function(req, res) {
 		locals = res.locals;
 	
 	locals.section = 'settings';
+	locals.title = 'Settings';
 	
 	
 	// Update the User

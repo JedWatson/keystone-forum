@@ -12,6 +12,7 @@ exports = module.exports = function(req, res) {
 	
 	locals.section = 'join';
 	locals.form = req.body;
+	locals.title = 'Join';
 	locals.returnto = req.query.returnto;
 	
 	view.on('post', { action: 'join' }, function(next) {

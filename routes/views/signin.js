@@ -13,6 +13,7 @@ exports = module.exports = function(req, res) {
 	
 	locals.section = 'login';
 	locals.form = req.body;
+	locals.title = 'Sign in';
 	locals.returnto = req.query.returnto;
 	
 	view.on('post', { action: 'signin' }, function(next) {

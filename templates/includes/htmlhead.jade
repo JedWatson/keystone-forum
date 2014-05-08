@@ -2,9 +2,7 @@ script.
 	var _sf_startpt=(new Date()).getTime()
 meta(charset="utf-8")
 meta(name="viewport", content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width")
-title KeystoneJS Forum
-	if title
-		|  &middot; #{title}
+title!=(title ? title + ' &middot; ' : '') + 'KeystoneJS Forum'
 link(href="http://fonts.googleapis.com/css?family=Roboto:100,300,300italic,400", rel="stylesheet")
 link(href="/styles/site.min.css", rel="stylesheet")
 //- link(href="/styles/prism.css", rel="stylesheet")

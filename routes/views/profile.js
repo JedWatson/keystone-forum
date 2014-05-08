@@ -69,7 +69,7 @@ exports = module.exports = function(req, res) {
 	// ------------------------------
 	
 	view.on('render', function(next) {
-		locals.page.title = locals.profile.name.full + ' on KeystoneJS Forum';
+		locals.title = locals.profile.name.full;
 		next();
 	});
 	

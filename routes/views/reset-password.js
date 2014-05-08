@@ -5,6 +5,8 @@ exports = module.exports = function(req, res) {
 	
 	var view = new keystone.View(req, res),
 		locals = res.locals;
+
+	locals.title = 'Reset Password';
 	
 	view.on('init', function(next) {
 		

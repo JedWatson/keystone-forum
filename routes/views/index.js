@@ -69,6 +69,8 @@ exports = module.exports = function(req, res) {
 				next();
 			}
 		});
+
+		locals.title = (locals.current.filter.label + ' Topics') + (locals.current.tag ? (' about ' + locals.current.tag.name) : '');
 		
 	});
 	

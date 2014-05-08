@@ -216,8 +216,7 @@ exports = module.exports = function(req, res) {
 	
 	view.on('render', function(next) {
 		
-		locals.page.name = locals.topic.title;
-		locals.page.title = locals.page.name + ' on KeystoneJS Forum';
+		locals.title = locals.topic.name;
 		
 		locals.topic.populate('watchedBy');
 		

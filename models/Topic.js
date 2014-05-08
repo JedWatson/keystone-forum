@@ -141,35 +141,25 @@ Topic.schema.post('save', function() {
 // Methods
 // ------------------------------
 
-Topic.schema.methods.notifyForumSubscribers = function(callback) {
+Topic.schema.methods.notifyForumSubscribers = function(next) {
 	
 	var topic = this;
 	
-	// keystone.list('User').model.find().select('name email').exec(function(err, results) {
-	// 	console.log(results);
-	// });
-	
-	// TODO
-	// should use req.get('host')
-	
-	async.parallel({
-		subscribers: keystone.list('User').model.find().where('notifications.topics', true).select('name email').exec
-	}, function(err, results) {
-		
-		// console.log(results.subscribers);
-		
-		if (err) return callback(err);
-		
-		new keystone.Email('notification-new-topic').send({
-			to: results.subscribers,
-			from: {
-				name: 'KeystoneJS Forum',
-				email: 'forums@keystonejs.com'
-			},
-			subject: '(KeystoneJS topic) ' + topic.name,
-			url: 'http://localhost:3000' + topic.url,
-			topic: topic
-		}, callback);
+	keystone.list('User').model.find().where('notifications.topics', true).exec(function(err, subscribers) {
+
+		if (err) return next(err);
+
+		subscribers.forEach(function(subscriber) {
+			new keystone.Email('new-topic').send({
+				subject: 'KeystoneJS new topic: "' + topic.name + '"',
+				topic: topic,
+				to: subscriber.email,
+				from: {
+					name: 'KeystoneJS Forum',
+					email: 'forums@keystonejs.com'
+				}
+			}, next);
+		});
 		
 	});
 	

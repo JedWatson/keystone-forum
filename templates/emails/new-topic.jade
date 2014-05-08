@@ -1,6 +1,22 @@
-extends /layouts/default
+extends layouts/base
 
-block body-contents
-	p=topic.summary
-	p Head over to the forum and <a href="#{url}">check it out</a>.
-	+button({ url: url, label: 'View Topic', background_color: '#2697de', border_color: '#1a7cb7', border_width: '1px', border_radius: 4, color: '#fff', height: 40, width: '100%' })
+block populate
+	table#populate(border=0, cellpadding=0, cellspacing=0, width=660)
+		
+		//- Template Header
+		//- tr: td(valign='top')#header
+		
+		//- Template Body
+		tr: td(valign='top')#header-border-top
+		tr: td(valign='middle')#header
+			//- a(href=baseURL): img(src='/images/logo.gif', alt='Brand name')
+			h1=topic.name
+		tr: td(valign='top')#body
+			table(border=0, cellpadding=0, cellspacing=0, width='100%')
+				tr
+					td(valign='top')#content
+						!=topic.content.html
+						hr
+						| Visit the forum to <a href="#{baseURL}#{topic.url}">post a reply</a>.
+		//- Template Footer
+		//- tr: td(height="30") &nbsp;

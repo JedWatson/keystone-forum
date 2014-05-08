@@ -10,11 +10,7 @@ exports = module.exports = function(req, res) {
 	locals.section = 'new-topic';
 	locals.title = 'New Topic';
 	
-	locals.form = {
-		name: '',
-		tags: '',
-		content: ''
-	}
+	locals.form = req.body;
 	
 	
 	
@@ -40,13 +36,13 @@ exports = module.exports = function(req, res) {
 			
 			if (err) {
 				locals.validationErrors = err.errors;
-				
-				_.extend(locals.form, req.body);
-				
 				return next();
 			} else {
-				newTopic.notifyForumSubscribers();
-				return res.redirect('/topic/' + newTopic.key);
+				newTopic.notifyForumSubscribers(function(err) {
+					if (err) return next(err);
+					// req.flash('success', 'Your new topic is ready.'); // just redirecting will suffice
+					res.redirect('/topic/' + newTopic.key);
+				});
 			}
 		
 		});

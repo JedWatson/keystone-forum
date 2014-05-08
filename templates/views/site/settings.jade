@@ -13,23 +13,7 @@ block content
 						| since joining on #{current.user._.joinedAt.format('D MMMM YYYY')}
 					p: a(href=current.user.url).btn.btn-primary.btn-block View your profile &rarr;
 					//- p: button(type='button').btn.btn-link.btn-block.js-show-password-form Change Password
-				
-				//- change password form
-				if config.enableNativeUserAccounts
-					.profile-form__section.password-form(style='display: none;')
-						form(method='post', enctype='multipart/form-data', autocomplete='off', novalidate).profile-form
-							input(type='hidden', name='action', value='user.password')
-							h4.heading-bordered Change password
-							.form-group
-								label(for='change-password').sr-only Current Password
-								input(type='password', name='currentPassword', placeholder='Current Password', id='change-password').form-control
-							.form-group
-								label(for='change-passwordNew').sr-only New Password
-								input(type='password', name='password', placeholder='New Password', id='change-passwordNew').form-control
-							.form-group
-								label(for='change-passwordConfirm').sr-only Confirm Password
-								input(type='password', name='password_confirm', placeholder='Confirm Password', id='signin-passwordConfirm').form-control
-							button(type='submit', data-loading-text="Saving...").btn.btn-primary Change
+					
 								
 								
 								
@@ -51,6 +35,10 @@ block content
 							label.col-sm-2.control-label Website
 							.col-sm-10
 								input(type='text', name='website' value=current.user.website).form-control.form-control-labelled
+						.form-group
+							label.col-sm-2.control-label Password
+							.col-sm-10
+								button(type='button', data-toggle='modal', data-target='#modal-password').btn.btn-link= current.user.password ? 'Change your password' : 'Set your password'
 					
 					.profile-form__section
 						h4.heading-bordered Your Services
@@ -145,10 +133,33 @@ block content
 					.form-group
 						.col-sm-10.col-sm-offset-2
 							button(type='submit', data-loading-text="Saving...").btn.btn-primary Save profile
-	
+
+
+block modal
+	#modal-password(tabindex="-1", role="dialog", aria-labelledby="passwordUpdate", aria-hidden="true").modal
+		.modal-dialog
+			.modal-content
+				.modal-header
+					button(type="button", class="close", data-dismiss="modal", aria-hidden="true") &times;
+					h4.modal-title=current.user.password ? 'Change your password' : 'Set your password'
+				.modal-body
+					form(method='post', enctype='multipart/form-data', autocomplete='off', novalidate).profile-form
+						input(type='hidden', name='action', value='user.password')
+						if current.user.password
+							.form-group
+								label(for='change-password').sr-only Current Password
+								input(type='password', name='currentPassword', placeholder='Current Password', id='change-password').form-control
+						.form-group
+							label(for='change-passwordNew').sr-only New Password
+							input(type='password', name='password', placeholder='New Password', id='change-passwordNew').form-control
+						.form-group
+							label(for='change-passwordConfirm').sr-only Confirm Password
+							input(type='password', name='password_confirm', placeholder='Confirm Password', id='signin-passwordConfirm').form-control
+						button(type='submit', data-loading-text="Saving...").btn.btn-primary Change
 	
 block js
 	script(src='/js/lib/bootstrap/affix.js')
+	script(src='/js/lib/bootstrap/modal.js')
 	script.
 		jQuery(function($){
 			

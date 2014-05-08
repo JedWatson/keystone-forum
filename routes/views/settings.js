@@ -33,32 +33,30 @@ exports = module.exports = function(req, res) {
 	});
 	
 	
-	// Update the password if native user accounts are enabled
+	// Update the password
+
+	view.on('post', { action: 'user.password' }, function(next) {
 	
-	if (config.enableNativeUserAccounts) {
-		view.on('post', { action: 'user.password' }, function(next) {
+		if (!req.body.password || !req.body.password_confirm) {
+			req.flash('error', 'Please complete all password fields.');
+			return next();
+		}
+	
+		req.user.getUpdateHandler(req).process(req.body, {
+			fields: 'password',
+			flashErrors: true
+		}, function(err) {
 		
-			if (!req.body.password || !req.body.password_confirm) {
-				req.flash('error', 'Please complete all password fields.');
+			if (err) {
 				return next();
 			}
-		
-			req.user.getUpdateHandler(req).process(req.body, {
-				fields: 'password',
-				flashErrors: true
-			}, function(err) {
 			
-				if (err) {
-					return next();
-				}
-				
-				req.flash('success', 'Your changes have been saved.');
-				return next();
-			
-			});
+			req.flash('success', 'Your changes have been saved.');
+			return next();
 		
 		});
-	}
+	
+	});
 	
 	
 	// Deauth anything

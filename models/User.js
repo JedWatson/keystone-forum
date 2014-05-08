@@ -121,27 +121,26 @@ User.schema.methods.wasActive = function() {
 	return this;
 }
 
-User.schema.methods.resetPassword = function(callback) {
+User.schema.methods.resetPassword = function(next) {
 	
 	var user = this;
 	
-	this.resetPasswordKey = keystone.utils.randomString([16,24]);
+	user.resetPasswordKey = keystone.utils.randomString([16,24]);
 	
-	this.save(function(err) {
+	user.save(function(err) {
 		
-		if (err) return callback(err);
-		
-		new keystone.Email('forgotten-password').send({
-			name: user.name.first || user.name.full,
-			link: 'http://forum.keystonejs.com/reset-password/' + user.resetPasswordKey,
-			subject: 'Reset your KeystoneJS Forum Password'
-		},{
-			to: user,
+		if (err) return next(err);
+				
+		// send email
+		new keystone.Email('reset-password').send({
+			link: '/reset-password/' + user.resetPasswordKey,
+			subject: 'Reset your password on KeystoneJS Forum',
+			to: user.email,
 			from: {
 				name: 'KeystoneJS Forum',
-				email: 'contact@keystonejs.com'
+				email: 'forum@keystonejs.com'
 			}
-		}, callback);
+		}, next);
 		
 	});
 	

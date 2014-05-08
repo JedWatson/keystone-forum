@@ -1,3 +1,5 @@
+- var baseURL = env == 'production' ? 'http://forum.keystonejs.com' : 'http://localhost:3000';
+
 doctype html
 html
 	head
@@ -10,7 +12,5 @@ html
 		center
 			table#background(border='0', cellpadding='0', cellspacing='0', height='100%', width='100%')
 				tr
-					//- td: img(src="/images/shim.gif", width="30", height="30")
 					td(align='center', valign='top')#populate-container
 						block populate
-					//- td: img(src="/images/shim.gif", width="30", height="30")

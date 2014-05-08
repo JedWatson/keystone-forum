@@ -34,3 +34,16 @@ textarea {
 		top: @padding-base-vertical;
 	}
 }
+
+
+// Form Row
+// more reasonable gap between from elements
+
+.form-row {
+	.make-row(5px);
+
+	[class^="col-"] {
+		padding-left: 5px;
+		padding-right: 5px;
+	}
+}

@@ -7,8 +7,8 @@ block content
 	.container
 		.row
 			.col-sm-3.col-sm-push-9
-				.categories-heading.hidden-xs Categories
-				ul.tag-list.mb-2
+				h4.heading-bordered.hidden-xs Tags
+				nav: ul.tag-list.mb-2
 					li(class=!current.tag ? 'is-active' : null)
 						a(href=current.filter ? ('/' + current.filter.value) : '/').tag.tag-list__item
 							span.tag-count= topicCount
@@ -22,11 +22,10 @@ block content
 								span= tag.name
 
 			.col-sm-9.col-sm-pull-3
-				nav.filter-nav
-					ul
-						for filter in globals.forum.topic.filters
-							li(class=current.filter && filter.value == current.filter.value ? 'is-active' : null)
-								a(href='/' + filter.value + (current.tag ? ('/' + current.tag.key) : ''))= filter.label
+				nav.h4: ul.filter-nav
+					for filter in globals.forum.topic.filters
+						li(class=current.filter && filter.value == current.filter.value ? 'is-active' : null)
+							a(href='/' + filter.value + (current.tag ? ('/' + current.tag.key) : ''))= filter.label
 				
 				if topics.total
 					//- topic list

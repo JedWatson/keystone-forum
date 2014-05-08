@@ -6,7 +6,7 @@ block content
 		.row
 			.col-sm-3
 				.profile-form__section.sticky-content
-					h3.profile-form__heading= current.user.name.full
+					h4.heading-bordered= current.user.name.full
 					p
 						| You have started #{plural(current.user.topicCount, '* topic', '* topics')} 
 						| and replied #{current.user.replyCount}
@@ -19,7 +19,7 @@ block content
 					.profile-form__section.password-form(style='display: none;')
 						form(method='post', enctype='multipart/form-data', autocomplete='off', novalidate).profile-form
 							input(type='hidden', name='action', value='user.password')
-							h3.profile-form__heading Change password
+							h4.heading-bordered Change password
 							.form-group
 								label(for='change-password').sr-only Current Password
 								input(type='password', name='currentPassword', placeholder='Current Password', id='change-password').form-control
@@ -37,7 +37,7 @@ block content
 				form(method='post', enctype='multipart/form-data', autocomplete='off', novalidate).profile-form.form-horizontal
 					input(type='hidden', name='action', value='user.update')
 					.profile-form__section
-						h3.profile-form__heading Your Profile
+						h4.heading-bordered Your Profile
 						.form-group
 							label.col-sm-2.control-label Name
 							.col-sm-10: .row
@@ -53,7 +53,7 @@ block content
 								input(type='text', name='website' value=current.user.website).form-control.form-control-labelled
 					
 					.profile-form__section
-						h3.profile-form__heading Your Services
+						h4.heading-bordered Your Services
 						p.help-block.mb-2 You can authenticate yourself on the KeystoneJS Forum with any of the services you connect. When connected, links to your Twitter and Github will be displayed on your profile.
 						
 						
@@ -109,7 +109,7 @@ block content
 									a(href='?deauth=google', title='Revoke authorization of your Google account') Disconnect
 						
 					.profile-form__section
-						h3.profile-form__heading Public info
+						h4.heading-bordered Public info
 						.form-group
 							label.col-sm-2.control-label Bio
 								br
@@ -128,7 +128,7 @@ block content
 									input(type='file', name='photo_upload')
 						
 					.profile-form__section
-						h3.profile-form__heading Email notifications
+						h4.heading-bordered Email notifications
 						.form-group
 							label.col-sm-2.control-label Email me when
 							.col-sm-10

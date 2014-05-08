@@ -239,15 +239,9 @@
 .filter-nav {
 	border-bottom: 1px solid @gray-lighter;
 	list-style: none;
-	font-weight: 400;
 	margin: 0;
 	padding: 0;
 
-	ul {
-		list-style: none;
-		margin: 0;
-		padding: 0;
-	}
 	li {
 		display: inline-block;
 	}
@@ -267,9 +261,8 @@
 }
 @media (min-width: @screen-sm-min) {
 	.filter-nav {
-		font-size: 1.25em;
 		a {
-			padding: 15px;
+			padding: 0 1em 1em;
 		}
 	}
 }
@@ -290,24 +283,6 @@ pre {
 	// override 
 	code {
 		white-space: pre;
-	}
-}
-
-
-
-// sidebar navigation
-.categories-heading {
-	border-bottom: 1px solid @gray-lighter;
-	display: block;
-	font-size: @font-size-large;
-	font-weight: 400;
-	margin-bottom: 25px;
-	padding-bottom: 15px;
-	padding-top: 15px;
-	
-	@media (min-width: @screen-sm-min) {
-		padding-left: 15px;
-		padding-right: 15px;	
 	}
 }
 	

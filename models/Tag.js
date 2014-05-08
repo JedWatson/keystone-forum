@@ -75,5 +75,6 @@ Tag.schema.pre('save', function(next) {
 	
 });
 
+Tag.defaultSort = 'sortOrder';
 Tag.defaultColumns = 'name, topicCount,  replyCount, lastActiveAt';
 Tag.register();

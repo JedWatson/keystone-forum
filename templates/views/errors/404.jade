@@ -10,10 +10,11 @@ block content
 			
 		
 		//- Categories
-		.categories-heading Categories
+		h4.heading-bordered Tags
 		ul.tag-list
 			li
 				a(href='/').tag.tag-list__item
+					span.tag-count= totalTopicCount
 					span.tag-indicator
 					span All topics
 			for tag in tags

@@ -6,8 +6,7 @@ block content
 			input(type='hidden', name='action', value='topic.create')
 			.row
 				.col-sm-9
-					h4 New topic
-					hr
+					h4.heading-bordered New topic
 					+flash-messages(messages)
 					.form-group
 						input(type='text', name='name', placeholder='Title', value=form.name, tabindex=1).form-control.input-lg
@@ -36,8 +35,7 @@ block content
 						button(type='submit', data-loading-text='Saving...', tabindex=3).btn.btn-primary Post Topic
 
 				.col-sm-3
-					h4 Found a bug?
-					hr
+					h4.heading-bordered Found a bug?
 					p If you're experiencing what appears to be a bug or something that doesn't seem to be working correctly, please 
 						a(href='https://github.com/JedWatson/keystone/issues') log&nbsp;an&nbsp;issue
 						|  in the Github project

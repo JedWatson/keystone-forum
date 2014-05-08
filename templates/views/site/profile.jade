@@ -26,7 +26,7 @@ block content
 							span.entypo-social.entypo-twitter
 							span.sr-only @#{profile.twitterUsername}
 					if profile.website
-						li: a(href=profile.website, target='_blank', title=profile.website, itemprop='url')
+						li: a(href='http://' + profile.website.replace('http://', ''), target='_blank', itemprop='url')
 							if !profile.githubUsername && !profile.twitterUsername
 								= profile.website.replace('http://', '')
 							else

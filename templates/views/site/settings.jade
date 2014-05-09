@@ -142,12 +142,12 @@ block modal
 		.modal-dialog
 			.modal-content
 				.modal-header
-					button(type="button", class="close", data-dismiss="modal", aria-hidden="true") &times;
+					button(type="button", data-dismiss="modal", aria-hidden="true").close &times;
 					h4.modal-title=current.user.password ? 'Change your password' : 'Set your password'
 				.modal-body
 					form(method='post', enctype='multipart/form-data', autocomplete='off', novalidate).profile-form
 						input(type='hidden', name='action', value='user.password')
-						if current.user.password
+						//- if current.user.password
 							.form-group
 								label(for='change-password').sr-only Current Password
 								input(type='password', name='currentPassword', placeholder='Current Password', id='change-password').form-control
@@ -158,6 +158,7 @@ block modal
 							label(for='change-passwordConfirm').sr-only Confirm Password
 							input(type='password', name='password_confirm', placeholder='Confirm Password', id='signin-passwordConfirm').form-control
 						button(type='submit', data-loading-text="Saving...").btn.btn-primary Change
+						button(type="button", data-dismiss="modal", aria-hidden="true").btn.btn-link Cancel
 	
 block js
 	script(src='/js/lib/bootstrap/affix.js')
@@ -165,10 +166,9 @@ block js
 	script.
 		jQuery(function($){
 			
-			//- show password form
-			$('.js-show-password-form').click(function() {
-				$('.password-form').show().find('.form-control').eq(0).focus();
-				$(this).hide();
+			//- password form
+			$('#modal-password').on('shown.bs.modal', function() {
+				$(this).find('.form-control').eq(0).focus();
 			});
 			
 			//- fix the left col

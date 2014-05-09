@@ -4,4 +4,4 @@ block content
 	h1=topic.name
 	!=reply.content.html
 	hr
-	| Visit the forum to <a href="#{url}">post a reply</a>.
+	a(href=baseURL + topic.url + '#comment-id-' + reply.id) View the topic and post a reply

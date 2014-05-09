@@ -81,28 +81,22 @@ Reply.schema.methods.notifyTopicWatchers = function(next) {
 	
 	var reply = this;
 	
-	keystone.list('User').model.find().where('watchedTopics').in([reply.topic]).exec(function(err, watchers) {
-
-		if (err) return next(err);
+	keystone.list('Topic').model.findById(reply.topic).populate('watchedBy').exec(function(err, topic) {
 		
-		console.log(watchers);
+		if (err || !topic.watchedBy.length) return next(err);
 		
-		if (!watchers.length) {
-			next();
-		} else {
-			watchers.forEach(function(watcher) {
-				new keystone.Email('new-reply').send({
-					subject: 'KeystoneJS new reply: "' + reply.name + '"',
-					reply: reply,
-					to: watcher.email,
-					from: {
-						name: 'KeystoneJS Forum',
-						email: 'forums@keystonejs.com'
-					}
-				}, next);
-			});
-		}
-		
+		topic.watchedBy.forEach(function(watcher) {
+			new keystone.Email('new-reply').send({
+				subject: 'New reply on "' + topic.name + '"',
+				topic: topic,
+				reply: reply,
+				to: watcher.email,
+				from: {
+					name: 'KeystoneJS Forum',
+					email: 'forums@keystonejs.com'
+				}
+			}, next);
+		});
 	});
 	
 }

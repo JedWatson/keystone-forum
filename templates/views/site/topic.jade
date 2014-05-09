@@ -15,7 +15,7 @@ block content
 				if current.user
 					a(href=watchedByUser ? '?unwatch' : '?watch', title=watchedByUser ? 'Stop email notifications' : 'Get email notifications').btn.btn-sm.btn-default.pull-right.watch-button
 						span.entypo.entypo-eye
-						=watchedByUser ? ' Unwatch' : ' Watch'
+						=watchedByUser ? 'Unwatch' : 'Watch'
 				h4: a(href='/').text-muted &larr; Back to all topics
 				hr
 				article(itemscope itemtype="http://schema.org/Article").topic-details

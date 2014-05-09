@@ -106,8 +106,18 @@ exports = module.exports = function(req, res) {
 				
 			} else {
 				
+				newReply.notifyTopicWatchers(function(err) {
+					if (err) return next(err);
+					
+					// show the success message then scroll to their reply 
+					req.flash('success', 'Thank you for your reply.');
+					locals.performFunction = 'scrollToLastComment';
+					
+					next();
+				});
+				
 				// send email
-				new keystone.Email('new-reply').send({
+				/*new keystone.Email('new-reply').send({
 					reply: newReply,
 					topic: locals.topic,
 					link: 'http://forum.keystonejs.com' + locals.topic.url,
@@ -117,11 +127,7 @@ exports = module.exports = function(req, res) {
 						name: 'KeystoneJS Forum',
 						email: 'forum@keystonejs.com'
 					}
-				}, next);
-				
-				// show the success message then scroll to their reply 
-				req.flash('success', 'Thank you for your reply.');
-				locals.performFunction = 'scrollToLastComment';
+				}, next);*/
 				
 			}
 		});

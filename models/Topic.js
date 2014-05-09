@@ -148,18 +148,22 @@ Topic.schema.methods.notifyForumSubscribers = function(next) {
 	keystone.list('User').model.find().where('notifications.topics', true).exec(function(err, subscribers) {
 
 		if (err) return next(err);
-
-		subscribers.forEach(function(subscriber) {
-			new keystone.Email('new-topic').send({
-				subject: 'KeystoneJS new topic: "' + topic.name + '"',
-				topic: topic,
-				to: subscriber.email,
-				from: {
-					name: 'KeystoneJS Forum',
-					email: 'forums@keystonejs.com'
-				}
-			}, next);
-		});
+		
+		if (!subscribers.length) {
+			next();
+		} else {
+			subscribers.forEach(function(subscriber) {
+				new keystone.Email('new-topic').send({
+					subject: 'KeystoneJS new topic: "' + topic.name + '"',
+					topic: topic,
+					to: subscriber.email,
+					from: {
+						name: 'KeystoneJS Forum',
+						email: 'forums@keystonejs.com'
+					}
+				}, next);
+			});
+		}
 		
 	});
 	

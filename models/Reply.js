@@ -77,27 +77,31 @@ Reply.schema.post('save', function() {
 // Methods
 // ------------------------------
 
-Reply.schema.methods.notifyTopicWatchers = function(callback) {
+Reply.schema.methods.notifyTopicWatchers = function(next) {
 	
-	var topicReply = this;
+	var reply = this;
 	
-	async.parallel({
-		watchers: keystone.list('User').model.find.where('_id').in(this.watchedBy).exec,
-		topic: keystone.list('Topic').model.findById(this.topic).exec
-	}, function(err, results) {
+	keystone.list('User').model.find().where('watchedTopics').in([reply.topic]).exec(function(err, watchers) {
+
+		if (err) return next(err);
 		
-		if (err) return callback(err);
+		console.log(watchers);
 		
-		new keystone.Email('new-reply').send({
-			to: results.watchers,
-			from: {
-				name: 'KeystoneJS Forum',
-				email: 'forums@keystonejs.com'
-			},
-			subject: '(KeystoneJS reply) ' + results.topic.name,
-			topic: results.topic,
-			topicReply: topicReply
-		}, callback);
+		if (!watchers.length) {
+			next();
+		} else {
+			watchers.forEach(function(watcher) {
+				new keystone.Email('new-reply').send({
+					subject: 'KeystoneJS new reply: "' + reply.name + '"',
+					reply: reply,
+					to: watcher.email,
+					from: {
+						name: 'KeystoneJS Forum',
+						email: 'forums@keystonejs.com'
+					}
+				}, next);
+			});
+		}
 		
 	});
 	

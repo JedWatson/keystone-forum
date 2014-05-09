@@ -106,28 +106,22 @@ exports = module.exports = function(req, res) {
 				
 			} else {
 				
-				newReply.notifyTopicWatchers(function(err) {
-					if (err) return next(err);
-					
-					// show the success message then scroll to their reply 
-					req.flash('success', 'Thank you for your reply.');
-					locals.performFunction = 'scrollToLastComment';
-					
-					next();
-				});
-				
 				// send email
-				/*new keystone.Email('new-reply').send({
+				new keystone.Email('new-reply').send({
 					reply: newReply,
 					topic: locals.topic,
 					link: 'http://forum.keystonejs.com' + locals.topic.url,
-					subject: '[KeystoneJS]' + locals.topic.name,
+					subject: locals.topic.name,
 					to: 'joss.mackison@gmail.com',
 					from: {
 						name: 'KeystoneJS Forum',
 						email: 'forum@keystonejs.com'
 					}
-				}, next);*/
+				}, next);
+				
+				// show the success message then scroll to their reply 
+				req.flash('success', 'Thank you for your reply.');
+				locals.performFunction = 'scrollToLastComment';
 				
 			}
 		});

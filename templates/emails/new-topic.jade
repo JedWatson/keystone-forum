@@ -1,22 +1,7 @@
 extends layouts/base
 
-block populate
-	table#populate(border=0, cellpadding=0, cellspacing=0, width=660)
-		
-		//- Template Header
-		//- tr: td(valign='top')#header
-		
-		//- Template Body
-		tr: td(valign='top')#header-border-top
-		tr: td(valign='middle')#header
-			//- a(href=baseURL): img(src='/images/logo.gif', alt='Brand name')
-			h1=topic.name
-		tr: td(valign='top')#body
-			table(border=0, cellpadding=0, cellspacing=0, width='100%')
-				tr
-					td(valign='top')#content
-						!=topic.content.html
-						hr
-						| Visit the forum to <a href="#{baseURL}#{topic.url}">post a reply</a>.
-		//- Template Footer
-		//- tr: td(height="30") &nbsp;
+block content
+	h1=topic.name
+	!=topic.content.html
+	hr
+	| Visit the forum to <a href="#{baseURL}#{topic.url}">post a reply</a>.

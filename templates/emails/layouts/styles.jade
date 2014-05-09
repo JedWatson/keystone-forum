@@ -59,16 +59,20 @@ style(type='text/css').
 	
 	/* helper classes */
 	#populate .img-fix { display: block; }
-	#populate hr, #populate .hr { border: 0 none; border-top: 1px solid #{dividerColor}; margin: 20px 0; }
+	#populate hr, #populate .hr { border: 0 none; border-top: 1px solid #{dividerColor}; margin: #{emailGutter}px 0; }
 	#populate hr.spacer, #populate .hr.spacer { border-color: transparent; margin: 5px 0; }
 
+	
 	/* HEADER */
+	
 	#header-border-top { height: 3px; background-color: #{linkColor}; }
-	#header { background-color: #ffffff; border-left: 1px solid #e5e5e5; border-right: 1px solid #e5e5e5; height: 90px; }
-	#header h1 { margin: 0; }
+	#header { background-color: #ffffff; border-left: 1px solid #e5e5e5; border-right: 1px solid #e5e5e5; }
+	#header-brand img { display: block; }
 	.header-spacer { font-size: 0; line-height: 0; height: 2px; }
 
+	
 	/* BODY */
+	
 	#body { background-color: #ffffff; border: 1px solid #e5e5e5; border-top: 0 none; }
 	#body .intro-text p { font-size: 16px; margin-bottom: 0; }
 	#body .sections td { vertical-align: middle; }
@@ -146,6 +150,7 @@ style(type='text/css').
 		padding-left: #{emailGutter}px;
 		padding-right: #{emailGutter}px;
 	}
+	#header-brand { padding-bottom: #{emailGutter}px; padding-top: #{emailGutter}px; }
 	#body {
 		padding-left: #{emailGutter}px;
 		padding-right: #{emailGutter}px;
@@ -153,10 +158,15 @@ style(type='text/css').
 	
 	/* small screens */
 	@media only screen and (max-width: 680px) {
+		body, #background { background-color: white !important; }
+		h1 {
+			font-size: 16px !important;
+		}
 		pre {
 			background-color: transparent !important;
 			padding: 0 !important;
 		}
+		#populate hr, #populate .hr { margin: 10px 0 !important; }
 		#populate-container {
 			padding: 0 !important;
 		}
@@ -175,8 +185,13 @@ style(type='text/css').
 			padding-left: #{emailGutter / 2}px !important;
 			padding-right: #{emailGutter / 2}px !important;
 		}
-		#header h1 {
-			text-align: left !important;
+		#header-brand {
+			padding-bottom: 10px !important;
+			padding-top: 10px !important;
+		}
+		#header-brand img {
+			height: 40px !important;
+			width: 118px !important;
 		}
 		#body {
 			border: 0 none !important;

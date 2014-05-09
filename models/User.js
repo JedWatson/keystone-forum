@@ -19,7 +19,7 @@ var deps = {
 
 User.add({
 	name: { type: Types.Name, required: true, index: true },
-	email: { type: Types.Email, initial: true, index: true },
+	email: { type: Types.Email, initial: true, required: true, index: true },
 	password: { type: Types.Password, initial: true },
 	state: { type: Types.Select, options: 'enabled, banned' },
 	notes: { type: Types.Textarea, collapse: true },

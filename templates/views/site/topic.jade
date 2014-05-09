@@ -53,8 +53,10 @@ block content
 					
 					//-comments
 					#comments.topic-details__footer
+						h4.comment-heading
+							span.comment-heading__title= replies.length ? plural(replies.length, '* reply', '* replies') : 'Reply to this topic'
+							span.comment-heading__divider
 						if replies.length
-							h4.text-muted=plural(replies.length, '* reply', '* replies')
 							+comment-thread(replies)
 						+comment-form()
 			.col-sm-3

@@ -10,8 +10,6 @@ exports = module.exports = function(req, res) {
 	
 	view.on('init', function(next) {
 		
-		console.log(req.params.key);
-		
 		User.model.findOne().where('resetPasswordKey', req.params.key).exec(function(err, user) {
 			if (err) return next(err);
 			if (!user) {

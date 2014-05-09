@@ -3,13 +3,13 @@ mixin social-signin()
 	.social-signup-buttons: .social-signup-buttons-inner
 			
 		.signup-button: a(href='/auth/github', title='Log in with Github').btn.btn-github.btn-block
-			span.entypo-social.entypo-github
-			span.signup-button__text  Github
+			span.signup-button__icon.entypo-social.entypo-github
+			span.signup-button__text Github
 			
 		.signup-button: a(href='/auth/twitter', title='Log in with Twitter').btn.btn-twitter.btn-block
-			span.entypo-social.entypo-twitter
-			span.signup-button__text  Twitter
+			span.signup-button__icon.entypo-social.entypo-twitter
+			span.signup-button__text Twitter
 		
 		.signup-button: a(href='/auth/google', title='Log in with Google').btn.btn-google.btn-block
-			span(class='entypo-google-circles').entypo-social
-			span.signup-button__text  Google
+			span.signup-button__icon(class='entypo-google-circles').entypo-social
+			span.signup-button__text Google

@@ -39,10 +39,12 @@ exports = module.exports = function(req, res) {
 				return next();
 			} else {
 				newTopic.notifyForumSubscribers(function(err) {
-					if (err) return next(err);
-					// req.flash('success', 'Your new topic is ready.'); // just redirecting will suffice
-					res.redirect('/topic/' + newTopic.key);
+					if (err) {
+						console.error("===== Create Topic failed to send emails =====");
+						console.error(err);
+					}
 				});
+				res.redirect('/topic/' + newTopic.key);
 			}
 		
 		});

@@ -10,15 +10,20 @@ exports = module.exports = function(req, res) {
 		
 		User.model.findOne().where('email', req.body.email).exec(function(err, user) {
 			if (err) return next(err);
+			
 			if (!user) {
 				req.flash('error', "Sorry, we don't recognise that email address.");
 				return next();
 			}
+			
 			user.resetPassword(function(err) {
-				if (err) return next(err);
-				req.flash('success', 'We have emailed you a link to reset your password. Please follow the instructions in your email.');
-				res.redirect('/login');
+				if (err) {
+					console.error("===== Reset Password failed to send email =====");
+					console.error(err);
+				}
 			});
+			req.flash('success', 'We have emailed you a link to reset your password. Please follow the instructions in your email.');
+			res.redirect('/login');
 		});
 		
 	});

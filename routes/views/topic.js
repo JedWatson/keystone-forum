@@ -103,26 +103,19 @@ exports = module.exports = function(req, res) {
 		}, function(err) {
 			if (err) {
 				locals.validationErrors = err.errors;
-				
 			} else {
-				
-				// send email
-				new keystone.Email('new-reply').send({
-					reply: newReply,
-					topic: locals.topic,
-					link: 'http://forum.keystonejs.com' + locals.topic.url,
-					subject: locals.topic.name,
-					to: 'joss.mackison@gmail.com',
-					from: {
-						name: 'KeystoneJS Forum',
-						email: 'forum@keystonejs.com'
+				newReply.notifyTopicWatchers(function(err) {
+					if (err) {
+						console.error("===== Create Reply failed to send emails =====");
+						console.error(err);
 					}
-				}, next);
+				});
 				
 				// show the success message then scroll to their reply 
 				req.flash('success', 'Thank you for your reply.');
 				locals.performFunction = 'scrollToLastComment';
 				
+				next();
 			}
 		});
 		

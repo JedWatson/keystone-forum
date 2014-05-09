@@ -25,7 +25,7 @@ exports = module.exports = function(req, res) {
 				return next();
 			}
 			
-			req.flash('success', 'Your changes have been saved.');
+			req.flash('success', 'Your profile changes have been saved.');
 			return next();
 		
 		});
@@ -51,7 +51,7 @@ exports = module.exports = function(req, res) {
 				return next();
 			}
 			
-			req.flash('success', 'Your changes have been saved.');
+			req.flash('success', 'Your password has been updated.');
 			return next();
 		
 		});

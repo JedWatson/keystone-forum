@@ -10,7 +10,7 @@ exports = module.exports = function(req, res) {
 		locals = res.locals;
 	
 	locals.section = 'forum';
-	locals.current.filter = _.where(globals.forum.topic.filters, { value: req.params.filter })[0] || _.where(globals.forum.topic.filters, { value: 'newest' })[0];
+	locals.current.filter = _.where(globals.forum.filters, { value: req.params.filter })[0] || _.where(globals.forum.filters, { value: 'newest' })[0];
 	locals.current.tag = _.where(req.tags, { key: req.params.tag })[0];
 	
 	

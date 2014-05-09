@@ -70,6 +70,7 @@ exports = module.exports = function(req, res) {
 	
 	view.on('render', function(next) {
 		locals.title = locals.profile.name.full;
+		locals.metadescription = locals.profile.bio.md ? keystone.utils.cropString(keystone.utils.htmlToText(locals.profile.bio.html), 200, '...', true) : '';
 		next();
 	});
 	

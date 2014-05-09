@@ -23,7 +23,7 @@ block content
 
 			.col-sm-9.col-sm-pull-3
 				nav.h4: ul.filter-nav
-					for filter in globals.forum.topic.filters
+					for filter in globals.forum.filters
 						li(class=current.filter && filter.value == current.filter.value ? 'is-active' : null)
 							a(href='/' + filter.value + (current.tag ? ('/' + current.tag.key) : ''))= filter.label
 				

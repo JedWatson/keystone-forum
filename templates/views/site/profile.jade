@@ -30,7 +30,7 @@ block content
 							if !profile.githubUsername && !profile.twitterUsername
 								= profile.website.replace('http://', '')
 							else
-								span.entypo.entypo-globe
+								span(title=profile.website.replace('http://', '')).entypo.entypo-globe
 								span.sr-only= profile.website
 		hr.mv-2
 		

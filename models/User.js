@@ -133,6 +133,7 @@ User.schema.methods.resetPassword = function(next) {
 				
 		// send email
 		new keystone.Email('reset-password').send({
+			user: user,
 			link: '/reset-password/' + user.resetPasswordKey,
 			subject: 'Reset your password on KeystoneJS Forum',
 			to: user.email,

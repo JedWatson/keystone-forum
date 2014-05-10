@@ -1,0 +1,116 @@
+// 
+// Comments
+// ==============================
+
+
+// combine the heading and divider
+
+.comment-heading {
+	margin-bottom: 2em;
+	margin-top: 2em;
+	position: relative;
+}
+.comment-heading__title {
+	background-color: white;
+	color: @gray-light;
+	padding-right: 1em;
+	position: relative;
+	z-index: 2;
+}
+.comment-heading__divider {
+	.size( 100%,.25em );
+	background-color: @gray-lighter;
+	display: block;
+	margin-top: -.125em;
+	position: absolute;
+	top: 50%;
+	z-index: 1;
+}
+
+
+
+
+// Comment Post
+// ------------------------------
+
+/*
+	Usage:
+
+	<div class="comment-post">
+		<div class="item-delete comment-options">
+			<button>Delete</button>
+			<div class="item-delete__hidden" style="display: none;">
+				...
+			</div>
+		</div>
+		<div class="media">
+			<a class="pull-left media-avatar" href="/profile/user">
+				<img width="60" height="60" class="img-avatar" alt="..." src="...">
+			</a>
+			<div class="media-body">
+				<p class="comment-post__header">
+					<a class="comment-post__author" href="/profile/user">...</a>
+					<time>...</time>
+				</p>
+				<p>...</p>
+			</div>
+		</div>
+	</div>
+*/
+
+
+// single item
+
+.comment-post {
+	border-bottom: 1px dashed @gray-lighter;
+	margin-bottom: 2em;
+	padding-bottom: 2em;
+	position: relative;
+}
+/*a*/.comment-post__author {
+	color: @gray;
+	font-weight: 400;
+	
+	&:hover {
+		color: @text-color;
+		text-decoration: none;
+	}
+}
+.comment-field-input {
+	&,
+	&:focus {
+		.box-shadow(0 1px 1px rgba(0, 0, 0, 0.075) inset);
+	}
+}
+.comment-options {
+	.transition( ~"opacity 200ms ease, right 200ms ease" );
+	color: @gray-light;
+	opacity: 0;
+	position: absolute;
+	right: 0;
+	top: 8px;
+	
+	/*
+	&:hover,
+	&:active,
+	&:focus {
+		color: @brand-danger;
+		outline: 0 none;
+	}
+	*/
+}
+.comment-post:hover .comment-options {
+	opacity: 1;
+}
+
+
+// hide the thumbnail to provide more space on mobile
+
+.media-avatar {
+	display: none;
+}
+@media (min-width: @screen-sm-min) {
+	.media-avatar {
+		display: block;
+	}
+}

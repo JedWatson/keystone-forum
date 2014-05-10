@@ -3,36 +3,28 @@
 // ==============================
 
 
-
+// right-aligned is not my jam
 
 .form-horizontal .control-label {
 	text-align: left;
 }
+
+// bootstrap uses chubby labels
+
 label.checkbox {
 	font-weight: 300;
 }
+
+// stop users pulling the textarea out of it's column
+
 textarea {
 	.resizable(vertical);
 }
 
+// maintain alignment of label text and input text
+
 .faux-label {
 	padding-top: @padding-base-vertical;
-}
-
-.at-username-field {
-	position: relative;
-	
-	.form-control {
-		padding-left: @font-size-base + @padding-base-horizontal;
-	}
-	
-	&:before {
-		color: @input-color-placeholder;
-		content: "\0040"; // @ symbol
-		left: @padding-base-horizontal;
-		position: absolute;
-		top: @padding-base-vertical;
-	}
 }
 
 

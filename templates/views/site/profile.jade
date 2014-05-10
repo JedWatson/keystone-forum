@@ -19,11 +19,11 @@ block content
 				ul.list-inline.text-muted
 					if profile.githubUsername
 						li: a(href='http://github.com/' + profile.githubUsername, target='_blank', title="@#{profile.githubUsername} on GitHub")
-							span.entypo-social.entypo-github
+							span.entypo-social.entypo-social-github
 							span.sr-only @#{profile.githubUsername}
 					if profile.twitterUsername
 						li: a(href='http://twitter.com/' + profile.twitterUsername, target='_blank', title="@#{profile.twitterUsername} on Twitter")
-							span.entypo-social.entypo-twitter
+							span.entypo-social.entypo-social-twitter
 							span.sr-only @#{profile.twitterUsername}
 					if profile.website
 						li: a(href='http://' + profile.website.replace('http://', ''), target='_blank', itemprop='url')

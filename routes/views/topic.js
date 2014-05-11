@@ -104,15 +104,26 @@ exports = module.exports = function(req, res) {
 			if (err) {
 				locals.validationErrors = err.errors;
 			} else {
+
+				// email topic watchers
 				newReply.notifyTopicWatchers(function(err) {
 					if (err) {
 						console.error("===== Create Reply failed to send emails =====");
 						console.error(err);
 					}
 				});
+
+				// subscribe the reply author to the topic
+				if (req.body.watch) {
+					locals.topic.watchedBy.push(req.user.id);
+					locals.topic.save(function(err) {
+						console.error("===== Subscribe reply author to Topic failed =====");
+						console.error(err);
+					});
+				}
 				
 				// show the success message then scroll to their reply 
-				req.flash('success', 'Thank you for your reply.');
+				req.flash('success', 'Thank you for your reply.' + (req.body.watch ? ' You are now watching this topic.' : ''));
 				locals.performFunction = 'scrollToLastComment';
 				
 				next();

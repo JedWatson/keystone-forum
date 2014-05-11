@@ -12,14 +12,13 @@ mixin comment-form(action)
 				.form-group: textarea(name='content', tabindex=1, rows=5, placeholder=current.user ? 'Leave a reply...' : 'Please sign in to comment', disabled=!current.user).comment-field-input.form-control
 			if current.user
 				.form-inline.mv-5
-					p.help-block.pull-right Replies use 
+					p.help-block.pull-right.faux-label Replies use 
 						a(href='http://daringfireball.net/projects/markdown/syntax', tabindex=3, target='_blank', title='Markdown Guide (new window)') Markdown
-					button(type='submit', tabindex=2).btn.btn-sm.btn-primary Post Reply
-					//- TODO
-					//- This would be nice to have later
-					//- .checkbox: label
-						input(type='checkbox', name='subscribed', value='true', checked)
-						| &nbsp;Subscribe to thread
+					button(type='submit', tabindex=2).btn.btn-primary.mr-1 Post Reply
+					if !watchedByUser
+						.checkbox: label.text-thin.text-dimmed
+							input(type='checkbox', name='watch', value='true', checked)
+							| &nbsp;Watch this topic
 			else
 				a(href='/join?returnto=' + page.path).btn.btn-sm.btn-primary Log in or Join to Comment
 

@@ -11,8 +11,11 @@
 
 // bootstrap uses chubby labels
 
+.radio label,
+.checkbox label,
+label.radio,
 label.checkbox {
-	font-weight: 300;
+	font-weight: inherit;
 }
 
 // stop users pulling the textarea out of it's column
@@ -21,7 +24,7 @@ textarea {
 	.resizable(vertical);
 }
 
-// maintain alignment of label text and input text
+// maintain alignment of label text and input/button text
 
 .faux-label {
 	padding-top: @padding-base-vertical;

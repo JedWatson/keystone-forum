@@ -93,7 +93,7 @@ Reply.schema.methods.notifyTopicWatchers = function(next) {
 				to: watcher.email,
 				from: {
 					name: 'KeystoneJS Forum',
-					email: 'forums@keystonejs.com'
+					email: 'forum@keystonejs.com'
 				}
 			}, next);
 		});

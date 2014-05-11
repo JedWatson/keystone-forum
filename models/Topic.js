@@ -159,7 +159,7 @@ Topic.schema.methods.notifyForumSubscribers = function(next) {
 					to: subscriber.email,
 					from: {
 						name: 'KeystoneJS Forum',
-						email: 'forums@keystonejs.com'
+						email: 'forum@keystonejs.com'
 					}
 				}, next);
 			});

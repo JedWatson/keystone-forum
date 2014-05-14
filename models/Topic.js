@@ -112,22 +112,40 @@ Topic.schema.pre('save', function(next) {
 
 Topic.schema.post('save', function() {
 	
-	if (!this._bubbleUpdate) {
+	var topic = this;
+
+	if (!topic._bubbleUpdate) {
 		return;
 	}
 	
-	if (this.author) {
-		keystone.list('User').model.findById(this.author).exec(function(err, user) {
+	if (topic.author) {
+		keystone.list('User').model.findById(topic.author).exec(function(err, user) {
 			return user && user.wasActive().save();
 		});
 	}
-	if (this.tags) {
-		keystone.list('Tag').model.find().where('_id').in(this.tags).exec(function(err, tags) {
+
+	// touch the topic's tags to make them update their topic count
+	if (topic.tags) {
+		keystone.list('Tag').model.find().where('_id').in(topic.tags).exec(function(err, tags) {
 			if (err) {
 				console.error(err)	
 			} else {
 				tags.forEach(function(tag) {
 					tag.save();
+				});
+			}
+		});
+	}
+
+	// archive the topic's replies when it's archived
+	if (topic.state == 'archived') {
+		keystone.list('Reply').model.find().where( 'topic', topic.id ).exec(function(err, results) {
+			if (err) {
+				console.error(err)	
+			} else {
+				results.forEach(function(reply) {
+					reply.state = 'archived';
+					reply.save();
 				});
 			}
 		});

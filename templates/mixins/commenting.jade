@@ -26,11 +26,11 @@ mixin comment-post(comment)
 	div(id='comment-id-' + comment.id, class=attributes.class).comment-post
 		if current.user && current.user.id == comment.author.id
 			.item-delete.comment-options
-				button(type='button').btn.btn-narrow.btn-link.item-delete__confirm.text-confirm Delete
+				button(type='button').btn.btn-sm.btn-narrow.btn-link.item-delete__confirm.text-confirm Delete
 				.item-delete__hidden
 					//- | Remove your reply from this topic?
-					a(href='?remove=comment&comment=' + comment.id).btn.btn-narrow.btn-danger Delete
-					button(type='button').btn.btn-narrow.btn-default.item-delete__cancel Cancel
+					a(href='?remove=comment&comment=' + comment.id).btn.btn-sm.btn-narrow.btn-danger Delete
+					button(type='button').btn.btn-sm.btn-narrow.btn-default.item-delete__cancel Cancel
 					
 		.media
 			a(href=comment.author.url).pull-left.media-avatar

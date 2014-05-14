@@ -81,21 +81,21 @@ block content
 								label.col-sm-2.control-label Github
 								.col-sm-10.text-muted.faux-label
 									span.entypo-social.entypo-social-github
-									|  Github account is connected. 
+									|  Your account is connected. 
 									a(href='?deauth=github', title='Revoke authorization of your Github account') Disconnect
 						if current.user.services.twitter.isConfigured
 							.form-group
 								label.col-sm-2.control-label Twitter
 								.col-sm-10.text-muted.faux-label
 									span.entypo-social.entypo-social-twitter
-									|  Twitter account is connected. 
+									|  Your account is connected. 
 									a(href='?deauth=twitter', title='Revoke authorization of your Twitter account') Disconnect
 						if current.user.services.google.isConfigured
 							.form-group
 								label.col-sm-2.control-label Google
 								.col-sm-10.text-muted.faux-label
 									span.entypo-social.entypo-social-google-circles
-									|  Google account is connected. 
+									|  Your account is connected. 
 									a(href='?deauth=google', title='Revoke authorization of your Google account') Disconnect
 						
 					.profile-form__section

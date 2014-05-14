@@ -45,11 +45,8 @@ exports = module.exports = function(req, res) {
 		locals.topic.watchedBy.push(req.user.id);
 		
 		locals.topic.save(function(err) {
-			if (err) return res.err(err);
-			// req.flash('success', 'You will receive email notifications about this topic.');
-					
-			// tidy up the url
-			return res.redirect(locals.topic.url);
+			if (err) { console.error("===== Watch Topic failed to save ====="); console.error(err); }
+			return res.redirect(locals.topic.url); // tidy up the url
 		});
 	});
 	
@@ -59,7 +56,7 @@ exports = module.exports = function(req, res) {
 	// UNWATCH the Topic
 	
 	view.on('get', { unwatch: true }, function(next) {
-		
+
 		if (!req.user) {
 			req.flash('error', 'You must be signed in to unwatch a topic.');
 			return next();
@@ -73,11 +70,8 @@ exports = module.exports = function(req, res) {
 		}
 		
 		locals.topic.save(function(err) {
-			if (err) return res.err(err);
-			// req.flash('success', 'You will NOT receive anymore email notifications about this topic.');
-					
-			// tidy up the url
-			return res.redirect(locals.topic.url);
+			if (err) { console.error("===== Unwatch Topic failed to save ====="); console.error(err); }
+			return res.redirect(locals.topic.url); // tidy up the url
 		});
 	});
 	
@@ -190,8 +184,6 @@ exports = module.exports = function(req, res) {
 		}
 		
 		locals.topic.state = 'archived';
-		
-		// TODO archive the topic's replies
 		
 		locals.topic.save(function(err) {
 			if (err) {

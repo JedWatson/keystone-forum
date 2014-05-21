@@ -8,31 +8,28 @@ exports = module.exports = function(req, res) {
 	
 	locals.section = 'profile';
 	locals.form = req.body;
-	locals.returnto = req.query.returnto;
 
 
-	// CREATE a User
+	// UPDATE the User
 	
 	view.on('post', { action: 'confirm.details' }, function(next) {
 		
-		var newUser = new User.model({
-			state: 'enabled'
-		});
-		
-		var updater = newUser.getUpdateHandler(req);
+		var updater = req.user.getUpdateHandler(req);
 		
 		updater.process(req.body, {
-			fields: 'name, email, photo',
+			fields: 'name, email, website',
 			flashErrors: true,
 			logErrors: true
 		}, function(err) {
 			if (err) {
 				locals.validationErrors = err.errors;
+				next();
 			} else {
-				
-				// show the success message then scroll to their reply 
-				req.flash('success', 'Thank you for your reply.');
-				locals.performFunction = 'scrollToLastComment';
+				if (req.query && req.query.returnto) {
+					return res.redirect(req.query.returnto + '?performFunction=focusOnCommentField');
+				} else {
+					return res.redirect('/settings');
+				}
 				
 			}
 		});

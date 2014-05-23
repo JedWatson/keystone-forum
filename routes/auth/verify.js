@@ -14,7 +14,7 @@ exports = module.exports = function(req, res) {
 	
 	view.on('init', function(next) {
 		if (!req.user) {
-			req.flash('error', 'Please sign in to access this page.');
+			req.flash('info', 'Please sign in to access this page.');
 			return res.redirect('/login');
 		} else if (!req.params.key) {
 			return next();

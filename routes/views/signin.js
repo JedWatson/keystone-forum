@@ -25,7 +25,8 @@ exports = module.exports = function(req, res) {
 	
 		var onSuccess = function() {
 			if (locals.journeyOrigin) {
-				res.redirect(locals.journeyOrigin + '?performFunction=focusOnCommentField');
+				res.redirect(locals.journeyOrigin + (locals.journeyOrigin.match('/topic/') ? '?performFunction=focusOnCommentField' : ''));
+				req.session.journeyOrigin = null;
 			} else {
 				res.redirect('/settings');
 			}

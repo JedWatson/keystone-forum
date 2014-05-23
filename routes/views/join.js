@@ -14,7 +14,7 @@ exports = module.exports = function(req, res) {
 	locals.section = 'join';
 	locals.form = req.body;
 	locals.title = 'Join';
-	locals.returnto = req.query.returnto;
+	req.session.journeyOrigin = req.query.journeyOrigin;
 	
 	var data = {};
 	
@@ -65,17 +65,13 @@ exports = module.exports = function(req, res) {
 			if (err) return next();
 			
 			var onSuccess = function() {
-				if (req.query && req.query.returnto) {
-					return res.redirect(req.query.returnto + '?performFunction=focusOnCommentField');
-				} else {
-					req.user.verifyEmail(function(err) {
-						if (err) {
-							console.error("===== Verification Email failed to send =====");
-							console.error(err);
-						}
-					});
-					res.redirect('/auth/verify');
-				}
+				req.user.verifyEmail(function(err) {
+					if (err) {
+						console.error("===== Verification Email failed to send =====");
+						console.error(err);
+					}
+				});
+				res.redirect('/auth/verify');
 			}
 			
 			var onFail = function(e) {

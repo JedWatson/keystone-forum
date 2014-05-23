@@ -93,15 +93,15 @@ Reply.schema.methods.notifyTopicWatchers = function(next) {
 	keystone.list('Topic').model.findById(reply.topic).populate('watchedBy').exec(function(err, topic) {
 		
 		if (err || !topic.watchedBy.length) return next(err);
-		console.log(data.author);
+		
 		topic.watchedBy.forEach(function(watcher) {
 			new keystone.Email('new-reply').send({
-				subject: data.author.name.first + ' replied to "' + topic.name + '"',
+				subject: 'Re: ' + topic.name,
 				topic: topic,
 				reply: reply,
 				to: watcher.email,
 				from: {
-					name: 'KeystoneJS Forum',
+					name: data.author.name.full,
 					email: 'forum@keystonejs.com'
 				}
 			}, next);

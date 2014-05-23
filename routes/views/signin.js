@@ -14,7 +14,7 @@ exports = module.exports = function(req, res) {
 	locals.section = 'login';
 	locals.form = req.body;
 	locals.title = 'Sign in';
-	locals.returnto = req.query.returnto;
+	locals.journeyOrigin = req.session.journeyOrigin;
 	
 	view.on('post', { action: 'signin' }, function(next) {
 		
@@ -22,10 +22,10 @@ exports = module.exports = function(req, res) {
 			req.flash('error', 'Please enter your username and password.');
 			return next();
 		}
-		
+	
 		var onSuccess = function() {
-			if (req.query && req.query.returnto) {
-				res.redirect(req.query.returnto + '?performFunction=focusOnCommentField');
+			if (locals.journeyOrigin) {
+				res.redirect(locals.journeyOrigin + '?performFunction=focusOnCommentField');
 			} else {
 				res.redirect('/settings');
 			}

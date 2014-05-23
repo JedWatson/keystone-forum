@@ -20,7 +20,7 @@ mixin comment-form(action)
 							input(type='checkbox', name='watch', value='true', checked)
 							| &nbsp;Watch this topic
 			else
-				a(href='/join?returnto=' + page.path).btn.btn-sm.btn-primary Log in or Join to Comment
+				a(href='/join?journeyOrigin=' + page.path).btn.btn-sm.btn-primary Log in or Join to Comment
 
 mixin comment-post(comment)
 	div(id='comment-id-' + comment.id, class=attributes.class).comment-post

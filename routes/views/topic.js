@@ -31,9 +31,12 @@ exports = module.exports = function(req, res) {
 	});
 	
 	
-	// INCREASE the Topic's view count
-	
 	view.on('init', function(next) {
+		
+		// this is where the user will always return to
+		req.session.journeyOrigin = null;
+		
+		// update the topic count
 		if (req.session.viewedTopics && !_.contains(req.session.viewedTopics, locals.topic.id)) {
 			locals.topic.viewCount = locals.topic.viewCount + 1;
 			locals.topic.save();

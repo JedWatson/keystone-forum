@@ -10,9 +10,6 @@ exports = module.exports = function(req, res) {
 	
 	keystone.session.signout(req, res, function() {
 		res.redirect('/');
-
-		// Uneccessary
-		// view.render('site/signout');
 	});
 	
 };

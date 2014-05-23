@@ -55,13 +55,14 @@
 	position: relative;
 	top: -1px;
 	vertical-align: middle;
-
-	&.express { background-color: @tag-express; }
-	&.mongoose { background-color: @tag-mongoose; }
-	&.nodejs { background-color: @tag-nodejs; }
-	&.announcement { background-color: @tag-announcement; }
-	&.demo { background-color: @tag-demo; }
-	&.forum { background-color: @tag-forum; }
+	
+	&.configuration { background-color: @tag-configuration; }
+	&.database      { background-color: @tag-database; }
+	&.admin-ui      { background-color: @tag-admin-ui; }
+	&.demo          { background-color: @tag-demo; }
+	&.templates     { background-color: @tag-templates; }
+	&.services      { background-color: @tag-services; }
+	&.announcement  { background-color: @tag-announcement; }
 }
 
 
@@ -141,13 +142,6 @@
 		outline: none;
 		text-decoration: none;
 	}
-
-	// .express > &:hover      { background-color: mix(white, @tag-express, 90%); }
-	// .mongoose > &:hover     { background-color: mix(white, @tag-mongoose, 90%); }
-	// .nodejs > &:hover       { background-color: mix(white, @tag-nodejs, 90%); }
-	// .announcement > &:hover { background-color: mix(white, @tag-announcement, 90%); }
-	// .demo > &:hover         { background-color: mix(white, @tag-demo, 90%); }
-	// .forum > &:hover        { background-color: mix(white, @tag-forum, 90%); }
 }
 
 // active
@@ -164,13 +158,13 @@
 }
 
 // variants
-.is-active.express      > .tag-list__item { background-color: @tag-express; }
-.is-active.mongoose     > .tag-list__item { background-color: @tag-mongoose; }
-.is-active.nodejs       > .tag-list__item { background-color: @tag-nodejs; }
-.is-active.announcement > .tag-list__item { background-color: @tag-announcement; }
-.is-active.demo         > .tag-list__item { background-color: @tag-demo; }
-.is-active.forum        > .tag-list__item { background-color: @tag-forum; }
-
+.is-active.configuration > .tag-list__item { background-color: @tag-configuration; }
+.is-active.database      > .tag-list__item { background-color: @tag-database; }
+.is-active.admin-ui      > .tag-list__item { background-color: @tag-admin-ui; }
+.is-active.demo          > .tag-list__item { background-color: @tag-demo; }
+.is-active.templates     > .tag-list__item { background-color: @tag-templates; }
+.is-active.services      > .tag-list__item { background-color: @tag-services; }
+.is-active.announcement  > .tag-list__item { background-color: @tag-announcement; }
 
 
 

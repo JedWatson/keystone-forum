@@ -40,7 +40,7 @@ exports = module.exports = function(req, res) {
 	
 	view.on('get', { resendVerificationEmail: true }, function(next) {
 			
-		req.user.verifyEmail(function(err) {
+		req.user.verifyEmail(req, res, function(err) {
 			if (err) {
 				console.error("===== Verification Email failed to send =====");
 				console.error(err);

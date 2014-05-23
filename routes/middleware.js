@@ -22,6 +22,7 @@ exports.init = function(req, res, next) {
 	locals.page = {
 		title: 'KeystoneJS',
 		path: req.url,
+		host: req.get('host'),
 		url: req.protocol + '://' + req.get('host') + req.url
 	};
 	

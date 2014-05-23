@@ -77,7 +77,7 @@ Reply.schema.post('save', function() {
 // Methods
 // ------------------------------
 
-Reply.schema.methods.notifyTopicWatchers = function(next) {
+Reply.schema.methods.notifyTopicWatchers = function(req, res, next) {
 	
 	var reply = this;
 	var data = {};
@@ -99,6 +99,7 @@ Reply.schema.methods.notifyTopicWatchers = function(next) {
 				subject: 'Re: ' + topic.name,
 				topic: topic,
 				reply: reply,
+				baseURL: req.protocol + '://' + req.get('host'),
 				to: watcher.email,
 				from: {
 					name: data.author.name.full,

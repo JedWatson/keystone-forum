@@ -109,7 +109,7 @@ exports = module.exports = function(req, res) {
 			} else {
 
 				// email topic watchers
-				newReply.notifyTopicWatchers(function(err) {
+				newReply.notifyTopicWatchers(req, res, function(err) {
 					if (err) {
 						console.error("===== Create Reply failed to send emails =====");
 						console.error(err);

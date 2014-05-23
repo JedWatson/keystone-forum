@@ -160,7 +160,7 @@ Topic.schema.post('save', function() {
 // Methods
 // ------------------------------
 
-Topic.schema.methods.notifyForumSubscribers = function(next) {
+Topic.schema.methods.notifyForumSubscribers = function(req, res, next) {
 	
 	var topic = this;
 	
@@ -175,6 +175,7 @@ Topic.schema.methods.notifyForumSubscribers = function(next) {
 				new keystone.Email('new-topic').send({
 					subject: 'New topic: ' + topic.name,
 					topic: topic,
+					baseURL: req.protocol + '://' + req.get('host'),
 					to: subscriber.email,
 					from: {
 						name: 'KeystoneJS Forum',

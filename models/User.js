@@ -138,6 +138,7 @@ User.schema.methods.resetPassword = function(next) {
 			user: user,
 			link: '/reset-password/' + user.resetPasswordKey,
 			subject: 'Reset your password on KeystoneJS Forum',
+			baseURL: req.protocol + '://' + req.get('host'),
 			to: user.email,
 			from: {
 				name: 'KeystoneJS Forum',
@@ -149,7 +150,7 @@ User.schema.methods.resetPassword = function(next) {
 	
 }
 
-User.schema.methods.verifyEmail = function(next) {
+User.schema.methods.verifyEmail = function(req, res, next) {
 	
 	var user = this;
 	
@@ -164,6 +165,7 @@ User.schema.methods.verifyEmail = function(next) {
 			user: user,
 			link: '/auth/verify/' + user.emailVerificationKey,
 			subject: 'Please confirm your email address',
+			baseURL: req.protocol + '://' + req.get('host'),
 			to: user.email,
 			from: {
 				name: 'KeystoneJS Forum',

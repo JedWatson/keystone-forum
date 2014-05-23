@@ -38,7 +38,7 @@ exports = module.exports = function(req, res) {
 				locals.validationErrors = err.errors;
 				return next();
 			} else {
-				newTopic.notifyForumSubscribers(function(err) {
+				newTopic.notifyForumSubscribers(req, res, function(err) {
 					if (err) {
 						console.error("===== Create Topic failed to send emails =====");
 						console.error(err);

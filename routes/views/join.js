@@ -1,5 +1,6 @@
 var keystone = require('keystone'),
-	async = require('async');
+	async = require('async'),
+	User = keystone.list('User');
 
 exports = module.exports = function(req, res) {
 	
@@ -15,65 +16,48 @@ exports = module.exports = function(req, res) {
 	locals.title = 'Join';
 	locals.returnto = req.query.returnto;
 	
+	var data = {};
+	
 	view.on('post', { action: 'join' }, function(next) {
 		
 		async.series([
 			
-			function(cb) {
-				
+			function(done) {
 				if (!req.body.join_name || !req.body.join_email || !req.body.join_password) {
 					req.flash('error', 'Please enter a name, email and password.');
-					return cb(true);
+					return done(true);
 				}
-				
 				if (req.body.join_password != req.body.join_passwordConfirm) {
 					req.flash('error', 'Passwords must match.');
-					return cb(true);
+					return done(true);
 				}
-				
-				return cb();
-				
+				return done();
 			},
 			
-			function(cb) {
-				
+			function(done) {
 				keystone.list('User').model.findOne({ email: req.body.join_email }, function(err, user) {
-					
 					if (err || user) {
 						req.flash('error', 'User already exists with that email address.');
-						return cb(true);
+						return done(true);
 					}
-					
-					return cb();
-					
+					return done();
 				});
-				
 			},
 			
-			function(cb) {
-			
-				var splitName = req.body.join_name.split(' '),
-					firstName = splitName[0],
-					lastName = splitName[1];
-				
+			function(done) {
+				var name = req.body.join_name.split(' ');
 				var userData = {
 					name: {
-						first: firstName,
-						last: lastName
+						first: name.length ? name[0] : '',
+						last: name.length > 1 ? name[1] : ''
 					},
 					email: req.body.join_email,
-					password: req.body.join_password,
-					
-					twitter: req.body.join_twitter
+					password: req.body.join_password
 				};
-				
-				var User = keystone.list('User').model,
-					newUser = new User(userData);
-				
-				newUser.save(function(err) {
-					return cb(err);
+				data.newUser = new User.model(userData);
+				data.newUser.save(function(err) {
+					return done(err);
 				});
-			
 			}
 			
 		], function(err){
@@ -99,7 +83,7 @@ exports = module.exports = function(req, res) {
 				return next();
 			}
 			
-			keystone.session.signin({ email: req.body.join_email, password: req.body.join_password }, req, res, onSuccess, onFail);
+			keystone.session.signin(data.newUser.id, req, res, onSuccess, onFail);
 			
 		});
 		

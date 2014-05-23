@@ -56,7 +56,7 @@ exports = module.exports = function(app) {
 	
 	
 	// Authentication
-	app.get('/auth/confirm', routes.auth.confirm);
+	app.all('/auth/confirm', routes.auth.confirm);
 	app.all('/auth/verify/:key?', routes.auth.verify);
 	app.get('/auth/:service', routes.auth.service);
 	

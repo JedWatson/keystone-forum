@@ -16,63 +16,28 @@ exports = module.exports = function(req, res) {
 	locals.authUser = req.session.auth;
 	locals.existingUser = false;
 	
+	// Reject request if no auth data is stored in session
 	if (!req.session.auth) {
 		console.log('[auth.confirm] - No auth data detected, redirecting to signin.');
 		console.log('------------------------------------------------------------');
 		return res.redirect('/login');
 	}
 	
-	view.on('post', { action: 'confirm.details' }, function(err) {
+	// Function to handle data confirmation process
+	var checkAuth = function() {
 	
 		async.series([
 		
-			// Get additional data
+			// Check for user (only if not signed in)
 			function(next) {
-			
-				if (req.session.auth.type != 'github') return next();
 				
-				console.log('[auth.confirm] - Finding GitHub email addresses...');
-				console.log('------------------------------------------------------------');
+				if (req.user) {
+					console.log('[auth.confirm] - Already signed in, skipping existing user search.');
+					console.log('------------------------------------------------------------');
+					locals.existingUser = req.user;
+					return next();
+				}
 				
-				request({
-					url: 'https://api.github.com/user/emails?access_token=' + req.session.auth.accessToken,
-					headers: {
-						'User-Agent': 'forums.keystonejs.com'
-					}
-				}, function(err, data) {
-				
-					if (err) {
-						console.log(err);
-						console.log("[auth.confirm] - Error retrieving GitHub email addresses.");
-						console.log('------------------------------------------------------------');
-						return next();
-						
-					} else {
-						
-						console.log("[auth.confirm] - Retrieved GitHub email addresses...");
-						console.log('------------------------------------------------------------');
-						
-						var emails = JSON.parse(data.body);
-						
-						if (emails.length) {
-							_.each(emails, function(e) {
-								if (!e.primary) return;
-								req.session.auth.email = e.email;
-								return next();
-							});
-						} else {
-							return next();
-						}
-						
-					}
-					
-				});
-			
-			},
-			
-			// Check for user
-			function(next) {
-			
 				console.log('[auth.confirm] - Searching for existing users...');
 				console.log('------------------------------------------------------------');
 				
@@ -95,12 +60,16 @@ exports = module.exports = function(req, res) {
 					console.log('------------------------------------------------------------');
 					
 					var userData = {
+						state: 'enabled',
+						
 						website: req.session.auth.website,
+						
+						isVerified: true,
 						
 						services: locals.existingUser.services || {}
 					};
 					
-					userData.services[req.session.auth.type] = {
+					_.extend(userData.services[req.session.auth.type], {
 						isConfigured: true,
 						
 						profileId: req.session.auth.profileId,
@@ -108,7 +77,7 @@ exports = module.exports = function(req, res) {
 						username: req.session.auth.username,
 						accessToken: req.session.auth.accessToken,
 						refreshToken: req.session.auth.refreshToken
-					}
+					});
 					
 					console.log('[auth.confirm] - Existing user data:', userData);
 					
@@ -138,7 +107,11 @@ exports = module.exports = function(req, res) {
 						name: req.session.auth.name,
 						email: req.session.auth.email,
 						
+						state: 'enabled',
+						
 						website: req.session.auth.website,
+						
+						isVerified: true,
 						
 						services: {}
 					};
@@ -178,13 +151,20 @@ exports = module.exports = function(req, res) {
 			// Sign in
 			function() {
 			
+				if (req.user) {
+					console.log('[auth.confirm] - Already signed in, skipping sign in.');
+					console.log('------------------------------------------------------------');
+					return res.redirect('/settings');
+					return next();
+				}
+				
 				console.log('[auth.confirm] - Signing in user...');
 				console.log('------------------------------------------------------------');
 				
 				var onSuccess = function(user) {
 					console.log("[auth.confirm] - Successfully signed in.");
 					console.log('------------------------------------------------------------');
-					return res.redirect('/profile');
+					return res.redirect('/settings');
 				}
 				
 				var onFail = function(err) {
@@ -197,10 +177,60 @@ exports = module.exports = function(req, res) {
 			
 			}
 		
-		], function(err) {
+		]);
+	
+	}
+	
+	// Retrieve additional data to assist registration (email)
+	view.on('render', function(next) {
+	
+		if (req.session.auth.type != 'github') return next();
+		
+		console.log('[auth.confirm] - Finding GitHub email addresses...');
+		console.log('------------------------------------------------------------');
+		
+		request({
+			url: 'https://api.github.com/user/emails?access_token=' + req.session.auth.accessToken,
+			headers: {
+				'User-Agent': 'forums.keystonejs.com'
+			}
+		}, function(err, data) {
+		
+			if (err) {
+				console.log(err);
+				console.log("[auth.confirm] - Error retrieving GitHub email addresses.");
+				console.log('------------------------------------------------------------');
+				return next();
+				
+			} else {
+				
+				console.log("[auth.confirm] - Retrieved GitHub email addresses...");
+				console.log('------------------------------------------------------------');
+				
+				var emails = JSON.parse(data.body);
+				
+				if (emails.length) {
+					_.each(emails, function(e) {
+						if (!e.primary) return;
+						req.session.auth.email = e.email;
+						return next();
+					});
+				} else {
+					return next();
+				}
+				
+			}
 			
 		});
 	
+	});
+	
+	view.on('init', function() {
+		if (req.user) return checkAuth();
+	});
+	
+	view.on('post', { action: 'confirm.details' }, function() {
+		return checkAuth();
 	});
 	
 	// TODO: Confirm details

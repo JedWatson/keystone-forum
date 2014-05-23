@@ -45,11 +45,8 @@ exports = module.exports = function(req, res) {
 		locals.topic.watchedBy.push(req.user.id);
 		
 		locals.topic.save(function(err) {
-			if (err) return res.err(err);
-			// req.flash('success', 'You will receive email notifications about this topic.');
-					
-			// tidy up the url
-			return res.redirect(locals.topic.url);
+			if (err) { console.error("===== Watch Topic failed to save ====="); console.error(err); }
+			return res.redirect(locals.topic.url); // tidy up the url
 		});
 	});
 	
@@ -59,7 +56,7 @@ exports = module.exports = function(req, res) {
 	// UNWATCH the Topic
 	
 	view.on('get', { unwatch: true }, function(next) {
-		
+
 		if (!req.user) {
 			req.flash('error', 'You must be signed in to unwatch a topic.');
 			return next();
@@ -73,11 +70,8 @@ exports = module.exports = function(req, res) {
 		}
 		
 		locals.topic.save(function(err) {
-			if (err) return res.err(err);
-			// req.flash('success', 'You will NOT receive anymore email notifications about this topic.');
-					
-			// tidy up the url
-			return res.redirect(locals.topic.url);
+			if (err) { console.error("===== Unwatch Topic failed to save ====="); console.error(err); }
+			return res.redirect(locals.topic.url); // tidy up the url
 		});
 	});
 	
@@ -104,15 +98,26 @@ exports = module.exports = function(req, res) {
 			if (err) {
 				locals.validationErrors = err.errors;
 			} else {
+
+				// email topic watchers
 				newReply.notifyTopicWatchers(function(err) {
 					if (err) {
 						console.error("===== Create Reply failed to send emails =====");
 						console.error(err);
 					}
 				});
+
+				// subscribe the reply author to the topic
+				if (req.body.watch) {
+					locals.topic.watchedBy.push(req.user.id);
+					locals.topic.save(function(err) {
+						console.error("===== Subscribe reply author to Topic failed =====");
+						console.error(err);
+					});
+				}
 				
 				// show the success message then scroll to their reply 
-				req.flash('success', 'Thank you for your reply.');
+				req.flash('success', 'Thank you for your reply.' + (req.body.watch ? ' You are now watching this topic.' : ''));
 				locals.performFunction = 'scrollToLastComment';
 				
 				next();
@@ -180,8 +185,6 @@ exports = module.exports = function(req, res) {
 		
 		locals.topic.state = 'archived';
 		
-		// TODO archive the topic's replies
-		
 		locals.topic.save(function(err) {
 			if (err) {
 				if (err.name == 'CastError') {
@@ -225,10 +228,10 @@ exports = module.exports = function(req, res) {
 		// load replies last so they're aware of create/delete
 
 		Reply.model.find()
-			.where( 'topic', locals.topic.id )
-			.where( 'state', 'published' )
-			.where( 'author' ).ne( null )
-			.populate( 'author', 'name key photo' )
+			.where('topic', locals.topic.id)
+			.where('author').ne(null)
+			.or([{ state: 'published' }, { state: 'archived' }])
+			.populate('author')
 			.sort('createdAt')
 			.exec(function(err, replies) {
 				if (err) return res.err(err);

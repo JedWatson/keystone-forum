@@ -22,10 +22,14 @@ block content
 								span= tag.name
 
 			.col-sm-9.col-sm-pull-3
-				nav.h4: ul.filter-nav
-					for filter in globals.forum.topic.filters
+				.visible-xs: #nav
+				nav.filter-nav: ul.filter-nav__list
+					for filter in globals.forum.filters
 						li(class=current.filter && filter.value == current.filter.value ? 'is-active' : null)
-							a(href='/' + filter.value + (current.tag ? ('/' + current.tag.key) : ''))= filter.label
+							a(href='/' + filter.value + (current.tag ? ('/' + current.tag.key) : '') + '#nav')
+								span(class=filter.icon).visible-xs.entypo
+								span.hidden-xs= filter.label
+				h2.heading-bordered.visible-xs #{current.filter.label} Topics
 				
 				if topics.total
 					//- topic list

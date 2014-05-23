@@ -1,4 +1,4 @@
-//- include ../mixins/flash-messages
+include ../../mixins/flash-messages
 
 doctype html
 html
@@ -6,7 +6,7 @@ html
 		include ../../includes/htmlhead
 		block css
 	body.confirm-page
-		.container-sm
+		.container-xs
 			.confirm-page__logo
 				img(src='/images/logo.svg', alt='KeystoneJS', width=207, height=70)
 			
@@ -15,13 +15,14 @@ html
 					input(type='hidden', name='action', value='confirm.details')
 					//- h3.profile-form__heading Confirm Details
 					p.text-muted.mb-2 Thanks for joining the forum! Please confirm your details and we'll get you on your way:
+					+flash-messages(messages)
 					.form-group.form-row
 						.col-xs-6: input(type='text' name='name.first' placeholder='First Name' value=authUser.name.first).form-control
 						.col-xs-6: input(type='text' name='name.last' placeholder='Last Name' value=authUser.name.last).form-control
 					.form-group
 						input(type='email' name='email' placeholder='Email' value=authUser.email).form-control.form-control-labelled
 					.form-group
-						input(type='text' name='website' placeholder='Website' value=authUser.website).form-control.form-control-labelled
+						input(type='text' name='website' placeholder='Website (optional)' value=authUser.website).form-control.form-control-labelled
 					.form-group
 						button(type='submit').btn.btn-primary.btn-block That all checks out, let's go &rarr;
 		

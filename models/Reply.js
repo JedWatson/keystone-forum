@@ -17,7 +17,7 @@ var Reply = new keystone.List('Reply', {
 Reply.add({
 	author: { type: Types.Relationship, initial: true, ref: 'User', index: true },
 	topic: { type: Types.Relationship, initial: true, ref: 'Topic', index: true },
-	state: { type: Types.Select, options: 'published, archived', default: 'published', index: true },
+	state: { type: Types.Select, options: 'published, archived, spam', default: 'published', index: true },
 	createdAt: { type: Types.Date, default: Date.now, noedit: true, index: true }
 });
 
@@ -93,7 +93,7 @@ Reply.schema.methods.notifyTopicWatchers = function(next) {
 				to: watcher.email,
 				from: {
 					name: 'KeystoneJS Forum',
-					email: 'forums@keystonejs.com'
+					email: 'forum@keystonejs.com'
 				}
 			}, next);
 		});

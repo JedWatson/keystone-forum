@@ -38,12 +38,8 @@ exports.init = function(req, res, next) {
 
 exports.loadTags = function(req, res, next) {
 	
-	keystone.list('Tag').model.find().exec(function(err, tags) {
-		if (err) {
-			return res.status(500).render('500', {
-				err: err
-			});
-		}
+	keystone.list('Tag').model.find().where('display', true).exec(function(err, tags) {
+		if (err) return next(err);
 		req.tags = tags;
 		res.locals.tags = tags;
 		next();
@@ -59,6 +55,7 @@ exports.loadTags = function(req, res, next) {
 exports.countTopics = function(req, res, next) {
 	
 	keystone.list('Topic').model.count().where('state', 'published').where('author').ne(null).exec(function(err, count) {
+		if (err) return next(err);
 		req.totalTopicCount = count;
 		res.locals.totalTopicCount = count;
 		next();
@@ -121,6 +118,22 @@ exports.requireUser = function(req, res, next) {
 	if (!req.user) {
 		req.flash('error', 'Please sign in to access this page.');
 		res.redirect('/login');
+	} else {
+		next();
+	}
+	
+}
+
+/**
+	Prevents people spamming with fake emails
+ */
+
+exports.verifyUser = function(req, res, next) {
+	
+	if (req.url.match('/signout')) {
+		next();
+	} else if (!req.url.match('/auth/verify') && (req.user && !req.user.isVerified)) {
+		res.redirect('/auth/verify');
 	} else {
 		next();
 	}

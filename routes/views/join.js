@@ -84,7 +84,13 @@ exports = module.exports = function(req, res) {
 				if (req.query && req.query.returnto) {
 					return res.redirect(req.query.returnto + '?performFunction=focusOnCommentField');
 				} else {
-					return res.redirect('/settings');
+					req.user.verifyEmail(function(err) {
+						if (err) {
+							console.error("===== Verification Email failed to send =====");
+							console.error(err);
+						}
+					});
+					res.redirect('/auth/verify');
 				}
 			}
 			

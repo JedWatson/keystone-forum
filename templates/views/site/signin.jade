@@ -6,7 +6,8 @@ block css
 	link(href="/styles/session.min.css", rel="stylesheet")
 
 block content
-	.container-sm
+	.container-xs
+		h1.sr-only Log into KeystoneJS Forum
 		form(method='post', role='join').session-form
 			input(type='hidden', name='action', value='signin')
 			

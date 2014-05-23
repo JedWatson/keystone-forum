@@ -15,7 +15,8 @@ var Tag = new keystone.List('Tag', {
 });
 
 Tag.add({
-	name: { type: String, required: true, initial: true, index: true }
+	name: { type: String, required: true, initial: true, index: true },
+	display: { type: Boolean, required: true, initial: true, default: true }
 });
 
 
@@ -26,8 +27,7 @@ Tag.add({
 
 Tag.add('Meta', {
 	topicCount: { type: Number, default: 0, collapse: true, noedit: true },
-	replyCount: { type: Number, default: 0, collapse: true, noedit: true },
-	lastActiveAt: { type: Date, collapse: true, noedit: true }
+	lastActiveAt: { type: Date, noedit: true }
 });
 
 
@@ -61,14 +61,6 @@ Tag.schema.pre('save', function(next) {
 				tag.topicCount = count || 0;
 				done(err);
 			});
-		},
-		
-		// cache the count of replies to this tag
-		function(done) {
-			keystone.list('Reply').model.count().where('tag', tag.id).where('state', 'published').exec(function(err, count) {
-				tag.replyCount = count || 0;
-				done(err);
-			});
 		}
 		
 	], next);
@@ -76,5 +68,5 @@ Tag.schema.pre('save', function(next) {
 });
 
 Tag.defaultSort = 'sortOrder';
-Tag.defaultColumns = 'name, topicCount,  replyCount, lastActiveAt';
+Tag.defaultColumns = 'name, topicCount,  display, lastActiveAt';
 Tag.register();

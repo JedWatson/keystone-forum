@@ -2,6 +2,8 @@ mixin topic-item(topic)
 	li(itemscope itemtype='http://schema.org/itemListElement')
 		a(href=topic.url, itemprop='url', itemscope, itemtype='http://schema.org/Article').topic
 			.topic__avatar
+				if topic.author.isCoreContributor
+					span(title='Core Contributor').avatar-type.avatar-type--core
 				img(src=topic.author.photo.exists ? topic.author._.photo.fill(60,60) : 'http://www.placehold.it/60x60').img-avatar
 			.topic__count
 				.topic__count-number= topic.replyCount

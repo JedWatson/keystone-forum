@@ -2,30 +2,26 @@
 // LAYOUT
 // ==============================
 
+
+// apply the bg colour here so the footer doesn't look weird on short screens
+
 .page-wrapper {
 	background-color: white;
 	padding-bottom: 10em;
 }
 
 
-// small container
-.container-sm {
-	.container-fixed();
-	max-width: 400px;
-}
+// for skinny single column layouts
 
-// medium container
+.container-xs,
+.container-sm,
 .container-md {
 	.container-fixed();
-	max-width: 600px;
 }
-
-// variable width container
-.flexi-container {
-	.container-fluid();
-
-	min-width: @container-sm;
-	max-width: @container-lg;
+@media (min-width: @screen-sm-min) {
+	.container-xs { width: @screen-xs-min - @grid-gutter-width; }
+	.container-sm { width: @screen-sm-min - @grid-gutter-width; }
+	.container-md { max-width: @screen-md-min - @grid-gutter-width; }
 }
 
 
@@ -48,10 +44,6 @@
 	}
 	.keystone-logo {
 		float: left;
-		// img {
-		// 	height: 35px;
-		// 	width: 103px;
-		// }
 	}
 	.social-buttons {
 		float: left;
@@ -92,81 +84,6 @@
 }
 .forum-nav__collapse.in {
 	clear: left;
-}
-
-
-// tiny screens
-
-@media (max-width: @screen-xs-max) {
-	.forum-header {
-		height: 70px;
-		line-height: 70px;
-	}
-	.keystone-logo > img {
-		height: 40px;
-		width: 118px;
-	}
-	.forum-nav {
-		.box-shadow( ~"0 1px 4px rgba(0,0,0,0.1), 0 1px 0 rgba(0,0,0,0.1)" );
-		background-color: white;
-		line-height: 4;
-		margin-left: @grid-gutter-width / -2;
-		margin-right: @grid-gutter-width / -2;
-		.active a {
-			.box-shadow( 3px 0 @link-color inset );
-			background-color: #fafafa;
-		}
-		a:active {
-			background-color: #fafafa;
-		}
-	}
-	.navbar-toggle {
-		margin-bottom: 18px;
-		margin-top: 18px;
-	}
-}
-
-
-// large screens
-
-@media (min-width: @screen-sm-min) {
-	.forum-nav {
-		float: right;
-		
-		.collapse {
-			display: block;
-		}
-	}
-	.forum-nav__nav {
-		> li {
-			float: left;
-		}
-		> li > a {
-			&:hover,
-			&:focus {
-				@shadow: 0 -2px white inset, 0 -5px mix(@link-color, white, 50%) inset;
-				.box-shadow( @shadow );
-				background-color: transparent;
-			}
-		}
-	
-		// active
-		> li.active > a {
-			@shadow: 0 -2px white inset, 0 -5px @link-color inset;
-			.box-shadow( @shadow );
-			background: none transparent;
-			color: @gray-darker;
-		}
-		
-		.forum-nav__docs {
-			border-left: 1px solid @gray-lighter;
-			margin-left: 1em;
-			padding-left: 1em;
-		}
-	}
-	.navbar-toggle {
-		.navbar-vertical-align(28);
-	}
 }
 
 
@@ -242,12 +159,18 @@
 
 
 
-// User Stuff
+// Miscellaneous
 // ------------------------------
+
+
+// luxurious whitespace form sections
 
 .profile-form__section {
 	margin-bottom: 6em;
 }
+
+
+// control widths for fixed content on various screens
 
 .sticky-content {
 	&.affix {
@@ -273,5 +196,98 @@
 		&.affix-bottom {
 			width: 263px;
 		}
+	}
+}
+
+
+// skinny confirm page
+
+.confirm-page__logo {
+	border-bottom: 1px solid @gray-lighter;
+	margin-bottom: 1em;
+	padding-bottom: 1em;
+	padding-top: 1em;
+}
+	
+@media (max-width: @screen-xs-max) {
+	.confirm-page__logo > img { .size(118px,40px); }
+}
+
+
+
+
+// Responsive
+// ------------------------------
+
+
+// tiny screens only
+
+@media (max-width: @screen-xs-max) {
+	.forum-header {
+		height: 70px;
+		line-height: 70px;
+	}
+	.keystone-logo > img {
+		height: 40px;
+		width: 118px;
+	}
+	.forum-nav {
+		.box-shadow( ~"0 1px 4px rgba(0,0,0,0.1), 0 1px 0 rgba(0,0,0,0.1)" );
+		background-color: white;
+		line-height: 4;
+		margin-left: @grid-gutter-width / -2;
+		margin-right: @grid-gutter-width / -2;
+		.active a {
+			.box-shadow( 3px 0 @link-color inset );
+			background-color: #fafafa;
+		}
+		a:active {
+			background-color: #fafafa;
+		}
+	}
+	.navbar-toggle {
+		margin-bottom: 18px;
+		margin-top: 18px;
+	}
+}
+
+
+// large screens only
+
+@media (min-width: @screen-sm-min) {
+	.forum-nav {
+		float: right;
+		
+		.collapse {
+			display: block;
+		}
+	}
+	.forum-nav__nav {
+		> li {
+			float: left;
+		}
+		> li > a {
+			&:hover,
+			&:focus {
+				@shadow: 0 -2px white inset, 0 -5px mix(@link-color, white, 50%) inset;
+				.box-shadow( @shadow );
+				background-color: transparent;
+			}
+		}
+		> li.active > a {
+			@shadow: 0 -2px white inset, 0 -5px @link-color inset;
+			.box-shadow( @shadow );
+			background: none transparent;
+			color: @gray-darker;
+		}
+		
+		.forum-nav__docs {
+			border-left: 1px solid @gray-lighter;
+			margin-left: 1em;
+			padding-left: 1em;
+		}
+	}
+	.navbar-toggle {
+		.navbar-vertical-align(28);
 	}
 }

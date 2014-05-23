@@ -26,6 +26,18 @@
 	top: 50%;
 	z-index: 1;
 }
+.deleted-comment-message {
+	background-color: @gray-lightest;
+	border-radius: 1em;
+	color: #bbb;
+	font-size: .75em;
+	font-weight: 400;
+	// margin-bottom: 2em;
+	// margin-top: 2em;
+	padding: .25em;
+	text-align: center;
+	text-transform: uppercase;
+}
 
 
 
@@ -88,7 +100,7 @@
 	opacity: 0;
 	position: absolute;
 	right: 0;
-	top: 0;
+	top: 2em;
 }
 .comment-post:hover .comment-options {
 	opacity: 1;
@@ -103,5 +115,8 @@
 @media (min-width: @screen-sm-min) {
 	.media-avatar {
 		display: block;
+	}
+	.deleted-comment-message {
+		// margin-left: 70px;
 	}
 }

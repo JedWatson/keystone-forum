@@ -4,9 +4,9 @@ mixin comment-form(action)
 		
 		.comment-author.media-avatar.pull-left
 			if current.user
-				img(src=current.user.photo.exists ? current.user._.photo.fill(60,60) : '/images/scaffolding/60x60.png', alt=current.user.name.full, width=60, height=60).img-avatar
+				img(src=current.user.photo.exists ? current.user._.photo.fill(60,60) : '/images/avatar.png', alt=current.user.name.full, width=60, height=60).img-avatar
 			else
-				img(src='/images/scaffolding/60x60.png', alt='Comment author placeholder', width=60, height=60).img-avatar
+				img(src='/images/avatar.png', alt='Comment author placeholder', width=60, height=60).img-avatar
 		.comment-box.media-body
 			.comment-field
 				.form-group: textarea(name='content', tabindex=1, rows=5, placeholder=current.user ? 'Leave a reply...' : 'Please sign in to comment', disabled=!current.user).comment-field-input.form-control
@@ -34,7 +34,7 @@ mixin comment-post(comment)
 					
 		.media
 			a(href=comment.author.url).pull-left.media-avatar
-				img(src=comment.author.photo.exists ? comment.author._.photo.fill(60,60) : '/images/scaffolding/60x60.png', alt=comment.author.name.full, width=60, height=60).img-avatar
+				img(src=comment.author.photo.exists ? comment.author._.photo.fill(60,60) : '/images/avatar.png', alt=comment.author.name.full, width=60, height=60).img-avatar
 			.media-body
 				p.comment-post__header
 					a(href=comment.author.url).comment-post__author=comment.author.name.full
@@ -47,4 +47,7 @@ mixin comment-thread(comments)
 	if comments.length
 		.comment-thread
 			for comment in comments
-				+comment-post(comment)
+				if comment.state == 'archived'
+					.comment-post: .deleted-comment-message Deleted
+				else
+					+comment-post(comment)

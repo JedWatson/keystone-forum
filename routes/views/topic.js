@@ -229,8 +229,8 @@ exports = module.exports = function(req, res) {
 
 		Reply.model.find()
 			.where( 'topic', locals.topic.id )
-			.where( 'state', 'published' )
 			.where( 'author' ).ne( null )
+			.or([{ state: 'published' }, { state: 'archived' }])
 			.populate( 'author', 'name key photo' )
 			.sort('createdAt')
 			.exec(function(err, replies) {

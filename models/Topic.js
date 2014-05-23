@@ -45,6 +45,7 @@ Topic.add('Meta', {
 	createdAt: { type: Date, default: Date.now, noedit: true, index: true },
 	lastActiveAt: { type: Date, default: Date.now, noedit: true, index: true },
 	replyCount: { type: Number, default: 0, collapse: true, noedit: true },
+	viewCount: { type: Number, default: 0, collapse: true, noedit: true },
 	lastReplyAt: { type: Date, collapse: true, noedit: true },
 	lastReplyAuthor: { type: Types.Relationship, ref: 'User', collapse: true, noedit: true }
 });
@@ -172,7 +173,7 @@ Topic.schema.methods.notifyForumSubscribers = function(next) {
 		} else {
 			subscribers.forEach(function(subscriber) {
 				new keystone.Email('new-topic').send({
-					subject: 'KeystoneJS new topic: "' + topic.name + '"',
+					subject: 'New topic: ' + topic.name,
 					topic: topic,
 					to: subscriber.email,
 					from: {

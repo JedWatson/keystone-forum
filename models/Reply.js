@@ -80,14 +80,23 @@ Reply.schema.post('save', function() {
 Reply.schema.methods.notifyTopicWatchers = function(next) {
 	
 	var reply = this;
+	var data = {};
+	
+	
+	// TODO find a better way to populate/get the reply author
+	
+	keystone.list('Reply').model.findById(reply.id).populate('author', 'name').exec(function(err, result) {
+		if (err || !result) return next(err);
+		data.author = result.author;
+	});
 	
 	keystone.list('Topic').model.findById(reply.topic).populate('watchedBy').exec(function(err, topic) {
 		
 		if (err || !topic.watchedBy.length) return next(err);
-		
+		console.log(data.author);
 		topic.watchedBy.forEach(function(watcher) {
 			new keystone.Email('new-reply').send({
-				subject: 'New reply on "' + topic.name + '"',
+				subject: data.author.name.first + ' replied to "' + topic.name + '"',
 				topic: topic,
 				reply: reply,
 				to: watcher.email,

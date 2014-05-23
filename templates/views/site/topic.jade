@@ -38,6 +38,9 @@ block content
 								if replies.length
 									|  &middot; 
 									a(href='#comments', data-scrollduration=300).js-scrollto-anchor= plural(replies.length, '* reply', '* replies')
+								if topic.viewCount
+									|  &middot; 
+									spant= plural(topic.viewCount, '* view', '* views')
 								
 					.topic-details__body
 						.media

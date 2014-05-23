@@ -27,6 +27,9 @@ exports.init = function(req, res, next) {
 	
 	locals.qs_set = qs_set(req, res);
 	
+	// set the topics this session has viewed
+	req.session.viewedTopics = req.session.viewedTopics || [];
+	
 	next();
 	
 }

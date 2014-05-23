@@ -31,6 +31,15 @@ exports = module.exports = function(req, res) {
 	});
 	
 	
+	// INCREASE the Topic's view count
+	
+	view.on('init', function(next) {
+		if (req.session.viewedTopics && !_.contains(req.session.viewedTopics, locals.topic.id)) {
+			locals.topic.viewCount = locals.topic.viewCount + 1;
+			locals.topic.save();
+		}
+		return next();
+	});
 	
 	
 	// WATCH the Topic
@@ -222,6 +231,12 @@ exports = module.exports = function(req, res) {
 				locals.watchedByUser = true;
 				break;
 			}
+		}
+		
+		
+		// add this topic to the session's viewed topics array
+		if (!_.contains(req.session.viewedTopics, locals.topic.id)) {
+			req.session.viewedTopics.push(locals.topic.id);
 		}
 		
 		

@@ -1,0 +1,86 @@
+//
+// Pagination 
+// --------------------------------------------------
+
+
+// modifiers
+
+.pagination-container {
+	margin: 1em 0;
+}
+.pagination,
+.pagination-count {
+	.inline-align();
+	color: @gray-light;
+	margin: 0 1em 0 0;
+}
+.pagination--below {
+	margin-top: 2em;
+	padding-top: 1em;
+}
+.pagination--above {
+	margin-bottom: 2em;
+	padding-bottom: 1em;
+}
+
+
+// base
+
+.pagination {
+	display: inline-block;
+	padding-left: 0;
+	margin: 0;
+	border-radius: @border-radius-base;
+
+	> li {
+		display: inline; // Remove list-style and block-level defaults
+		> a,
+		> span {
+			// border: 1px solid transparent;
+			border-radius: @border-radius-base;
+			color: @gray;
+			float: left; // Collapse white-space
+			line-height: @line-height-base;
+			margin-left: 1px;
+			padding: .5em .85em;
+			position: relative;
+			text-decoration: none;
+		}
+	}
+
+	> li > a,
+	> li > span {
+		&:hover,
+		&:focus {
+			background-color: mix(@link-color, white, 10%);
+			border-color: @pagination-hover-border;
+			color: @text-color;
+		}
+	}
+
+	> .active > a,
+	> .active > span {
+		&,
+		&:hover,
+		&:focus {
+			z-index: 2;
+			color: @pagination-active-color;
+			background-color: @pagination-active-bg;
+			border-color: @pagination-active-border;
+			cursor: default;
+		}
+	}
+
+	> .disabled {
+		pointer-events: none;
+		
+		> span,
+		> span:hover,
+		> span:focus,
+		> a,
+		> a:hover,
+		> a:focus {
+			color: @pagination-disabled-color;
+		}
+	}
+}

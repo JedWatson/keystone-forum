@@ -34,7 +34,7 @@ exports = module.exports = function(req, res) {
 	
 	
 	// Update the password
-
+	
 	view.on('post', { action: 'user.password' }, function(next) {
 	
 		if (!req.body.password || !req.body.password_confirm) {
@@ -59,43 +59,34 @@ exports = module.exports = function(req, res) {
 	});
 	
 	
-	// Deauth anything
+	// Disconnect anything
 	
-	/*
 	view.on('init', function(next) {
 	
-		if (!_.has(req.query, 'deauth')) return next();
+		if (!_.has(req.query, 'disconnect')) return next();
 		
-		switch(req.query.deauth)
+		var serviceName = '';
+		
+		switch(req.query.disconnect)
 		{
-			case 'twitter':
-				req.user.services.twitter = false;
-			break;
-			
-			case 'github':
-				req.user.services.github = false;
-			break;
-			
-			case 'google':
-				req.user.services.google = false;
-			break;
+			case 'twitter': req.user.services.twitter.isConfigured = null; serviceName = 'Twitter'; break;
+			case 'github': req.user.services.github.isConfigured = null; serviceName = 'GitHub'; break;
+			case 'google': req.user.services.google .isConfigured= null; serviceName = 'Google'; break;
 		}
-		
-		console.log(req.user.services)
 		
 		req.user.save(function(err) {
 		
 			if (err) {
+				req.flash('success', 'The service could not be disconnected, please try again.');
 				return next();
 			}
 			
-			req.flash('success', 'Your changes have been saved.');
-			return next();
+			req.flash('success', serviceName + ' has been successfully disconnected.');
+			return res.redirect('/settings');
 		
 		});
 	
 	});
-	*/
 	
 	
 	view.render('site/settings');

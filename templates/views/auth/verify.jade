@@ -13,6 +13,8 @@ html
 			.forum-body
 				+flash-messages(messages)
 				p.mb-2 Thanks for joining the forum! We've sent you an email to confirm your email address.
-				p: a(href='?resendVerificationEmail').btn.btn-primary Resend Email
+				p
+					a(href='?resendVerificationEmail').btn.btn-primary Resend Email
+					a(href='/signout').btn.btn-link Sign Out
 				hr
 				p.text-sm.text-muted If you're having trouble finding the email be sure to check your spam/junk folder

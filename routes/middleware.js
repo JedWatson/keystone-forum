@@ -133,7 +133,9 @@ exports.requireUser = function(req, res, next) {
 
 exports.verifyUser = function(req, res, next) {
 	
-	if (!req.url.match('/auth/verify') && (req.user && !req.user.isVerified)) {
+	if (req.url.match('/signout')) {
+		next();
+	} else if (!req.url.match('/auth/verify') && (req.user && !req.user.isVerified)) {
 		res.redirect('/auth/verify');
 	} else {
 		next();

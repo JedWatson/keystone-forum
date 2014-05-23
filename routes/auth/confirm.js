@@ -23,29 +23,78 @@ exports = module.exports = function(req, res) {
 		return res.redirect('/login');
 	}
 	
+	// Set existing user if already logged in
+	if (req.user) {
+		locals.existingUser = req.user;
+	}
+	
+	// Function to handle signin
+	var doSignIn = function() {
+	
+		console.log('[auth.confirm] - Signing in user...');
+		console.log('------------------------------------------------------------');
+		
+		var onSuccess = function(user) {
+			console.log("[auth.confirm] - Successfully signed in.");
+			console.log('------------------------------------------------------------');
+			return res.redirect('/settings');
+		}
+		
+		var onFail = function(err) {
+			console.log("[auth.confirm] - Failed signing in.");
+			console.log('------------------------------------------------------------');
+			return res.redirect('/login');
+		}
+		
+		keystone.session.signin(locals.existingUser.id, req, res, onSuccess, onFail);
+	
+	}
+	
 	// Function to handle data confirmation process
 	var checkAuth = function() {
 	
 		async.series([
 		
-			// Check for user (only if not signed in)
+			// Check for user by profile id (only if not signed in)
 			function(next) {
 				
-				if (req.user) {
-					console.log('[auth.confirm] - Already signed in, skipping existing user search.');
-					console.log('------------------------------------------------------------');
-					locals.existingUser = req.user;
-					return next();
-				}
+				if (locals.existingUser) return next();
 				
-				console.log('[auth.confirm] - Searching for existing users...');
+				console.log('[auth.confirm] - Searching for existing users via [' + req.session.auth.type + '] profile id...');
 				console.log('------------------------------------------------------------');
 				
 				var query = User.model.findOne();
 					query.where('services.' + req.session.auth.type + '.profileId', req.session.auth.profileId);
 					query.exec(function(err, user) {
 						if (err) return res.redirect('/login');
-						if (user) locals.existingUser = user;
+						if (user) {
+							console.log('[auth.confirm] - Found existing user via [' + req.session.auth.type + '] profile id...');
+							console.log('------------------------------------------------------------');
+							locals.existingUser = user;
+							return doSignIn();
+						}
+						return next();
+					});
+			
+			},
+			
+			// Check for user by email (only if not signed in)
+			function(next) {
+				
+				if (locals.existingUser) return next();
+				
+				console.log('[auth.confirm] - Searching for existing users via [' + req.session.auth.email + '] email address...');
+				console.log('------------------------------------------------------------');
+				
+				var query = User.model.findOne();
+					query.where('email', req.body.email);
+					query.exec(function(err, user) {
+						if (err) return res.redirect('/login');
+						if (user) {
+							console.log('[auth.confirm] - Found existing user via email address...');
+							console.log('------------------------------------------------------------');
+							locals.existingUser = user;
+						}
 						return next();
 					});
 			
@@ -102,7 +151,6 @@ exports = module.exports = function(req, res) {
 					console.log('[auth.confirm] - Creating new user...');
 					console.log('------------------------------------------------------------');
 					
-					// Structure data
 					var userData = {
 						name: {
 							first: req.body['name.first'],
@@ -151,7 +199,7 @@ exports = module.exports = function(req, res) {
 			
 			},
 			
-			// Sign in
+			// Session
 			function() {
 			
 				if (req.user) {
@@ -161,22 +209,7 @@ exports = module.exports = function(req, res) {
 					return next();
 				}
 				
-				console.log('[auth.confirm] - Signing in user...');
-				console.log('------------------------------------------------------------');
-				
-				var onSuccess = function(user) {
-					console.log("[auth.confirm] - Successfully signed in.");
-					console.log('------------------------------------------------------------');
-					return res.redirect('/settings');
-				}
-				
-				var onFail = function(err) {
-					console.log("[auth.confirm] - Failed signing in.");
-					console.log('------------------------------------------------------------');
-					return res.redirect('/login');
-				}
-				
-				keystone.session.signin(locals.existingUser.id, req, res, onSuccess, onFail);
+				return doSignIn();
 			
 			}
 		

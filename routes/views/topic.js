@@ -228,10 +228,10 @@ exports = module.exports = function(req, res) {
 		// load replies last so they're aware of create/delete
 
 		Reply.model.find()
-			.where( 'topic', locals.topic.id )
-			.where( 'author' ).ne( null )
+			.where('topic', locals.topic.id)
+			.where('author').ne(null)
 			.or([{ state: 'published' }, { state: 'archived' }])
-			.populate( 'author', 'name key photo' )
+			.populate('author')
 			.sort('createdAt')
 			.exec(function(err, replies) {
 				if (err) return res.err(err);

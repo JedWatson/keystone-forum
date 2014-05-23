@@ -27,6 +27,7 @@ User.add({
 	emailVerificationKey: { type: String, hidden: true }
 }, 'Profile', {
 	isPublic: Boolean,
+	isCoreContributor: Boolean,
 	photo: { type: Types.CloudinaryImage },
 	website: { type: Types.Url },
 	bio: { type: Types.Markdown },

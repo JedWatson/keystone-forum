@@ -12,6 +12,30 @@
 
 
 
+// Set mixin
+// use if you can't or don't want to apply the "@icon-prefix" class to your element
+
+.entypo-icon(@color, @content, @size) {
+	color: @color;
+	font-size: @size;
+
+	&:before { content: @content; }
+
+	display: inline-block;
+	font-family: 'EntypoRegular';
+	font-style: normal;
+	font-variant: normal;
+	font-weight: normal;
+	line-height: .5em;
+	speak: none;
+	text-decoration: inherit;
+	text-transform: none;
+	vertical-align: -0.1em;
+	-webkit-font-smoothing: antialiased;
+}
+
+
+
 
 /*
   Fill Space

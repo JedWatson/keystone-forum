@@ -11,17 +11,17 @@ html
 				img(src='/images/logo.svg', alt='KeystoneJS', width=207, height=70)
 			
 			.forum-body
-				form(method='post', enctype='multipart/form-data', autocomplete='off', novalidate).profile-form
+				form(method='post', autocomplete='off', novalidate).profile-form
 					input(type='hidden', name='action', value='confirm.details')
 					//- h3.profile-form__heading Confirm Details
 					p.text-muted.mb-2 Thanks for joining the forum! Please confirm your details and we'll get you on your way:
 					.form-group.form-row
-						.col-xs-6: input(type='text' name='name.first' placeholder='First Name' value=current.user.name.first).form-control
-						.col-xs-6: input(type='text' name='name.last' placeholder='Last Name' value=current.user.name.last).form-control
+						.col-xs-6: input(type='text' name='name.first' placeholder='First Name' value=authUser.name.first).form-control
+						.col-xs-6: input(type='text' name='name.last' placeholder='Last Name' value=authUser.name.last).form-control
 					.form-group
-						input(type='email' name='email' placeholder='Email' value=current.user.email).form-control.form-control-labelled
+						input(type='email' name='email' placeholder='Email' value=authUser.email).form-control.form-control-labelled
 					.form-group
-						input(type='text' name='website' placeholder='Website' value=current.user.website).form-control.form-control-labelled
+						input(type='text' name='website' placeholder='Website' value=authUser.website).form-control.form-control-labelled
 					.form-group
 						button(type='submit').btn.btn-primary.btn-block That all checks out, let's go &rarr;
 		

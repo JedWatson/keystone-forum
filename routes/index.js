@@ -53,12 +53,9 @@ exports = module.exports = function(app) {
 	app.all('/reset-password/:key', routes.views['reset-password']);
 	
 	
-	// Auth
-	app.get('/auth/github', routes.auth.github);
-	app.get('/auth/twitter', routes.auth.twitter);
-	app.get('/auth/google', routes.auth.google);
+	// Authentication
 	app.get('/auth/confirm', routes.auth.confirm);
-	
+	app.get('/auth/:service', routes.auth.service);
 	
 	// User
 	app.all('/settings*', middleware.requireUser);

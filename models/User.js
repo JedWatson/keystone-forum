@@ -19,13 +19,14 @@ var deps = {
 
 User.add({
 	name: { type: Types.Name, required: true, index: true },
-	email: { type: Types.Email, initial: true, index: true },
+	email: { type: Types.Email, required: true, initial: true, index: true },
 	password: { type: Types.Password, initial: true },
 	state: { type: Types.Select, options: 'enabled, banned' },
 	notes: { type: Types.Textarea, collapse: true },
 	resetPasswordKey: { type: String, hidden: true }
 }, 'Profile', {
 	isPublic: Boolean,
+	isVerified: Boolean,
 	photo: { type: Types.CloudinaryImage },
 	website: { type: Types.Url },
 	bio: { type: Types.Markdown },
@@ -42,7 +43,6 @@ User.add({
 			isConfigured: { type: Boolean, label: 'GitHub has been authenticated' },
 			
 			profileId: { type: String, label: 'Profile ID', dependsOn: deps.github },
-			profileUrl: { type: String, label: 'Profile URL', dependsOn: deps.github },
 			
 			username: { type: String, label: 'Username', dependsOn: deps.github },
 			accessToken: { type: String, label: 'Access Token', dependsOn: deps.github },

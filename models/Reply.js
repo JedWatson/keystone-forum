@@ -22,7 +22,7 @@ Reply.add({
 });
 
 Reply.add('Content', {
-	content: { type: Types.Markdown, height: 300, required: true }
+	content: { type: Types.Markdown, height: 300, required: true, initial: true }
 });
 
 

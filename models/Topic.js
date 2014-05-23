@@ -25,7 +25,7 @@ Topic.add({
 
 Topic.add('Content', {
 	image: { type: Types.CloudinaryImage, collapse: true },
-	content: { type: Types.Markdown, height: 400, required: true }
+	content: { type: Types.Markdown, height: 400, required: true, initial: true }
 });
 
 /** State */

@@ -127,6 +127,20 @@ exports.requireUser = function(req, res, next) {
 	
 }
 
+/**
+	Prevents people spamming with fake emails
+ */
+
+exports.verifyUser = function(req, res, next) {
+	
+	if (!req.url.match('/auth/verify') && (req.user && !req.user.isVerified)) {
+		res.redirect('/auth/verify');
+	} else {
+		next();
+	}
+	
+}
+
 
 /**
 	Returns a closure that can be used within views to change a parameter in the query string

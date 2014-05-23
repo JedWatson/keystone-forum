@@ -37,6 +37,8 @@ var routes = {
 // Bind Routes
 exports = module.exports = function(app) {
 	
+	app.get('/*', middleware.verifyUser);
+	
 	// Forum
 	app.get('/', routes.views.index);
 	app.get('/' + globals.forum.routePatterns.filters, routes.views.index);
@@ -58,6 +60,7 @@ exports = module.exports = function(app) {
 	app.get('/auth/twitter', routes.auth.twitter);
 	app.get('/auth/google', routes.auth.google);
 	app.all('/auth/confirm', routes.auth.confirm);
+	app.all('/auth/verify/:key?', routes.auth.verify);
 	
 	
 	// User

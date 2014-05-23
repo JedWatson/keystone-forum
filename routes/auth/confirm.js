@@ -36,9 +36,6 @@ exports = module.exports = function(req, res) {
 		
 	});
 
-	
-	// TODO: Create the user only after they confirm details
-
 	view.render('auth/confirm');
 	
 }

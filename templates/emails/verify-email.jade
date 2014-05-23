@@ -1,0 +1,7 @@
+extends layouts/base
+
+block content
+	p Hi #{user.name.first},
+	p Welcome to the KeystoneJS forum. Please confirm your email address by following the link below:
+	p: a(href=baseURL + link)= baseURL + link
+	p - KeystoneJS Team

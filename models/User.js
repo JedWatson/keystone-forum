@@ -23,7 +23,8 @@ User.add({
 	password: { type: Types.Password, initial: true },
 	state: { type: Types.Select, options: 'enabled, banned' },
 	notes: { type: Types.Textarea, collapse: true },
-	resetPasswordKey: { type: String, hidden: true }
+	resetPasswordKey: { type: String, hidden: true },
+	emailVerificationKey: { type: String, hidden: true }
 }, 'Profile', {
 	isPublic: Boolean,
 	photo: { type: Types.CloudinaryImage },
@@ -35,7 +36,8 @@ User.add({
 		topics: { type: Boolean, default: true }
 	}
 }, 'Permissions', {
-	isAdmin: { type: Boolean, label: 'Can Admin KeystoneJS Forum' }
+	isAdmin: { type: Boolean, label: 'Can Admin KeystoneJS Forum' },
+	isVerified: { type: Boolean, label: 'Has a verified email address' }
 }, 'Services', {
 	services: {
 		github: {
@@ -136,6 +138,32 @@ User.schema.methods.resetPassword = function(next) {
 			user: user,
 			link: '/reset-password/' + user.resetPasswordKey,
 			subject: 'Reset your password on KeystoneJS Forum',
+			to: user.email,
+			from: {
+				name: 'KeystoneJS Forum',
+				email: 'forum@keystonejs.com'
+			}
+		}, next);
+		
+	});
+	
+}
+
+User.schema.methods.verifyEmail = function(next) {
+	
+	var user = this;
+	
+	user.emailVerificationKey = keystone.utils.randomString([16,24]);
+	
+	user.save(function(err) {
+		
+		if (err) return next(err);
+				
+		// send email
+		new keystone.Email('verify-email').send({
+			user: user,
+			link: '/auth/verify/' + user.emailVerificationKey,
+			subject: 'Please confirm your email address',
 			to: user.email,
 			from: {
 				name: 'KeystoneJS Forum',

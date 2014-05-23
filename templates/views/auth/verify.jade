@@ -1,0 +1,18 @@
+include ../../mixins/flash-messages
+
+doctype html
+html
+	head
+		include ../../includes/htmlhead
+		block css
+	body.confirm-page
+		.container-xs
+			.confirm-page__logo
+				img(src='/images/logo.svg', alt='KeystoneJS', width=207, height=70)
+			
+			.forum-body
+				+flash-messages(messages)
+				p.mb-2 Thanks for joining the forum! We've sent you an email to confirm your email address.
+				p: a(href='?resendVerificationEmail').btn.btn-primary Resend Email
+				hr
+				p.text-sm.text-muted If you're having trouble finding the email be sure to check your spam/junk folder

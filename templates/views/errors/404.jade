@@ -7,10 +7,7 @@ block content
 			div(style='margin: 30px 0;').debug!= htmlStringify(errorMsg)
 		else
 			p.lead!= utils.textToHTML(errorMsg) || 'The page you requested has been moved or deleted.'
-			
-		
-		//- Categories
-		h4.heading-bordered Tags
+		hr
 		ul.tag-list
 			li
 				a(href='/').tag.tag-list__item

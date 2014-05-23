@@ -71,7 +71,7 @@ exports = module.exports = function(req, res) {
 		{
 			case 'twitter': req.user.services.twitter.isConfigured = null; serviceName = 'Twitter'; break;
 			case 'github': req.user.services.github.isConfigured = null; serviceName = 'GitHub'; break;
-			case 'google': req.user.services.google .isConfigured= null; serviceName = 'Google'; break;
+			case 'google': req.user.services.google.isConfigured= null; serviceName = 'Google'; break;
 		}
 		
 		req.user.save(function(err) {

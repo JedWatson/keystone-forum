@@ -62,7 +62,7 @@ exports = module.exports = function(req, res) {
 					var userData = {
 						state: 'enabled',
 						
-						website: req.session.auth.website,
+						website: req.body.website,
 						
 						isVerified: true,
 						
@@ -79,7 +79,7 @@ exports = module.exports = function(req, res) {
 						refreshToken: req.session.auth.refreshToken
 					});
 					
-					console.log('[auth.confirm] - Existing user data:', userData);
+					// console.log('[auth.confirm] - Existing user data:', userData);
 					
 					locals.existingUser.set(userData);
 					
@@ -104,12 +104,15 @@ exports = module.exports = function(req, res) {
 					
 					// Structure data
 					var userData = {
-						name: req.session.auth.name,
-						email: req.session.auth.email,
+						name: {
+							first: req.body['name.first'],
+							last: req.body['name.last']
+						},
+						email: req.body.email,
 						
 						state: 'enabled',
 						
-						website: req.session.auth.website,
+						website: req.body.website,
 						
 						isVerified: true,
 						
@@ -126,7 +129,7 @@ exports = module.exports = function(req, res) {
 						refreshToken: req.session.auth.refreshToken
 					}
 					
-					console.log('[auth.confirm] - New user data:', userData );
+					// console.log('[auth.confirm] - New user data:', userData );
 					
 					locals.existingUser = new User.model(userData);
 					
@@ -225,40 +228,18 @@ exports = module.exports = function(req, res) {
 	
 	});
 	
-	view.on('init', function() {
+	view.on('init', function(next) {
 		if (req.user) return checkAuth();
+		return next();
 	});
 	
-	view.on('post', { action: 'confirm.details' }, function() {
+	view.on('post', { action: 'confirm.details' }, function(next) {
+		if (!req.body['name.first'] || !req.body['name.last'] || !req.body.email) {
+			req.flash('error', 'Please enter a name & email.');
+			return next();
+		}
 		return checkAuth();
 	});
-	
-	// TODO: Confirm details
-	/*
-	view.on('post', { action: 'confirm.details' }, function(next) {
-		
-		var updater = req.user.getUpdateHandler(req);
-		
-		updater.process(req.body, {
-			fields: 'name, email, website',
-			flashErrors: true,
-			logErrors: true
-		}, function(err) {
-			if (err) {
-				locals.validationErrors = err.errors;
-				next();
-			} else {
-				if (req.query && req.query.returnto) {
-					return res.redirect(req.query.returnto + '?performFunction=focusOnCommentField');
-				} else {
-					return res.redirect('/settings');
-				}
-				
-			}
-		});
-		
-	});
-	*/
 	
 	view.render('auth/confirm');
 	

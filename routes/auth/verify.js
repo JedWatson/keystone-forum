@@ -33,7 +33,6 @@ exports = module.exports = function(req, res) {
 			req.flash('error', "Sorry, that verification key isn't valid.");
 			return next();
 		}
-		
 	});
 
 

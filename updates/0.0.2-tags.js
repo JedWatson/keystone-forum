@@ -1,10 +1,11 @@
 exports.create = {
 	Tag: [
-		{ name: 'Express' },
-		{ name: 'Mongoose' },
-		{ name: 'Node.js' },
-		{ name: 'Announcement' },
-		{ name: 'Demo' },
-		{ name: 'Forum' }
+		{ name: 'Configuration',  display: true },
+		{ name: 'Database',       display: true },
+		{ name: 'Admin UI',       display: true },
+		{ name: 'Templates',      display: true },
+		{ name: 'Services',       display: true },
+		{ name: 'Demo',           display: true },
+		{ name: 'Announcement' }
 	]
 }

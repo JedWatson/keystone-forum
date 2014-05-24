@@ -28,7 +28,6 @@ keystone.set('500', function(err, req, res, next) {
 
 // Load Routes
 var routes = {
-	api: importRoutes('./api'),
 	views: importRoutes('./views'),
 	dev: importRoutes('./dev'),
 	auth: importRoutes('./auth')
@@ -41,7 +40,6 @@ exports = module.exports = function(app) {
 	
 	// Forum
 	app.get('/', routes.views.index);
-	app.get('/' + globals.forum.routePatterns.filters, routes.views.index);
 	app.get('/' + globals.forum.routePatterns.filters + '/:tag?', routes.views.index);
 	
 	app.all('/topic/:topic', routes.views.topic);
@@ -57,7 +55,7 @@ exports = module.exports = function(app) {
 	
 	// Authentication
 	app.all('/auth/confirm', routes.auth.confirm);
-	app.all('/auth/verify/:key?', routes.auth.verify);
+	app.all('/auth/verify', routes.auth.verify);
 	app.get('/auth/:service', routes.auth.service);
 	
 	
@@ -73,9 +71,5 @@ exports = module.exports = function(app) {
 	
 	// Test Emails
 	app.get('/email/:key', routes.dev.email);
-	
-	
-	// API
-	app.all('/api*', keystone.initAPI);
 
 }

@@ -1,6 +1,6 @@
 mixin comment-form(action)
 	form(method='post').comment-form.media
-		input(type='hidden', name='action', value='comment.create')
+		input(type='hidden', name='action', value=action)
 		
 		.comment-author.media-avatar.pull-left
 			if current.user

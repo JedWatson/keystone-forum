@@ -163,7 +163,7 @@ User.schema.methods.verifyEmail = function(req, res, next) {
 		// send email
 		new keystone.Email('verify-email').send({
 			user: user,
-			link: '/auth/verify/' + user.emailVerificationKey,
+			link: '/auth/verify/?email=' + user.email + '&key=' + user.emailVerificationKey,
 			subject: 'Please confirm your email address',
 			baseURL: req.protocol + '://' + req.get('host'),
 			to: user.email,

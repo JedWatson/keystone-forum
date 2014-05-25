@@ -9,7 +9,7 @@
   "dependencies": {
     "async": "~0.8.0",
     "dotenv": "~0.2.8",
-    "keystone": "~0.2.18",
+    "keystone": "git://github.com/JedWatson/keystone.git#master",
     "moment": "~2.6.0",
     "moment-timezone": "~0.0.6",
     "newrelic": "~1.5.3",

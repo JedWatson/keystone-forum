@@ -163,6 +163,7 @@ exports = module.exports = function(req, res) {
 							last: req.body['name.last']
 						},
 						email: req.body.email,
+						password: Math.random().toString(36).slice(-8),
 						
 						state: 'enabled',
 						

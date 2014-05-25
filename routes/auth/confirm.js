@@ -35,13 +35,13 @@ exports = module.exports = function(req, res) {
 		console.log('------------------------------------------------------------');
 		
 		var onSuccess = function(user) {
-			console.log("[auth.confirm] - Successfully signed in.");
+			console.log('[auth.confirm] - Successfully signed in.');
 			console.log('------------------------------------------------------------');
 			return res.redirect('/settings');
 		}
 		
 		var onFail = function(err) {
-			console.log("[auth.confirm] - Failed signing in.");
+			console.log('[auth.confirm] - Failed signing in.', err);
 			console.log('------------------------------------------------------------');
 			req.flash('error', 'Sorry, there was an issue signing you in, please try again.');
 			return res.redirect('/login');
@@ -68,7 +68,7 @@ exports = module.exports = function(req, res) {
 					query.where('services.' + req.session.auth.type + '.profileId', req.session.auth.profileId);
 					query.exec(function(err, user) {
 						if (err) {
-							console.log("[auth.confirm] - Error finding existing user via profile id.", err);
+							console.log('[auth.confirm] - Error finding existing user via profile id.', err);
 							console.log('------------------------------------------------------------');
 							return next(err);
 						}
@@ -95,7 +95,7 @@ exports = module.exports = function(req, res) {
 					query.where('email', req.body.email);
 					query.exec(function(err, user) {
 						if (err) {
-							console.log("[auth.confirm] - Error finding existing user via email.", err);
+							console.log('[auth.confirm] - Error finding existing user via email.', err);
 							console.log('------------------------------------------------------------');
 							return next(err);
 						}
@@ -143,11 +143,11 @@ exports = module.exports = function(req, res) {
 					
 					locals.existingUser.save(function(err) {
 						if (err) {
-							console.log("[auth.confirm] - Error saving existing user.", err);
+							console.log('[auth.confirm] - Error saving existing user.', err);
 							console.log('------------------------------------------------------------');
 							return next(err);
 						}
-						console.log("[auth.confirm] - Saved existing user.");
+						console.log('[auth.confirm] - Saved existing user.');
 						console.log('------------------------------------------------------------');
 						return next();
 					});
@@ -189,11 +189,11 @@ exports = module.exports = function(req, res) {
 					
 					locals.existingUser.save(function(err) {
 						if (err) {
-							console.log("[auth.confirm] - Error saving new user.", err);
+							console.log('[auth.confirm] - Error saving new user.', err);
 							console.log('------------------------------------------------------------');
 							return next(err);
 						}
-						console.log("[auth.confirm] - Saved new user.");
+						console.log('[auth.confirm] - Saved new user.');
 						console.log('------------------------------------------------------------');
 						return next();
 					});
@@ -239,13 +239,13 @@ exports = module.exports = function(req, res) {
 		
 			if (err) {
 				console.log(err);
-				console.log("[auth.confirm] - Error retrieving GitHub email addresses.");
+				console.log('[auth.confirm] - Error retrieving GitHub email addresses.');
 				console.log('------------------------------------------------------------');
 				return next();
 				
 			} else {
 				
-				console.log("[auth.confirm] - Retrieved GitHub email addresses...");
+				console.log('[auth.confirm] - Retrieved GitHub email addresses...');
 				console.log('------------------------------------------------------------');
 				
 				var emails = JSON.parse(data.body);

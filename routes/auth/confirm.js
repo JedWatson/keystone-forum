@@ -43,6 +43,7 @@ exports = module.exports = function(req, res) {
 		var onFail = function(err) {
 			console.log("[auth.confirm] - Failed signing in.");
 			console.log('------------------------------------------------------------');
+			req.flash('error', 'Sorry, there was an issue signing you in, please try again.');
 			return res.redirect('/login');
 		}
 		
@@ -66,7 +67,11 @@ exports = module.exports = function(req, res) {
 				var query = User.model.findOne();
 					query.where('services.' + req.session.auth.type + '.profileId', req.session.auth.profileId);
 					query.exec(function(err, user) {
-						if (err) return res.redirect('/login');
+						if (err) {
+							console.log("[auth.confirm] - Error finding existing user via profile id.", err);
+							console.log('------------------------------------------------------------');
+							return next(err);
+						}
 						if (user) {
 							console.log('[auth.confirm] - Found existing user via [' + req.session.auth.type + '] profile id...');
 							console.log('------------------------------------------------------------');
@@ -89,7 +94,11 @@ exports = module.exports = function(req, res) {
 				var query = User.model.findOne();
 					query.where('email', req.body.email);
 					query.exec(function(err, user) {
-						if (err) return res.redirect('/login');
+						if (err) {
+							console.log("[auth.confirm] - Error finding existing user via email.", err);
+							console.log('------------------------------------------------------------');
+							return next(err);
+						}
 						if (user) {
 							console.log('[auth.confirm] - Found existing user via email address...');
 							console.log('------------------------------------------------------------');
@@ -133,17 +142,14 @@ exports = module.exports = function(req, res) {
 					locals.existingUser.set(userData);
 					
 					locals.existingUser.save(function(err) {
-						
 						if (err) {
 							console.log("[auth.confirm] - Error saving existing user.", err);
 							console.log('------------------------------------------------------------');
 							return next(err);
-						} else {
-							console.log("[auth.confirm] - Saved existing user.");
-							console.log('------------------------------------------------------------');
-							return next();
 						}
-						
+						console.log("[auth.confirm] - Saved existing user.");
+						console.log('------------------------------------------------------------');
+						return next();
 					});
 				
 				} else {
@@ -182,17 +188,14 @@ exports = module.exports = function(req, res) {
 					locals.existingUser = new User.model(userData);
 					
 					locals.existingUser.save(function(err) {
-						
 						if (err) {
 							console.log("[auth.confirm] - Error saving new user.", err);
 							console.log('------------------------------------------------------------');
 							return next(err);
-						} else {
-							console.log("[auth.confirm] - Saved new user.");
-							console.log('------------------------------------------------------------');
-							return next();
 						}
-						
+						console.log("[auth.confirm] - Saved new user.");
+						console.log('------------------------------------------------------------');
+						return next();
 					});
 					
 				}
@@ -201,19 +204,21 @@ exports = module.exports = function(req, res) {
 			
 			// Session
 			function() {
-			
 				if (req.user) {
 					console.log('[auth.confirm] - Already signed in, skipping sign in.');
 					console.log('------------------------------------------------------------');
 					return res.redirect('/settings');
 					return next();
 				}
-				
 				return doSignIn();
-			
 			}
 		
-		]);
+		], function(err) {
+			if (err) {
+				req.flash('error', 'Sorry, there was an issue signing you in, please try again.');
+				return res.redirect('/login');
+			}
+		});
 	
 	}
 	

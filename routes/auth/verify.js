@@ -23,7 +23,7 @@ exports = module.exports = function(req, res) {
 		var onSuccess = function(user) {
 			console.log("[auth.verify] - Successfully signed in.");
 			console.log('------------------------------------------------------------');
-
+			
 			user.isVerified = true;
 			user.save();
 			req.flash('success', 'Welcome to the KeystoneJS forum, this is your profile.' );
@@ -39,8 +39,8 @@ exports = module.exports = function(req, res) {
 		keystone.session.signin(locals.existingUser.id, req, res, onSuccess, onFail);
 	
 	}
-
-
+	
+	
 	// UPDATE the User
 	
 	view.on('init', function(next) {
@@ -62,8 +62,8 @@ exports = module.exports = function(req, res) {
 			});
 		}
 	});
-
-
+	
+	
 	// SEND the Verification Email
 	
 	view.on('get', { resendVerificationEmail: true }, function(next) {
@@ -78,7 +78,7 @@ exports = module.exports = function(req, res) {
 		res.redirect('/auth/verify');
 		
 	});
-
+	
 	view.render('auth/verify');
 	
 }

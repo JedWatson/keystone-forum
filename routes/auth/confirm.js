@@ -47,6 +47,8 @@ exports = module.exports = function(req, res) {
 			return res.redirect('/login');
 		}
 		
+		console.log(locals.existingUser);
+		
 		keystone.session.signin(locals.existingUser.id, req, res, onSuccess, onFail);
 	
 	}

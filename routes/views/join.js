@@ -79,7 +79,7 @@ exports = module.exports = function(req, res) {
 				return next();
 			}
 			
-			keystone.session.signin(data.newUser._id, req, res, onSuccess, onFail);
+			keystone.session.signin(String(data.newUser._id), req, res, onSuccess, onFail);
 			
 		});
 		

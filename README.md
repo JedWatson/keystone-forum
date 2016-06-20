@@ -1,6 +1,4 @@
 KeystoneJS Forums
 ===============
 
-The source code for forums.keystonejs.com
-
-(Under construction)
+Abandoned. Please refer to http://keystonejs.com/examples/ for example projects.
